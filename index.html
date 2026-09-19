@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP System - Project Malang</title>
+  <meta name="description" content="Sistem ERP Terpadu - Otentikasi, Pemilihan Unit Bisnis, Cost Center, Gudang, Penjualan, Pembelian, dan Dashboard Manajemen">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-viewport">
+
+  <!-- =====================================================================
+       VIEW 1: LOGIN (Figma: #8:44)
+       ===================================================================== -->
+  <section id="view-login" class="view-section active">
+    <div class="onboarding-layout">
+      <div class="onboarding-bg-shapes">
+        <div class="bg-blob-1"></div>
+        <div class="bg-blob-2"></div>
+      </div>
+
+      <div class="login-card-container">
+        <div class="login-brand-badge">
+          <div class="brand-icon">M</div>
+          <div>
+            <div class="brand-title">ERP MALANG</div>
+            <div class="brand-subtitle">Enterprise Gateway</div>
+          </div>
+        </div>
+
+        <form id="form-erp-login" autocomplete="off">
+          <div class="form-group-erp">
+            <label for="login-username">Username</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" id="login-username" class="input-erp" placeholder="Enter your user name" required value="admin_malang">
+            </div>
+          </div>
+
+          <div class="form-group-erp">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="login-password" class="input-erp" placeholder="Enter your user password" required value="••••••••••••">
+            </div>
+          </div>
+
+          <div class="form-group-erp">
+            <label for="login-location">Lokasi</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <input type="text" id="login-location" class="input-erp" placeholder="Enter your user location" required value="Kantor Pusat Malang">
+            </div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-erp">
+              <label for="login-port">Port</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                </svg>
+                <input type="text" id="login-port" class="input-erp" placeholder="Enter port" required value="5432">
+              </div>
+            </div>
+
+            <div class="form-group-erp">
+              <label for="login-database">Database</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+                <input type="text" id="login-database" class="input-erp" placeholder="Enter database" required value="erp_malang_prod_v2">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions-erp">
+            <button type="submit" id="btn-submit-login" class="btn-erp btn-erp-primary">
+              <span>Login</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button type="reset" class="btn-erp btn-erp-secondary">Close</button>
+          </div>
+
+          <div class="quick-demo-badge">
+            <button type="button" id="btn-demo-autofill" class="demo-autofill-btn">✨ Isi Otomatis Contoh Demo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       VIEW 2: SELECT BUSINESS (Figma: #8:145)
+       ===================================================================== -->
+  <section id="view-business" class="view-section">
+    <div class="onboarding-layout">
+      <div class="onboarding-bg-shapes">
+        <div class="bg-blob-1"></div>
+        <div class="bg-blob-2"></div>
+      </div>
+
+      <div class="onboarding-header-pill">
+        <h1>Select Business</h1>
+        <p>Pilih unit usaha atau entitas bisnis yang ingin Anda kelola pada sesi ini</p>
+      </div>
+
+      <div id="grid-business-list" class="selection-grid-container">
+        <!-- Generated by JavaScript -->
+      </div>
+
+      <div class="onboarding-nav-bar">
+        <button class="btn-nav-back" data-action="back-to-login">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Kembali ke Login</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       VIEW 3: COST CENTER (Figma: #8:165)
+       ===================================================================== -->
+  <section id="view-costcenter" class="view-section">
+    <div class="onboarding-layout">
+      <div class="onboarding-bg-shapes">
+        <div class="bg-blob-1"></div>
+        <div class="bg-blob-2"></div>
+      </div>
+
+      <div class="onboarding-header-pill">
+        <h1>Cost Center</h1>
+        <p>Pilih alokasi departemen & pusat biaya untuk pencatatan anggaran dan transaksi</p>
+      </div>
+
+      <div id="grid-costcenter-list" class="selection-grid-container">
+        <!-- Generated by JavaScript -->
+      </div>
+
+      <div class="onboarding-nav-bar">
+        <button class="btn-nav-back" data-action="back-to-business">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Kembali ke Pilih Bisnis</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       VIEW 4: GUDANG / WAREHOUSE (Figma: #8:180)
+       ===================================================================== -->
+  <section id="view-gudang" class="view-section">
+    <div class="onboarding-layout">
+      <div class="onboarding-bg-shapes">
+        <div class="bg-blob-1"></div>
+        <div class="bg-blob-2"></div>
+      </div>
+
+      <div class="onboarding-header-pill">
+        <h1>Gudang</h1>
+        <p>Pilih gudang aktif untuk manajemen inventori, pergerakan barang, dan stok fisik</p>
+      </div>
+
+      <div id="grid-gudang-list" class="selection-grid-container">
+        <!-- Generated by JavaScript -->
+      </div>
+
+      <div class="onboarding-nav-bar">
+        <button class="btn-nav-back" data-action="back-to-costcenter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Kembali ke Cost Center</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       VIEW 5: MAIN ERP DASHBOARD (Figma: #1:3 & Mekari Suite)
+       ===================================================================== -->
+  <section id="view-dashboard" class="view-section">
+    <div class="dashboard-wrapper">
+      <!-- Sidebar -->
+      <aside class="erp-sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">M</div>
+          <div>
+            <div class="sidebar-brand-name">ERP Malang</div>
+            <div class="sidebar-brand-sub">Enterprise Suite</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav-group">
+          <div class="nav-section-title">Menu Utama</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" data-module="overview" class="sidebar-nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-module="sales" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>Penjualan (Sales)</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-module="purchasing" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Pembelian (Purchase)</span>
+                <span class="sidebar-badge">2 PO</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-module="inventory" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span>Inventori & Stok</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-module="accounting" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span>Keuangan & Pajak</span>
+              </a>
+            </li>
+          </ul>
+
+          <div class="nav-section-title" style="margin-top: 1rem;">Administrasi</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" data-module="reports" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Laporan Eksekutif</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-module="settings" class="sidebar-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>Pengaturan Sistem</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="user-avatar">AM</div>
+          <div class="user-info">
+            <div id="user-display-name" class="user-name">admin_malang</div>
+            <div class="user-role">Super Administrator</div>
+          </div>
+          <button id="btn-sidebar-logout" class="btn-sidebar-logout" title="Logout">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="erp-main-area">
+        <!-- Top Navbar -->
+        <header class="erp-topbar">
+          <div class="topbar-left">
+            <div class="context-switchers">
+              <span class="context-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                <span id="tag-current-biz">PT Malang Manufaktur</span>
+                <button class="btn-change-context" data-change-target="business">Ganti</button>
+              </span>
+
+              <span class="context-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+                <span id="tag-current-cc">CC-PROD</span>
+                <button class="btn-change-context" data-change-target="costcenter">Ganti</button>
+              </span>
+
+              <span class="context-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span id="tag-current-wh">Gudang Utama Malang</span>
+                <button class="btn-change-context" data-change-target="gudang">Ganti</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <div class="search-input-top">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="global-search-input" placeholder="Cari SKU, faktur, pelanggan...">
+            </div>
+
+            <button id="btn-open-quick-modal" class="btn-dash-action btn-erp-primary" style="height: 38px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>+ Buat Transaksi</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Body Dashboard -->
+        <div class="dashboard-content-body">
+
+          <!-- =================================================================
+               MODULE 1: OVERVIEW DASHBOARD
+               ================================================================= -->
+          <div id="module-overview" class="module-section">
+            <div class="page-header-row">
+              <div class="page-title-group">
+                <h2>Dashboard Operasional & Finansial</h2>
+                <p>Ringkasan performa real-time rantai pasok dan aktivitas bisnis per 19 September 2026</p>
+              </div>
+              <div class="header-action-group">
+                <button class="btn-dash-action btn-erp-primary" data-action="navigate-sales">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>+ Penjualan Baru</span>
+                </button>
+                <button class="btn-dash-action btn-erp-secondary" data-action="navigate-purchase">
+                  <span>+ Pembelian Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="stats-grid-row" style="margin-top: 1.5rem;">
+              <div class="stat-card-erp">
+                <div class="stat-card-top">
+                  <span class="stat-card-title">Total Penjualan (Bulan Ini)</span>
+                  <div class="stat-icon-wrapper stat-icon-blue">💰</div>
+                </div>
+                <div class="stat-main-val">Rp 842.500.000</div>
+                <div class="stat-trend">
+                  <span class="trend-up">▲ +14.2%</span>
+                  <span class="trend-label">vs bulan sebelumnya</span>
+                </div>
+              </div>
+
+              <div class="stat-card-erp">
+                <div class="stat-card-top">
+                  <span class="stat-card-title">Total Nilai Valuasi Stok</span>
+                  <div class="stat-icon-wrapper stat-icon-green">📦</div>
+                </div>
+                <div class="stat-main-val">Rp 1.480.000.000</div>
+                <div class="stat-trend">
+                  <span class="trend-up">▲ +3.8%</span>
+                  <span class="trend-label">12.450 unit item</span>
+                </div>
+              </div>
+
+              <div class="stat-card-erp">
+                <div class="stat-card-top">
+                  <span class="stat-card-title">Purchase Order Pending</span>
+                  <div class="stat-icon-wrapper stat-icon-amber">⏳</div>
+                </div>
+                <div class="stat-main-val">8 Pesanan</div>
+                <div class="stat-trend">
+                  <span class="trend-down">● 2 Butuh Otorisasi</span>
+                  <span class="trend-label">Total Rp 310 Juta</span>
+                </div>
+              </div>
+
+              <div class="stat-card-erp">
+                <div class="stat-card-top">
+                  <span class="stat-card-title">Peringatan Minimum Stok</span>
+                  <div class="stat-icon-wrapper stat-icon-purple">⚠️</div>
+                </div>
+                <div class="stat-main-val">4 SKU Kritis</div>
+                <div class="stat-trend">
+                  <span class="trend-down">Segera Restock</span>
+                  <span class="trend-label">Gudang Kepanjen</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-analytics-grid" style="margin-top: 1.5rem;">
+              <div class="panel-card-erp">
+                <div class="panel-card-header">
+                  <h3>Arus Kas & Performa Penjualan (H2 2026)</h3>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">Periode Mingguan</span>
+                </div>
+
+                <div class="bar-chart-container">
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 55%;"></div>
+                      <div class="bar-fill-expense" style="height: 35%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 1</span>
+                  </div>
+
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 70%;"></div>
+                      <div class="bar-fill-expense" style="height: 40%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 2</span>
+                  </div>
+
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 60%;"></div>
+                      <div class="bar-fill-expense" style="height: 30%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 3</span>
+                  </div>
+
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 90%;"></div>
+                      <div class="bar-fill-expense" style="height: 50%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 4</span>
+                  </div>
+
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 85%;"></div>
+                      <div class="bar-fill-expense" style="height: 45%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 5</span>
+                  </div>
+
+                  <div class="bar-col">
+                    <div class="bar-dual-group">
+                      <div class="bar-fill-sales" style="height: 95%;"></div>
+                      <div class="bar-fill-expense" style="height: 40%;"></div>
+                    </div>
+                    <span class="bar-label">Mg 6</span>
+                  </div>
+                </div>
+
+                <div class="chart-legend">
+                  <div class="legend-item">
+                    <div class="legend-box" style="background: var(--primary);"></div>
+                    <span>Penjualan Bersih</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-box" style="background: #CBD5E1;"></div>
+                    <span>Biaya Operasional</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-card-erp">
+                <div class="panel-card-header">
+                  <h3>Utilisasi Kapasitas Gudang</h3>
+                  <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Status Terkini</span>
+                </div>
+
+                <div class="warehouse-status-list">
+                  <div class="wh-status-row">
+                    <div class="wh-row-info">
+                      <span>Gudang Kepanjen</span>
+                      <span style="color: var(--primary);">84%</span>
+                    </div>
+                    <div class="wh-progress-bar">
+                      <div class="wh-progress-fill" style="width: 84%; background: var(--primary);"></div>
+                    </div>
+                  </div>
+
+                  <div class="wh-status-row">
+                    <div class="wh-row-info">
+                      <span>Transit Singosari</span>
+                      <span style="color: var(--success);">58%</span>
+                    </div>
+                    <div class="wh-progress-bar">
+                      <div class="wh-progress-fill" style="width: 58%; background: var(--success);"></div>
+                    </div>
+                  </div>
+
+                  <div class="wh-status-row">
+                    <div class="wh-row-info">
+                      <span>Batu (Bahan Baku)</span>
+                      <span style="color: var(--info);">42%</span>
+                    </div>
+                    <div class="wh-progress-bar">
+                      <div class="wh-progress-fill" style="width: 42%; background: var(--info);"></div>
+                    </div>
+                  </div>
+
+                  <div class="wh-status-row">
+                    <div class="wh-row-info">
+                      <span>Retail Lowokwaru</span>
+                      <span style="color: var(--danger);">91% (Penuh)</span>
+                    </div>
+                    <div class="wh-progress-bar">
+                      <div class="wh-progress-fill" style="width: 91%; background: var(--danger);"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transaction Table Card -->
+            <div class="table-card-erp" style="margin-top: 1.5rem;">
+              <div class="table-toolbar">
+                <h3>Daftar Aktivitas & Transaksi Terbaru</h3>
+                <div class="table-filter-group">
+                  <button class="filter-btn-pill active" data-filter="all">Semua</button>
+                  <button class="filter-btn-pill" data-filter="sales">Penjualan</button>
+                  <button class="filter-btn-pill" data-filter="purchase">Pengadaan</button>
+                  <button class="filter-btn-pill" data-filter="transfer">Transfer Stok</button>
+                </div>
+              </div>
+
+              <div style="overflow-x: auto;">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>No. Dokumen</th>
+                      <th>Tanggal</th>
+                      <th>Mitra / Rekanan</th>
+                      <th>Kategori Transaksi</th>
+                      <th>Nominal / Qty</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-transactions-body">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               MODULE 2: PENJUALAN (SALES)
+               ================================================================= -->
+          <div id="module-sales" class="module-section" style="display: none;">
+            <div class="page-header-row">
+              <div class="page-title-group">
+                <h2>Manajemen Penjualan & Faktur</h2>
+                <p>Kelola sales order, faktur tagihan penjualan, pengiriman barang, dan piutang pelanggan</p>
+              </div>
+              <div class="header-action-group">
+                <button id="btn-toggle-sales-form" class="btn-dash-action btn-erp-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Buat Faktur Penjualan Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- FORM BUAT PENJUALAN -->
+            <div id="container-sales-form" class="transaction-form-card" style="margin-top: 1.5rem;">
+              <div class="form-section-header">
+                <div>
+                  <h3>Formulir Faktur Penjualan Baru</h3>
+                  <p style="color: var(--text-muted); font-size: 0.88rem;">Lengkapi rincian pelanggan, barang pesanan, dan kalkulasi tagihan</p>
+                </div>
+                <button type="button" id="btn-sales-demo-fill" class="demo-autofill-btn">✨ Isi Otomatis Contoh Sales</button>
+              </div>
+
+              <form id="form-sales-transaction">
+                <div class="form-grid-3col">
+                  <div class="form-group-erp">
+                    <label>Pelanggan (Customer)</label>
+                    <select id="sales-customer" class="select-erp" required>
+                      <option value="">-- Pilih Pelanggan --</option>
+                      <option value="PT Surya Gemilang Kencana">PT Surya Gemilang Kencana</option>
+                      <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
+                      <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
+                      <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>No. Faktur / Referensi</label>
+                    <input type="text" id="sales-invoice-no" class="input-erp" value="INV-2026-003" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Gudang Pengirim</label>
+                    <select id="sales-warehouse" class="select-erp" required>
+                      <option value="Gudang Utama Malang (Kepanjen)">Gudang Utama Malang (Kepanjen)</option>
+                      <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                      <option value="Gudang Distribusi Retail (Lowokwaru)">Gudang Distribusi Retail (Lowokwaru)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Tanggal Transaksi</label>
+                    <input type="date" id="sales-date" class="input-erp" value="2026-09-19" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Jatuh Tempo (Due Date)</label>
+                    <input type="date" id="sales-due-date" class="input-erp" value="2026-10-19" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Syarat Pembayaran</label>
+                    <select id="sales-term" class="select-erp">
+                      <option value="Net 30">Net 30 Hari</option>
+                      <option value="Net 60">Net 60 Hari</option>
+                      <option value="COD">Cash on Delivery (COD)</option>
+                      <option value="CBD">Cash Before Delivery</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Item Lines Table -->
+                <div style="margin-top: 1.5rem;">
+                  <h4 style="font-size: 1rem; color: var(--secondary); margin-bottom: 0.75rem;">Daftar Produk / Barang yang Dijual</h4>
+                  <div class="items-table-wrapper">
+                    <table class="items-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 35%;">Produk / Item</th>
+                          <th style="width: 15%;">Kuantitas (Qty)</th>
+                          <th style="width: 12%;">Satuan</th>
+                          <th style="width: 20%;">Harga Satuan (Rp)</th>
+                          <th style="width: 18%;">Total (Rp)</th>
+                          <th style="width: 5%;"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="sales-items-tbody">
+                        <tr>
+                          <td>
+                            <input type="text" class="table-input item-name" placeholder="Nama / Kode Produk" value="Komponen Mesin Seri MX-400" required>
+                          </td>
+                          <td>
+                            <input type="number" class="table-input item-qty" value="10" min="1" required>
+                          </td>
+                          <td>
+                            <select class="table-input item-unit">
+                              <option value="Pcs">Pcs</option>
+                              <option value="Box">Box</option>
+                              <option value="Set">Set</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input type="number" class="table-input item-price" value="2500000" min="0" required>
+                          </td>
+                          <td>
+                            <input type="text" class="table-input item-total" value="Rp 25.000.000" readonly style="background: #F1F5F9; font-weight: 600;">
+                          </td>
+                          <td>
+                            <button type="button" class="btn-remove-row" title="Hapus Baris">✕</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="table-footer-action">
+                      <button type="button" id="btn-add-sales-item" class="btn-add-line">+ Tambah Baris Item</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Calculations -->
+                <div class="form-bottom-row" style="margin-top: 1.5rem;">
+                  <div class="form-group-erp">
+                    <label>Catatan / Memo Penjualan</label>
+                    <textarea id="sales-notes" class="textarea-erp" placeholder="Instruksi pengiriman, rekening pembayaran, atau catatan khusus..."></textarea>
+                  </div>
+
+                  <div class="summary-calc-card">
+                    <div class="summary-calc-row">
+                      <span>Subtotal:</span>
+                      <strong id="sales-calc-subtotal">Rp 25.000.000</strong>
+                    </div>
+                    <div class="summary-calc-row">
+                      <span>Diskon Tambahan (Rp):</span>
+                      <input type="number" id="sales-discount-input" class="table-input" value="0" style="width: 120px; text-align: right;">
+                    </div>
+                    <div class="summary-calc-row">
+                      <span>PPN (11%):</span>
+                      <strong id="sales-calc-tax">Rp 2.750.000</strong>
+                    </div>
+                    <div class="summary-calc-row total-highlight">
+                      <span>Total Tagihan:</span>
+                      <strong id="sales-calc-grandtotal" style="color: var(--primary);">Rp 27.750.000</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-submit-bar">
+                  <button type="button" class="btn-erp btn-erp-secondary" style="max-width: 140px;" id="btn-cancel-sales">Batal</button>
+                  <button type="submit" class="btn-erp btn-erp-primary" style="max-width: 240px;">
+                    <span>✓ Terbitkan Faktur</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- DAFTAR FAKTUR PENJUALAN -->
+            <div class="table-card-erp" style="margin-top: 1.5rem;">
+              <div class="table-toolbar">
+                <h3>Riwayat Faktur Penjualan</h3>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total 4 Faktur Terdata</span>
+              </div>
+              <div style="overflow-x: auto;">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>No. Faktur</th>
+                      <th>Tanggal</th>
+                      <th>Pelanggan</th>
+                      <th>Gudang</th>
+                      <th>Total Tagihan</th>
+                      <th>Status Pembayaran</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sales-table-body">
+                    <!-- JS rendered -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               MODULE 3: PEMBELIAN (PURCHASING)
+               ================================================================= -->
+          <div id="module-purchasing" class="module-section" style="display: none;">
+            <div class="page-header-row">
+              <div class="page-title-group">
+                <h2>Manajemen Pengadaan & Pembelian (PO)</h2>
+                <p>Kelola pesanan pembelian material pabrikasi, tagihan supplier, dan penerimaan logistik</p>
+              </div>
+              <div class="header-action-group">
+                <button id="btn-toggle-purchase-form" class="btn-dash-action btn-erp-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Buat Purchase Order (PO) Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- FORM BUAT PEMBELIAN / PO -->
+            <div id="container-purchase-form" class="transaction-form-card" style="margin-top: 1.5rem;">
+              <div class="form-section-header">
+                <div>
+                  <h3>Formulir Purchase Order (PO) Baru</h3>
+                  <p style="color: var(--text-muted); font-size: 0.88rem;">Pemesanan bahan baku dan suku cadang kepada supplier resmi</p>
+                </div>
+                <button type="button" id="btn-purchase-demo-fill" class="demo-autofill-btn">✨ Isi Otomatis Contoh PO</button>
+              </div>
+
+              <form id="form-purchase-transaction">
+                <div class="form-grid-3col">
+                  <div class="form-group-erp">
+                    <label>Pemasok / Vendor</label>
+                    <select id="purchase-vendor" class="select-erp" required>
+                      <option value="">-- Pilih Vendor --</option>
+                      <option value="CV Multi Baja Nusantara">CV Multi Baja Nusantara</option>
+                      <option value="PT Delta Elektronik Utama">PT Delta Elektronik Utama</option>
+                      <option value="PT Logam Presisi Abadi">PT Logam Presisi Abadi</option>
+                      <option value="PT Petrokimia Semen Gresik">PT Petrokimia Semen Gresik</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>No. Purchase Order</label>
+                    <input type="text" id="purchase-po-no" class="input-erp" value="PO-2026-089" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Gudang Penerima</label>
+                    <select id="purchase-warehouse" class="select-erp" required>
+                      <option value="Gudang Bahan Baku & Komponen (Batu)">Gudang Bahan Baku & Komponen (Batu)</option>
+                      <option value="Gudang Utama Malang (Kepanjen)">Gudang Utama Malang (Kepanjen)</option>
+                      <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Tanggal PO</label>
+                    <input type="date" id="purchase-date" class="input-erp" value="2026-09-19" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Ekspektasi Pengiriman</label>
+                    <input type="date" id="purchase-expected-date" class="input-erp" value="2026-09-25" required>
+                  </div>
+
+                  <div class="form-group-erp">
+                    <label>Cost Center Pembebanan</label>
+                    <select id="purchase-costcenter" class="select-erp">
+                      <option value="CC-PROD">CC-101: Divisi Pabrikasi & Produksi</option>
+                      <option value="CC-LOG">CC-201: Divisi Logistik & Armada</option>
+                      <option value="CC-HQ">CC-301: Manajemen Operasional & HQ</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Items Table -->
+                <div style="margin-top: 1.5rem;">
+                  <h4 style="font-size: 1rem; color: var(--secondary); margin-bottom: 0.75rem;">Rincian Barang yang Dipesan</h4>
+                  <div class="items-table-wrapper">
+                    <table class="items-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 35%;">Bahan / Komponen</th>
+                          <th style="width: 15%;">Kuantitas (Qty)</th>
+                          <th style="width: 12%;">Satuan</th>
+                          <th style="width: 20%;">Harga Beli (Rp)</th>
+                          <th style="width: 18%;">Total (Rp)</th>
+                          <th style="width: 5%;"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="purchase-items-tbody">
+                        <tr>
+                          <td>
+                            <input type="text" class="table-input purchase-item-name" placeholder="Nama Komponen" value="Pelat Baja Cold-Rolled 3mm" required>
+                          </td>
+                          <td>
+                            <input type="number" class="table-input purchase-item-qty" value="50" min="1" required>
+                          </td>
+                          <td>
+                            <select class="table-input purchase-item-unit">
+                              <option value="Lembar">Lembar</option>
+                              <option value="Batang">Batang</option>
+                              <option value="Kg">Kg</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input type="number" class="table-input purchase-item-price" value="850000" min="0" required>
+                          </td>
+                          <td>
+                            <input type="text" class="table-input purchase-item-total" value="Rp 42.500.000" readonly style="background: #F1F5F9; font-weight: 600;">
+                          </td>
+                          <td>
+                            <button type="button" class="btn-remove-row" title="Hapus Baris">✕</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="table-footer-action">
+                      <button type="button" id="btn-add-purchase-item" class="btn-add-line">+ Tambah Baris Bahan</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Summary -->
+                <div class="form-bottom-row" style="margin-top: 1.5rem;">
+                  <div class="form-group-erp">
+                    <label>Catatan untuk Vendor & Otorisasi</label>
+                    <textarea id="purchase-notes" class="textarea-erp" placeholder="Instruksi spesifikasi material, standar ISO, dan persyaratan packing..."></textarea>
+                  </div>
+
+                  <div class="summary-calc-card">
+                    <div class="summary-calc-row">
+                      <span>Subtotal Pengadaan:</span>
+                      <strong id="purchase-calc-subtotal">Rp 42.500.000</strong>
+                    </div>
+                    <div class="summary-calc-row">
+                      <span>PPN (11%):</span>
+                      <strong id="purchase-calc-tax">Rp 4.675.000</strong>
+                    </div>
+                    <div class="summary-calc-row total-highlight">
+                      <span>Total Nilai PO:</span>
+                      <strong id="purchase-calc-grandtotal" style="color: var(--primary);">Rp 47.175.000</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-submit-bar">
+                  <button type="button" class="btn-erp btn-erp-secondary" style="max-width: 140px;" id="btn-cancel-purchase">Batal</button>
+                  <button type="submit" class="btn-erp btn-erp-primary" style="max-width: 260px;">
+                    <span>✓ Terbitkan Purchase Order</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- DAFTAR PURCHASE ORDERS -->
+            <div class="table-card-erp" style="margin-top: 1.5rem;">
+              <div class="table-toolbar">
+                <h3>Daftar Purchase Orders (PO)</h3>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total 3 PO Terdaftar</span>
+              </div>
+              <div style="overflow-x: auto;">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>No. PO</th>
+                      <th>Tanggal</th>
+                      <th>Pemasok (Vendor)</th>
+                      <th>Gudang Tujuan</th>
+                      <th>Nilai PO</th>
+                      <th>Status Dokumen</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="purchase-table-body">
+                    <!-- JS rendered -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               MODULE 4: INVENTORI & STOK
+               ================================================================= -->
+          <div id="module-inventory" class="module-section" style="display: none;">
+            <div class="page-header-row">
+              <div class="page-title-group">
+                <h2>Manajemen Inventori & Stok Fisik</h2>
+                <p>Monitoring stok real-time, mutasi barang antar gudang, dan level restock minimum</p>
+              </div>
+            </div>
+
+            <div class="table-card-erp" style="margin-top: 1.5rem;">
+              <div class="table-toolbar">
+                <h3>Katalog SKU & Ketersediaan Stok</h3>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Gudang Aktif: Kepanjen</span>
+              </div>
+              <div style="overflow-x: auto;">
+                <table class="erp-data-table">
+                  <thead>
+                    <tr>
+                      <th>Kode SKU</th>
+                      <th>Nama Barang</th>
+                      <th>Kategori</th>
+                      <th>Stok Tersedia</th>
+                      <th>Stok Minimum</th>
+                      <th>Nilai Satuan</th>
+                      <th>Status Stok</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 600; color: var(--primary);">SKU-MCH-001</td>
+                      <td><strong>Komponen Mesin Seri MX-400</strong></td>
+                      <td>Mesin & Sparepart</td>
+                      <td><strong>48 Pcs</strong></td>
+                      <td>10 Pcs</td>
+                      <td>Rp 2.500.000</td>
+                      <td><span class="badge-status badge-success">● Aman</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 600; color: var(--primary);">SKU-RAW-009</td>
+                      <td><strong>Pelat Baja Cold-Rolled 3mm</strong></td>
+                      <td>Bahan Baku</td>
+                      <td><strong>8 Lembar</strong></td>
+                      <td>25 Lembar</td>
+                      <td>Rp 850.000</td>
+                      <td><span class="badge-status badge-danger">● Menipis (Restock)</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 600; color: var(--primary);">SKU-ELC-042</td>
+                      <td><strong>Inverter Listrik Industri 5KW</strong></td>
+                      <td>Elektronik</td>
+                      <td><strong>14 Unit</strong></td>
+                      <td>5 Unit</td>
+                      <td>Rp 4.100.000</td>
+                      <td><span class="badge-status badge-success">● Aman</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 600; color: var(--primary);">SKU-FLX-012</td>
+                      <td><strong>Hydraulic Hose Tube 1/2 Inch</strong></td>
+                      <td>Pneumatik</td>
+                      <td><strong>6 Roll</strong></td>
+                      <td>15 Roll</td>
+                      <td>Rp 1.200.000</td>
+                      <td><span class="badge-status badge-warning">● Mendekati Batas</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </section>
+
+</div>
+
+<!-- Quick Transaction Dialog Modal -->
+<div id="modal-quick-transaction" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>Pilih Jenis Transaksi Baru</h3>
+      <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="selection-card" id="card-modal-sales">
+          <div class="card-icon-bubble">💰</div>
+          <h3>Faktur Penjualan (Sales)</h3>
+          <p class="card-desc">Terbitkan faktur untuk pesanan pelanggan dan kurangi stok barang jadi di gudang.</p>
+          <button class="btn-card-select">Buka Form Penjualan →</button>
+        </div>
+
+        <div class="selection-card" id="card-modal-purchase">
+          <div class="card-icon-bubble">📦</div>
+          <h3>Purchase Order (PO)</h3>
+          <p class="card-desc">Buat pesanan pengadaan bahan baku/komponen kepada vendor dan jadwalkan logistik masuk.</p>
+          <button class="btn-card-select">Buka Form Pembelian →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
