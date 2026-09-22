@@ -11,8 +11,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Application State
   const state = {
-    currentView: 'view-dashboard',
-    activeModule: 'sales',
+    currentView: 'view-login',
+    activeModule: 'overview',
     auth: {
       isLoggedIn: true,
       username: 'admin_malang',
@@ -1051,6 +1051,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Lain Button functionality in Penjualan Overlay
+  const btnLainOverlay = document.querySelector('.btn-lain-purple');
+  if (btnLainOverlay) {
+    btnLainOverlay.addEventListener('click', () => {
+      showToast('Opsi Lain-lain: Sedang dalam pengembangan (Figma prototype)', 'info');
+    });
+  }
 
   // Initial Render Calls
   calculateSalesTotals();
