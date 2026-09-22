@@ -14,7 +14,7 @@
   <!-- =====================================================================
        VIEW 1: LOGIN (Figma: #8:44)
        ===================================================================== -->
-  <section id="view-login" class="view-section active">
+  <section id="view-login" class="view-section">
     <div class="onboarding-layout">
       <div class="onboarding-bg-shapes">
         <div class="bg-blob-1"></div>
@@ -206,7 +206,7 @@
   <!-- =====================================================================
        VIEW 5: MAIN ERP DASHBOARD (Figma: #1:3 & Mekari Suite)
        ===================================================================== -->
-  <section id="view-dashboard" class="view-section">
+  <section id="view-dashboard" class="view-section active">
     <div class="dashboard-wrapper">
       <!-- Sidebar -->
       <aside class="erp-sidebar">
@@ -222,7 +222,7 @@
           <div class="nav-section-title">Menu Utama</div>
           <ul class="sidebar-nav-list">
             <li>
-              <a href="#" data-module="overview" class="sidebar-nav-item active">
+              <a href="#" data-module="overview" class="sidebar-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="3" width="7" height="7"></rect>
                   <rect x="14" y="3" width="7" height="7"></rect>
@@ -233,7 +233,7 @@
               </a>
             </li>
             <li>
-              <a href="#" data-module="sales" class="sidebar-nav-item">
+              <a href="#" data-module="sales" class="sidebar-nav-item active">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="1" x2="12" y2="23"></line>
                   <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
@@ -373,7 +373,7 @@
           <!-- =================================================================
                MODULE 1: OVERVIEW DASHBOARD
                ================================================================= -->
-          <div id="module-overview" class="module-section">
+          <div id="module-overview" class="module-section" style="display: none;">
             <div class="page-header-row">
               <div class="page-title-group">
                 <h2>Dashboard Operasional & Finansial</h2>
@@ -600,7 +600,7 @@
           <!-- =================================================================
                MODULE 2: PENJUALAN (FIGMA: #2038:6090 "Penjualan")
                ================================================================= -->
-          <div id="module-sales" class="module-section" style="display: none;">
+          <div id="module-sales" class="module-section" style="display: block;">
             
             <!-- 3 Top Metric Cards from Figma (#2038:6169, 6180, 6191) -->
             <div class="penjualan-top-metrics">

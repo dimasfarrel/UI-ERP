@@ -11,14 +11,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Application State
   const state = {
-    currentView: 'view-login',
-    activeModule: 'overview',
+    currentView: 'view-dashboard',
+    activeModule: 'sales',
     auth: {
-      isLoggedIn: false,
-      username: '',
-      database: '',
-      location: '',
-      port: ''
+      isLoggedIn: true,
+      username: 'admin_malang',
+      database: 'ERP_MALANG_PROD',
+      location: 'Malang Sentral',
+      port: '8080'
     },
     selection: {
       business: null,
