@@ -412,19 +412,144 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('sales-table-body');
     if (!tbody) return;
 
-    tbody.innerHTML = state.salesInvoices.map(inv => `
+    const statusFilter = document.getElementById('filter-sales-status')?.value || 'all';
+    const whFilter = document.getElementById('filter-sales-warehouse')?.value || 'all';
+    const searchQuery = (document.getElementById('search-sales-input')?.value || '').toLowerCase().trim();
+
+    const filtered = state.salesInvoices.filter(inv => {
+      if (statusFilter !== 'all' && inv.status !== statusFilter) return false;
+      if (whFilter !== 'all' && !inv.warehouse.includes(whFilter.split(' (')[0])) return false;
+      if (searchQuery) {
+        const matchId = inv.id.toLowerCase().includes(searchQuery);
+        const matchCust = inv.customer.toLowerCase().includes(searchQuery);
+        const matchWh = inv.warehouse.toLowerCase().includes(searchQuery);
+        if (!matchId && !matchCust && !matchWh) return false;
+      }
+      return true;
+    });
+
+    const countEl = document.getElementById('sales-record-count');
+    if (countEl) countEl.textContent = `${filtered.length} Faktur Terdata`;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center; padding: 2rem; color: #94A3B8;">Tidak ada faktur yang sesuai filter</td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(inv => `
       <tr>
         <td style="font-weight: 600; font-family: monospace; color: var(--primary);">${inv.id}</td>
         <td>${inv.date}</td>
         <td><strong>${inv.customer}</strong></td>
         <td>${inv.warehouse}</td>
-        <td style="font-weight: 600;">${inv.amount}</td>
+        <td style="font-weight: 600; color: #0F172A;">${inv.amount}</td>
         <td><span class="badge-status ${inv.badgeClass}">● ${inv.status}</span></td>
         <td>
-          <button style="background:none; border:none; color:var(--primary); font-weight: 600; cursor:pointer;">Cetak Faktur</button>
+          <button style="background:none; border:none; color:var(--primary); font-weight: 600; cursor:pointer;" onclick="alert('Mencetak faktur: ${inv.id}')">Cetak Faktur</button>
         </td>
       </tr>
     `).join('');
+  }
+
+  // =========================================================================
+  // FIGMA OVERLAY: CALCULATIONS & DYNAMIC ROWS (#2038:6036)
+  // =========================================================================
+  function calculateOverlaySalesTotals() {
+    const tbody = document.getElementById('overlay-sales-items-tbody');
+    if (!tbody) return;
+
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+
+      const baseAmount = Math.max(0, (qty * price) - discount);
+      const rowTax = baseAmount * (taxRate / 100);
+      const rowTotal = baseAmount + rowTax;
+      subtotal += baseAmount;
+
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(rowTotal);
+    });
+
+    const tax = subtotal * 0.11; // 11% PPN
+    const grandTotal = subtotal + tax;
+
+    const subtotalEl = document.getElementById('overlay-calc-subtotal');
+    const taxEl = document.getElementById('overlay-calc-tax');
+    const grandTotalEl = document.getElementById('overlay-calc-grandtotal');
+
+    if (subtotalEl) subtotalEl.textContent = formatRupiah(subtotal);
+    if (taxEl) taxEl.textContent = formatRupiah(tax);
+    if (grandTotalEl) grandTotalEl.textContent = formatRupiah(grandTotal);
+  }
+
+  function addOverlaySalesRow(product = '', desc = '', qty = 1, unit = 'Pcs', price = 0, disc = 0, tax = 11) {
+    const tbody = document.getElementById('overlay-sales-items-tbody');
+    if (!tbody) return;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>
+        <input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..." required>
+      </td>
+      <td>
+        <input type="text" class="table-input-cell overlay-item-desc" value="${desc}" placeholder="Deskripsi item...">
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" required style="text-align: center;">
+      </td>
+      <td>
+        <select class="table-input-cell overlay-item-unit">
+          <option value="Pcs" ${unit === 'Pcs' ? 'selected' : ''}>Pcs</option>
+          <option value="Unit" ${unit === 'Unit' ? 'selected' : ''}>Unit</option>
+          <option value="Box" ${unit === 'Box' ? 'selected' : ''}>Box</option>
+          <option value="Set" ${unit === 'Set' ? 'selected' : ''}>Set</option>
+        </select>
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0" required style="text-align: right;">
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0" style="text-align: right;">
+      </td>
+      <td>
+        <select class="table-input-cell overlay-item-tax">
+          <option value="11" ${tax === 11 ? 'selected' : ''}>11%</option>
+          <option value="0" ${tax === 0 ? 'selected' : ''}>0%</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" class="table-input-cell overlay-item-total" readonly style="background: #F8F9FA; font-weight: 700; text-align: right; color: #1E293B;">
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-remove-overlay-row" style="background:none; border:none; color:#EF4444; font-size:1.1rem; cursor:pointer;" title="Hapus Baris">&times;</button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+
+    row.querySelectorAll('input, select').forEach(elem => {
+      elem.addEventListener('input', calculateOverlaySalesTotals);
+      elem.addEventListener('change', calculateOverlaySalesTotals);
+    });
+
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => {
+      if (tbody.querySelectorAll('tr').length > 1) {
+        row.remove();
+        calculateOverlaySalesTotals();
+      } else {
+        showToast('Minimal harus ada 1 baris produk', 'info');
+      }
+    });
+
+    calculateOverlaySalesTotals();
   }
 
   function renderPurchaseTable() {
@@ -711,59 +836,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Sales Dynamic Row Actions
-  const btnAddSalesItem = document.getElementById('btn-add-sales-item');
-  if (btnAddSalesItem) {
-    btnAddSalesItem.addEventListener('click', () => {
-      addSalesRow('Komponen Baru / Jasa', 1, 'Pcs', 500000);
+  // =========================================================================
+  // FIGMA PENJUALAN & PROTOTYPE OVERLAY EVENT LISTENERS
+  // =========================================================================
+  const modalPenjualanOverlay = document.getElementById('modal-penjualan-overlay');
+  const btnOpenPenjualanOverlay = document.getElementById('btn-open-penjualan-overlay');
+  const btnClosePenjualanOverlay = document.getElementById('btn-close-penjualan-overlay');
+  const btnBatalOverlay = document.getElementById('btn-batal-overlay');
+  const btnAddOverlaySalesRow = document.getElementById('btn-add-overlay-sales-row');
+  const formSalesOverlay = document.getElementById('form-sales-overlay');
+
+  function openPenjualanOverlayModal() {
+    if (!modalPenjualanOverlay) return;
+    const tbody = document.getElementById('overlay-sales-items-tbody');
+    if (tbody && tbody.children.length === 0) {
+      addOverlaySalesRow('Komponen Mesin MX-4', 'Modul perakitan hidrolik', 10, 'Pcs', 2500000, 0, 11);
+      addOverlaySalesRow('Inverter Listrik Industri 5KW', 'Inverter 3-phase', 2, 'Unit', 4100000, 0, 11);
+    }
+    calculateOverlaySalesTotals();
+    modalPenjualanOverlay.classList.add('open');
+  }
+
+  function closePenjualanOverlayModal() {
+    if (modalPenjualanOverlay) {
+      modalPenjualanOverlay.classList.remove('open');
+    }
+  }
+
+  if (btnOpenPenjualanOverlay) {
+    btnOpenPenjualanOverlay.addEventListener('click', openPenjualanOverlayModal);
+  }
+  if (btnClosePenjualanOverlay) {
+    btnClosePenjualanOverlay.addEventListener('click', closePenjualanOverlayModal);
+  }
+  if (btnBatalOverlay) {
+    btnBatalOverlay.addEventListener('click', closePenjualanOverlayModal);
+  }
+  if (modalPenjualanOverlay) {
+    modalPenjualanOverlay.addEventListener('click', (e) => {
+      if (e.target === modalPenjualanOverlay) closePenjualanOverlayModal();
     });
   }
 
-  const salesDiscountInput = document.getElementById('sales-discount-input');
-  if (salesDiscountInput) {
-    salesDiscountInput.addEventListener('input', calculateSalesTotals);
-  }
-
-  // Sales Demo Fill
-  const btnSalesDemoFill = document.getElementById('btn-sales-demo-fill');
-  if (btnSalesDemoFill) {
-    btnSalesDemoFill.addEventListener('click', () => {
-      document.getElementById('sales-customer').value = 'PT Surya Gemilang Kencana';
-      document.getElementById('sales-invoice-no').value = 'INV-2026-00' + (state.salesInvoices.length + 1);
-      document.getElementById('sales-notes').value = 'Faktur dikirim bersamaan dengan Surat Jalan Armada Ekspedisi No. SJ-8841.';
-      const tbody = document.getElementById('sales-items-tbody');
-      if (tbody) tbody.innerHTML = '';
-      addSalesRow('Komponen Mesin Seri MX-400', 12, 'Pcs', 2500000);
-      addSalesRow('Inverter Listrik Industri 5KW', 2, 'Unit', 4100000);
-      showToast('Form penjualan terisi dengan data contoh pesanan industri', 'info');
+  if (btnAddOverlaySalesRow) {
+    btnAddOverlaySalesRow.addEventListener('click', () => {
+      addOverlaySalesRow('Komponen Tambahan / Jasa', 'Deskripsi item baru', 1, 'Pcs', 500000, 0, 11);
     });
   }
 
-  // Submit Sales Form
-  const formSales = document.getElementById('form-sales-transaction');
-  if (formSales) {
-    formSales.addEventListener('submit', (e) => {
+  if (formSalesOverlay) {
+    formSalesOverlay.addEventListener('submit', (e) => {
       e.preventDefault();
-      const customer = document.getElementById('sales-customer')?.value || 'Pelanggan Umum';
-      const invNo = document.getElementById('sales-invoice-no')?.value || 'INV-2026-999';
-      const wh = document.getElementById('sales-warehouse')?.value || 'Gudang Utama Malang';
-      const date = document.getElementById('sales-date')?.value || '2026-09-19';
-      const grandTotalText = document.getElementById('sales-calc-grandtotal')?.textContent || 'Rp 0';
+      const customer = document.getElementById('overlay-sales-customer')?.value || 'PT Surya Gemilang Kencana';
+      const invNo = document.getElementById('overlay-sales-invoice-no')?.value || ('INV-2026-00' + (state.salesInvoices.length + 1));
+      const wh = document.getElementById('overlay-sales-warehouse')?.value || 'Gudang Utama Malang';
+      const date = document.getElementById('overlay-sales-date')?.value || '2026-09-22';
+      const grandTotalText = document.getElementById('overlay-calc-grandtotal')?.textContent || 'Rp 0';
 
       const newInv = {
         id: invNo,
-        date: date,
+        date: date.split('-').reverse().join('/'),
         customer: customer,
         warehouse: wh.split(' (')[0],
         amount: grandTotalText,
-        status: 'Belum Lunas',
+        status: 'Belum Bayar',
         badgeClass: 'badge-warning'
       };
 
       state.salesInvoices.unshift(newInv);
       state.recentTransactions.unshift({
         id: invNo,
-        date: '19 Sep 2026',
+        date: '22 Sep 2026',
         partner: customer,
         type: 'Sales Order',
         amount: grandTotalText,
@@ -773,11 +916,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
       renderSalesTable();
       renderOverviewTable();
-      showToast(`Faktur ${invNo} berhasil diterbitkan untuk ${customer}!`, 'success');
-      formSales.reset();
-      calculateSalesTotals();
+      showToast(`Faktur ${invNo} berhasil diterbitkan dan disimpan!`, 'success');
+      closePenjualanOverlayModal();
     });
   }
+
+  // Sales Sub-Tabs from Figma
+  document.querySelectorAll('.penjualan-tab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      document.querySelectorAll('.penjualan-tab').forEach(t => t.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      const tabKey = e.currentTarget.getAttribute('data-sales-tab');
+      showToast(`Menampilkan tab: ${e.currentTarget.textContent}`, 'info');
+    });
+  });
+
+  // Filters & Search for Penjualan Table
+  const filterSalesStatus = document.getElementById('filter-sales-status');
+  const filterSalesWarehouse = document.getElementById('filter-sales-warehouse');
+  const searchSalesInput = document.getElementById('search-sales-input');
+
+  if (filterSalesStatus) filterSalesStatus.addEventListener('change', renderSalesTable);
+  if (filterSalesWarehouse) filterSalesWarehouse.addEventListener('change', renderSalesTable);
+  if (searchSalesInput) searchSalesInput.addEventListener('input', renderSalesTable);
 
   // Purchase Dynamic Row Actions
   const btnAddPurchaseItem = document.getElementById('btn-add-purchase-item');

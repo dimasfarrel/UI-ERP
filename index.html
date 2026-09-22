@@ -598,192 +598,112 @@
           </div>
 
           <!-- =================================================================
-               MODULE 2: PENJUALAN (SALES)
+               MODULE 2: PENJUALAN (FIGMA: #2038:6090 "Penjualan")
                ================================================================= -->
           <div id="module-sales" class="module-section" style="display: none;">
-            <div class="page-header-row">
-              <div class="page-title-group">
-                <h2>Manajemen Penjualan & Faktur</h2>
-                <p>Kelola sales order, faktur tagihan penjualan, pengiriman barang, dan piutang pelanggan</p>
+            
+            <!-- 3 Top Metric Cards from Figma (#2038:6169, 6180, 6191) -->
+            <div class="penjualan-top-metrics">
+              <div class="metric-summary-card card-unpaid">
+                <div class="metric-header">
+                  <h3>Belum Dibayar</h3>
+                  <span class="metric-badge">5</span>
+                </div>
+                <div class="metric-amount">Rp 128.500.000</div>
+                <div class="metric-subtext">5 Faktur Jatuh Tempo Bulan Ini</div>
               </div>
-              <div class="header-action-group">
-                <button id="btn-toggle-sales-form" class="btn-dash-action btn-erp-primary">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
+
+              <div class="metric-summary-card card-due">
+                <div class="metric-header">
+                  <h3>Jatuh Tempo</h3>
+                  <span class="metric-badge">2</span>
+                </div>
+                <div class="metric-amount">Rp 45.200.000</div>
+                <div class="metric-subtext">2 Faktur Melewati Batas Tempo</div>
+              </div>
+
+              <div class="metric-summary-card card-paid">
+                <div class="metric-header">
+                  <h3>Sudah Lunas</h3>
+                  <span class="metric-badge">8</span>
+                </div>
+                <div class="metric-amount">Rp 83.300.000</div>
+                <div class="metric-subtext">8 Faktur Selesai Terbayar</div>
+              </div>
+            </div>
+
+            <!-- Sub-Tabs from Figma (#2038:6201 "Tablist") -->
+            <div class="penjualan-tablist">
+              <button class="penjualan-tab active" data-sales-tab="faktur">Faktur</button>
+              <button class="penjualan-tab" data-sales-tab="tukar-faktur">Tukar faktur</button>
+              <button class="penjualan-tab" data-sales-tab="pengiriman">Pengiriman</button>
+              <button class="penjualan-tab" data-sales-tab="penawaran">Penawaran</button>
+              <button class="penjualan-tab" data-sales-tab="permintaan">Permintaan</button>
+              <button class="penjualan-tab" data-sales-tab="ditolak">Ditolak</button>
+            </div>
+
+            <!-- Filter & Action Toolbar from Figma (#2038:6215, 6221, 6227) -->
+            <div class="penjualan-toolbar">
+              <div class="penjualan-filter-group">
+                <select id="filter-sales-status" class="select-filter-figma">
+                  <option value="all">Semua Status</option>
+                  <option value="Lunas">Lunas</option>
+                  <option value="Belum Bayar">Belum Bayar</option>
+                  <option value="Jatuh Tempo">Jatuh Tempo</option>
+                </select>
+
+                <select id="filter-sales-warehouse" class="select-filter-figma">
+                  <option value="all">Semua Gudang</option>
+                  <option value="Gudang Utama Malang">Gudang Utama Malang</option>
+                  <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                  <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+                </select>
+
+                <div class="search-figma-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <span>Buat Faktur Penjualan Baru</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- FORM BUAT PENJUALAN -->
-            <div id="container-sales-form" class="transaction-form-card" style="margin-top: 1.5rem;">
-              <div class="form-section-header">
-                <div>
-                  <h3>Formulir Faktur Penjualan Baru</h3>
-                  <p style="color: var(--text-muted); font-size: 0.88rem;">Lengkapi rincian pelanggan, barang pesanan, dan kalkulasi tagihan</p>
+                  <input type="text" id="search-sales-input" placeholder="Cari faktur, pelanggan...">
                 </div>
-                <button type="button" id="btn-sales-demo-fill" class="demo-autofill-btn">✨ Isi Otomatis Contoh Sales</button>
               </div>
 
-              <form id="form-sales-transaction">
-                <div class="form-grid-3col">
-                  <div class="form-group-erp">
-                    <label>Pelanggan (Customer)</label>
-                    <select id="sales-customer" class="select-erp" required>
-                      <option value="">-- Pilih Pelanggan --</option>
-                      <option value="PT Surya Gemilang Kencana">PT Surya Gemilang Kencana</option>
-                      <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
-                      <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
-                      <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>No. Faktur / Referensi</label>
-                    <input type="text" id="sales-invoice-no" class="input-erp" value="INV-2026-003" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Gudang Pengirim</label>
-                    <select id="sales-warehouse" class="select-erp" required>
-                      <option value="Gudang Utama Malang (Kepanjen)">Gudang Utama Malang (Kepanjen)</option>
-                      <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                      <option value="Gudang Distribusi Retail (Lowokwaru)">Gudang Distribusi Retail (Lowokwaru)</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Tanggal Transaksi</label>
-                    <input type="date" id="sales-date" class="input-erp" value="2026-09-19" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Jatuh Tempo (Due Date)</label>
-                    <input type="date" id="sales-due-date" class="input-erp" value="2026-10-19" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Syarat Pembayaran</label>
-                    <select id="sales-term" class="select-erp">
-                      <option value="Net 30">Net 30 Hari</option>
-                      <option value="Net 60">Net 60 Hari</option>
-                      <option value="COD">Cash on Delivery (COD)</option>
-                      <option value="CBD">Cash Before Delivery</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Item Lines Table -->
-                <div style="margin-top: 1.5rem;">
-                  <h4 style="font-size: 1rem; color: var(--secondary); margin-bottom: 0.75rem;">Daftar Produk / Barang yang Dijual</h4>
-                  <div class="items-table-wrapper">
-                    <table class="items-table">
-                      <thead>
-                        <tr>
-                          <th style="width: 35%;">Produk / Item</th>
-                          <th style="width: 15%;">Kuantitas (Qty)</th>
-                          <th style="width: 12%;">Satuan</th>
-                          <th style="width: 20%;">Harga Satuan (Rp)</th>
-                          <th style="width: 18%;">Total (Rp)</th>
-                          <th style="width: 5%;"></th>
-                        </tr>
-                      </thead>
-                      <tbody id="sales-items-tbody">
-                        <tr>
-                          <td>
-                            <input type="text" class="table-input item-name" placeholder="Nama / Kode Produk" value="Komponen Mesin Seri MX-400" required>
-                          </td>
-                          <td>
-                            <input type="number" class="table-input item-qty" value="10" min="1" required>
-                          </td>
-                          <td>
-                            <select class="table-input item-unit">
-                              <option value="Pcs">Pcs</option>
-                              <option value="Box">Box</option>
-                              <option value="Set">Set</option>
-                            </select>
-                          </td>
-                          <td>
-                            <input type="number" class="table-input item-price" value="2500000" min="0" required>
-                          </td>
-                          <td>
-                            <input type="text" class="table-input item-total" value="Rp 25.000.000" readonly style="background: #F1F5F9; font-weight: 600;">
-                          </td>
-                          <td>
-                            <button type="button" class="btn-remove-row" title="Hapus Baris">✕</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="table-footer-action">
-                      <button type="button" id="btn-add-sales-item" class="btn-add-line">+ Tambah Baris Item</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Bottom Calculations -->
-                <div class="form-bottom-row" style="margin-top: 1.5rem;">
-                  <div class="form-group-erp">
-                    <label>Catatan / Memo Penjualan</label>
-                    <textarea id="sales-notes" class="textarea-erp" placeholder="Instruksi pengiriman, rekening pembayaran, atau catatan khusus..."></textarea>
-                  </div>
-
-                  <div class="summary-calc-card">
-                    <div class="summary-calc-row">
-                      <span>Subtotal:</span>
-                      <strong id="sales-calc-subtotal">Rp 25.000.000</strong>
-                    </div>
-                    <div class="summary-calc-row">
-                      <span>Diskon Tambahan (Rp):</span>
-                      <input type="number" id="sales-discount-input" class="table-input" value="0" style="width: 120px; text-align: right;">
-                    </div>
-                    <div class="summary-calc-row">
-                      <span>PPN (11%):</span>
-                      <strong id="sales-calc-tax">Rp 2.750.000</strong>
-                    </div>
-                    <div class="summary-calc-row total-highlight">
-                      <span>Total Tagihan:</span>
-                      <strong id="sales-calc-grandtotal" style="color: var(--primary);">Rp 27.750.000</strong>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-submit-bar">
-                  <button type="button" class="btn-erp btn-erp-secondary" style="max-width: 140px;" id="btn-cancel-sales">Batal</button>
-                  <button type="submit" class="btn-erp btn-erp-primary" style="max-width: 240px;">
-                    <span>✓ Terbitkan Faktur</span>
-                  </button>
-                </div>
-              </form>
+              <!-- Button "+ Buat Penjualan" that triggers the Figma Prototype Overlay -->
+              <button id="btn-open-penjualan-overlay" class="btn-buat-penjualan-figma">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Buat Penjualan</span>
+              </button>
             </div>
 
-            <!-- DAFTAR FAKTUR PENJUALAN -->
-            <div class="table-card-erp" style="margin-top: 1.5rem;">
+            <!-- Table: DAFTAR FAKTUR PENJUALAN from Figma (#2038:6232) -->
+            <div class="table-card-erp" style="margin-top: 1rem;">
               <div class="table-toolbar">
-                <h3>Riwayat Faktur Penjualan</h3>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">Total 4 Faktur Terdata</span>
+                <h3 style="font-family: var(--font-figma); font-size: 1.05rem; font-weight: 700;">DAFTAR FAKTUR PENJUALAN</h3>
+                <span id="sales-record-count" style="font-size: 0.85rem; color: var(--text-muted);">4 Faktur Terdata</span>
               </div>
               <div style="overflow-x: auto;">
                 <table class="erp-data-table">
                   <thead>
                     <tr>
-                      <th>No. Faktur</th>
-                      <th>Tanggal</th>
-                      <th>Pelanggan</th>
-                      <th>Gudang</th>
-                      <th>Total Tagihan</th>
-                      <th>Status Pembayaran</th>
-                      <th>Aksi</th>
+                      <th style="width: 16%;">No Transaksi</th>
+                      <th style="width: 13%;">Tanggal</th>
+                      <th style="width: 25%;">Pelanggan</th>
+                      <th style="width: 18%;">Gudang</th>
+                      <th style="width: 14%;">Total Tagihan</th>
+                      <th style="width: 14%;">Status</th>
+                      <th style="width: 10%;">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="sales-table-body">
-                    <!-- JS rendered -->
+                    <!-- Dynamic rendered via JS -->
                   </tbody>
                 </table>
               </div>
             </div>
+
           </div>
 
           <!-- =================================================================
@@ -1073,6 +993,145 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     FIGMA #PENJUALAN OVERLAY (FIGMA: #2038:6036 - PROTOTYPE MODAL BACKDROP)
+     ===================================================================== -->
+<div id="modal-penjualan-overlay" class="overlay-drawer-backdrop">
+  <div class="overlay-penjualan-card">
+    <div class="overlay-header">
+      <h3>Penjualan overlay</h3>
+      <button type="button" class="btn-close-x" id="btn-close-penjualan-overlay">&times;</button>
+    </div>
+
+    <form id="form-sales-overlay">
+      <div class="overlay-body">
+        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pelanggan</label>
+              <select id="overlay-sales-customer" class="form-input-figma" required>
+                <option value="">Pilih Pelanggan</option>
+                <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
+                <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
+                <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
+                <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
+              </select>
+            </div>
+
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="overlay-sales-address" class="form-input-figma" placeholder="Alamat pengiriman..." value="Jl. Industri Raya No. 12">
+            </div>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="overlay-sales-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="overlay-sales-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="overlay-sales-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="overlay-sales-email" class="form-input-figma" placeholder="Email..." value="finance@suryagemilang.co.id">
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+              <div class="overlay-field" style="flex: 1;">
+                <label>No Transaksi</label>
+                <input type="text" id="overlay-sales-invoice-no" class="form-input-figma" value="INV-2026-005" required>
+              </div>
+              <button type="button" class="btn-lain-purple">Lain</button>
+            </div>
+
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="overlay-sales-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
+        <div class="overlay-table-container" style="margin-top: 0.5rem;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Produk</th>
+                <th style="width: 24%;">Deskripsi</th>
+                <th style="width: 10%;">Quantity</th>
+                <th style="width: 9%;">Unit</th>
+                <th style="width: 13%;">Harga Satuan</th>
+                <th style="width: 8%;">Diskon</th>
+                <th style="width: 8%;">Pajak</th>
+                <th style="width: 12%;">Jumlah</th>
+                <th style="width: 4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="overlay-sales-items-tbody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-add-overlay-sales-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+
+        <!-- Bottom Calculation & Notes -->
+        <div class="overlay-calc-panel">
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="overlay-sales-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo pengiriman..."></textarea>
+          </div>
+
+          <div class="overlay-calc-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>Subtotal:</span>
+              <strong id="overlay-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>PPN (11%):</span>
+              <strong id="overlay-calc-tax">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
+              <span>Total Tagihan:</span>
+              <strong id="overlay-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
+      <div class="overlay-actions-bar">
+        <button type="button" id="btn-batal-overlay" class="btn-batal-text">batal</button>
+        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
+          <span>Simpan & Terbitkan</span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
