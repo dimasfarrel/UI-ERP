@@ -1054,9 +1054,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lain Button functionality in Penjualan Overlay
   const btnLainOverlay = document.querySelector('.btn-lain-purple');
-  if (btnLainOverlay) {
+  const modalLain = document.getElementById('modal-lain-overlay');
+  const btnCloseLain = document.getElementById('btn-close-lain');
+
+  if (btnLainOverlay && modalLain) {
     btnLainOverlay.addEventListener('click', () => {
-      showToast('Opsi Lain-lain: Sedang dalam pengembangan (Figma prototype)', 'info');
+      modalLain.classList.add('open');
+    });
+  }
+
+  if (btnCloseLain && modalLain) {
+    btnCloseLain.addEventListener('click', () => {
+      modalLain.classList.remove('open');
     });
   }
 
