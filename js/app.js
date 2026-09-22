@@ -1069,6 +1069,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Buat Penjualan Dropdown Logic
+  const btnToggleDropdown = document.getElementById('btn-toggle-penjualan-dropdown');
+  const dropdownMenu = document.getElementById('dropdown-menu-penjualan');
+  
+  if (btnToggleDropdown && dropdownMenu) {
+    btnToggleDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('show');
+    });
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (dropdownMenu && dropdownMenu.classList.contains('show')) {
+      if (!dropdownMenu.contains(e.target) && e.target !== btnToggleDropdown) {
+        dropdownMenu.classList.remove('show');
+      }
+    }
+  });
+
+  // Also close dropdown when an item is clicked
+  if (dropdownMenu) {
+    dropdownMenu.querySelectorAll('.dropdown-item-figma').forEach(item => {
+      item.addEventListener('click', () => {
+        dropdownMenu.classList.remove('show');
+      });
+    });
+  }
+
   // Initial Render Calls
   calculateSalesTotals();
   calculatePurchaseTotals();

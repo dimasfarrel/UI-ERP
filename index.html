@@ -668,14 +668,21 @@
                 </div>
               </div>
 
-              <!-- Button "+ Buat Penjualan" that triggers the Figma Prototype Overlay -->
-              <button id="btn-open-penjualan-overlay" class="btn-buat-penjualan-figma">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>Buat Penjualan</span>
-              </button>
+              <!-- Dropdown Button "+ Buat Penjualan Baru" -->
+              <div class="dropdown-buat-penjualan">
+                <button id="btn-toggle-penjualan-dropdown" class="btn-buat-penjualan-figma">
+                  <span>Buat penjualan baru</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.25rem;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div id="dropdown-menu-penjualan" class="dropdown-menu-figma">
+                  <a href="#" class="dropdown-item-figma" id="btn-open-penjualan-overlay">Penagihan Penjualan</a>
+                  <a href="#" class="dropdown-item-figma">Tukar Faktur</a>
+                  <a href="#" class="dropdown-item-figma">Pemesanan Penjualan</a>
+                  <a href="#" class="dropdown-item-figma">Penawaran Penjualan</a>
+                </div>
+              </div>
             </div>
 
             <!-- Table: DAFTAR FAKTUR PENJUALAN from Figma (#2038:6232) -->
