@@ -2142,3 +2142,22 @@ body {
   background-color: #F1F5F9;
   color: var(--primary);
 }
+
+
+.lain-input {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid #D4D4D4;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #333;
+  outline: none;
+  font-family: inherit;
+}
+
+.lain-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(6, 118, 255, 0.1);
+}

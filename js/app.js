@@ -552,6 +552,104 @@ document.addEventListener('DOMContentLoaded', () => {
     calculateOverlaySalesTotals();
   }
 
+  // =========================================================================
+  // FIGMA OVERLAY: PURCHASE CALCULATIONS & DYNAMIC ROWS
+  // =========================================================================
+  function calculateOverlayPurchaseTotals() {
+    const tbody = document.getElementById('overlay-purchase-items-tbody');
+    if (!tbody) return;
+
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+
+      const baseAmount = Math.max(0, (qty * price) - discount);
+      const rowTax = baseAmount * (taxRate / 100);
+      const rowTotal = baseAmount + rowTax;
+      subtotal += baseAmount;
+
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(rowTotal);
+    });
+
+    const tax = subtotal * 0.11; // 11% PPN
+    const grandTotal = subtotal + tax;
+
+    const subtotalEl = document.getElementById('overlay-purchase-calc-subtotal');
+    const taxEl = document.getElementById('overlay-purchase-calc-tax');
+    const grandTotalEl = document.getElementById('overlay-purchase-calc-grandtotal');
+
+    if (subtotalEl) subtotalEl.textContent = formatRupiah(subtotal);
+    if (taxEl) taxEl.textContent = formatRupiah(tax);
+    if (grandTotalEl) grandTotalEl.textContent = formatRupiah(grandTotal);
+  }
+
+  function addOverlayPurchaseRow(product = '', desc = '', qty = 1, unit = 'Pcs', price = 0, disc = 0, tax = 11) {
+    const tbody = document.getElementById('overlay-purchase-items-tbody');
+    if (!tbody) return;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>
+        <input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..." required>
+      </td>
+      <td>
+        <input type="text" class="table-input-cell overlay-item-desc" value="${desc}" placeholder="Deskripsi item...">
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" required style="text-align: center;">
+      </td>
+      <td>
+        <select class="table-input-cell overlay-item-unit">
+          <option value="Pcs" ${unit === 'Pcs' ? 'selected' : ''}>Pcs</option>
+          <option value="Unit" ${unit === 'Unit' ? 'selected' : ''}>Unit</option>
+          <option value="Box" ${unit === 'Box' ? 'selected' : ''}>Box</option>
+          <option value="Set" ${unit === 'Set' ? 'selected' : ''}>Set</option>
+        </select>
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0" required style="text-align: right;">
+      </td>
+      <td>
+        <input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0" style="text-align: right;">
+      </td>
+      <td>
+        <select class="table-input-cell overlay-item-tax">
+          <option value="11" ${tax === 11 ? 'selected' : ''}>11%</option>
+          <option value="0" ${tax === 0 ? 'selected' : ''}>0%</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" class="table-input-cell overlay-item-total" readonly style="background: #F8F9FA; font-weight: 700; text-align: right; color: #1E293B;">
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-remove-overlay-row" style="background:none; border:none; color:#EF4444; font-size:1.1rem; cursor:pointer;" title="Hapus Baris">&times;</button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+
+    row.querySelectorAll('input, select').forEach(elem => {
+      elem.addEventListener('input', calculateOverlayPurchaseTotals);
+      elem.addEventListener('change', calculateOverlayPurchaseTotals);
+    });
+
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => {
+      if (tbody.querySelectorAll('tr').length > 1) {
+        row.remove();
+        calculateOverlayPurchaseTotals();
+      } else {
+        showToast('Minimal harus ada 1 baris produk', 'info');
+      }
+    });
+
+    calculateOverlayPurchaseTotals();
+  }
+
+
   function renderPurchaseTable() {
     const tbody = document.getElementById('purchase-table-body');
     if (!tbody) return;
@@ -1025,6 +1123,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  
+  const btnAddPurchaseOverlayRow = document.getElementById('btn-add-overlay-purchase-row');
+  if (btnAddPurchaseOverlayRow) {
+    btnAddPurchaseOverlayRow.addEventListener('click', () => {
+      addOverlayPurchaseRow();
+    });
+  }
+
   // Initial calculation and bindings for existing table rows
   document.querySelectorAll('#sales-items-tbody input').forEach(inp => {
     inp.addEventListener('input', calculateSalesTotals);
@@ -1052,16 +1158,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Lain Button functionality in Penjualan Overlay
-  const btnLainOverlay = document.querySelector('.btn-lain-purple');
+  // Lain Button functionality in Overlays
+  const btnLainOverlays = document.querySelectorAll('.btn-lain-purple');
   const modalLain = document.getElementById('modal-lain-overlay');
   const btnCloseLain = document.getElementById('btn-close-lain');
 
-  if (btnLainOverlay && modalLain) {
-    btnLainOverlay.addEventListener('click', () => {
-      modalLain.classList.add('open');
+  btnLainOverlays.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (modalLain) modalLain.classList.add('open');
     });
-  }
+  });
 
   if (btnCloseLain && modalLain) {
     btnCloseLain.addEventListener('click', () => {

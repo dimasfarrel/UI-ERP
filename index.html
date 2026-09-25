@@ -716,184 +716,99 @@
           <!-- =================================================================
                MODULE 3: PEMBELIAN (PURCHASING)
                ================================================================= -->
-          <div id="module-purchasing" class="module-section" style="display: none;">
-            <div class="page-header-row">
-              <div class="page-title-group">
-                <h2>Manajemen Pengadaan & Pembelian (PO)</h2>
-                <p>Kelola pesanan pembelian material pabrikasi, tagihan supplier, dan penerimaan logistik</p>
+                    <div id="module-purchasing" class="module-section" style="display: none;">
+            
+            <div class="penjualan-top-metrics">
+              <div class="metric-summary-card card-unpaid" style="border-top-color: #F59E0B;">
+                <div class="metric-header">
+                  <h3>Faktur belum dibayar</h3>
+                  <span class="metric-badge" style="background: #F59E0B;">0</span>
+                </div>
+                <div class="metric-amount">Rp. 0,00</div>
+                <div class="metric-subtext">Total</div>
               </div>
-              <div class="header-action-group">
-                <button id="btn-toggle-purchase-form" class="btn-dash-action btn-erp-primary">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
+
+              <div class="metric-summary-card card-due" style="border-top-color: #EF4444;">
+                <div class="metric-header">
+                  <h3>Faktur telat dibayar</h3>
+                  <span class="metric-badge" style="background: #EF4444;">0</span>
+                </div>
+                <div class="metric-amount">Rp. 0,00</div>
+                <div class="metric-subtext">Total</div>
+              </div>
+
+              <div class="metric-summary-card card-paid" style="border-top-color: #10B981;">
+                <div class="metric-header">
+                  <h3>Pelunasan 30 hari terakhir</h3>
+                  <span class="metric-badge" style="background: #10B981;">0</span>
+                </div>
+                <div class="metric-amount">Rp. 0,00</div>
+                <div class="metric-subtext">Total</div>
+              </div>
+            </div>
+
+            <div class="penjualan-tablist">
+              <button class="penjualan-tab active" data-purchase-tab="faktur">Faktur</button>
+              <button class="penjualan-tab" data-purchase-tab="tukar-faktur">Tukar faktur</button>
+              <button class="penjualan-tab" data-purchase-tab="pengiriman">Pengiriman</button>
+              <button class="penjualan-tab" data-purchase-tab="pesanan">Pesanan</button>
+              <button class="penjualan-tab" data-purchase-tab="penawaran">Penawaran</button>
+              <button class="penjualan-tab" data-purchase-tab="permintaan">Permintaan</button>
+              <button class="penjualan-tab" data-purchase-tab="persetujuan">Membutuhkan persetujuan <span style="background: #94A3B8; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: 4px;">0</span></button>
+              <button class="penjualan-tab" data-purchase-tab="ditolak">Ditolak</button>
+            </div>
+
+            <div class="penjualan-toolbar">
+              <div class="penjualan-filter-group">
+                <select id="filter-purchase-status" class="select-filter-figma">
+                  <option value="all">Semua status</option>
+                  <option value="Lunas">Lunas</option>
+                  <option value="Belum Bayar">Belum Bayar</option>
+                  <option value="Jatuh Tempo">Jatuh Tempo</option>
+                </select>
+
+                <div class="search-figma-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
-                  <span>Buat Purchase Order (PO) Baru</span>
+                  <input type="text" id="search-purchase-input" placeholder="Cari transaksi">
+                </div>
+                
+                <button class="btn-filter-icon" style="background: transparent; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 1rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--secondary); font-size: 0.85rem; font-weight: 500;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                  </svg>
+                  <span>Filter</span>
                 </button>
               </div>
+
+              <div class="dropdown-buat-penjualan">
+                <button id="btn-toggle-pembelian-dropdown" class="btn-buat-penjualan-figma" style="background: #194bfb;">
+                  <span>Buat pembelian baru</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.25rem;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div id="dropdown-menu-pembelian" class="dropdown-menu-figma">
+                  <a href="#" class="dropdown-item-figma" id="btn-open-pembelian-overlay">Faktur pembelian</a>
+                  <a href="#" class="dropdown-item-figma">Tukar pembelian</a>
+                  <a href="#" class="dropdown-item-figma">Pemesanan pembelian</a>
+                  <a href="#" class="dropdown-item-figma">Penawaran pembelian</a>
+                  <a href="#" class="dropdown-item-figma">Permintaan pembelian</a>
+                </div>
+              </div>
             </div>
 
-            <!-- FORM BUAT PEMBELIAN / PO -->
-            <div id="container-purchase-form" class="transaction-form-card" style="margin-top: 1.5rem;">
-              <div class="form-section-header">
-                <div>
-                  <h3>Formulir Purchase Order (PO) Baru</h3>
-                  <p style="color: var(--text-muted); font-size: 0.88rem;">Pemesanan bahan baku dan suku cadang kepada supplier resmi</p>
-                </div>
-                <button type="button" id="btn-purchase-demo-fill" class="demo-autofill-btn">✨ Isi Otomatis Contoh PO</button>
-              </div>
-
-              <form id="form-purchase-transaction">
-                <div class="form-grid-3col">
-                  <div class="form-group-erp">
-                    <label>Pemasok / Vendor</label>
-                    <select id="purchase-vendor" class="select-erp" required>
-                      <option value="">-- Pilih Vendor --</option>
-                      <option value="CV Multi Baja Nusantara">CV Multi Baja Nusantara</option>
-                      <option value="PT Delta Elektronik Utama">PT Delta Elektronik Utama</option>
-                      <option value="PT Logam Presisi Abadi">PT Logam Presisi Abadi</option>
-                      <option value="PT Petrokimia Semen Gresik">PT Petrokimia Semen Gresik</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>No. Purchase Order</label>
-                    <input type="text" id="purchase-po-no" class="input-erp" value="PO-2026-089" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Gudang Penerima</label>
-                    <select id="purchase-warehouse" class="select-erp" required>
-                      <option value="Gudang Bahan Baku & Komponen (Batu)">Gudang Bahan Baku & Komponen (Batu)</option>
-                      <option value="Gudang Utama Malang (Kepanjen)">Gudang Utama Malang (Kepanjen)</option>
-                      <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Tanggal PO</label>
-                    <input type="date" id="purchase-date" class="input-erp" value="2026-09-19" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Ekspektasi Pengiriman</label>
-                    <input type="date" id="purchase-expected-date" class="input-erp" value="2026-09-25" required>
-                  </div>
-
-                  <div class="form-group-erp">
-                    <label>Cost Center Pembebanan</label>
-                    <select id="purchase-costcenter" class="select-erp">
-                      <option value="CC-PROD">CC-101: Divisi Pabrikasi & Produksi</option>
-                      <option value="CC-LOG">CC-201: Divisi Logistik & Armada</option>
-                      <option value="CC-HQ">CC-301: Manajemen Operasional & HQ</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Items Table -->
-                <div style="margin-top: 1.5rem;">
-                  <h4 style="font-size: 1rem; color: var(--secondary); margin-bottom: 0.75rem;">Rincian Barang yang Dipesan</h4>
-                  <div class="items-table-wrapper">
-                    <table class="items-table">
-                      <thead>
-                        <tr>
-                          <th style="width: 35%;">Bahan / Komponen</th>
-                          <th style="width: 15%;">Kuantitas (Qty)</th>
-                          <th style="width: 12%;">Satuan</th>
-                          <th style="width: 20%;">Harga Beli (Rp)</th>
-                          <th style="width: 18%;">Total (Rp)</th>
-                          <th style="width: 5%;"></th>
-                        </tr>
-                      </thead>
-                      <tbody id="purchase-items-tbody">
-                        <tr>
-                          <td>
-                            <input type="text" class="table-input purchase-item-name" placeholder="Nama Komponen" value="Pelat Baja Cold-Rolled 3mm" required>
-                          </td>
-                          <td>
-                            <input type="number" class="table-input purchase-item-qty" value="50" min="1" required>
-                          </td>
-                          <td>
-                            <select class="table-input purchase-item-unit">
-                              <option value="Lembar">Lembar</option>
-                              <option value="Batang">Batang</option>
-                              <option value="Kg">Kg</option>
-                            </select>
-                          </td>
-                          <td>
-                            <input type="number" class="table-input purchase-item-price" value="850000" min="0" required>
-                          </td>
-                          <td>
-                            <input type="text" class="table-input purchase-item-total" value="Rp 42.500.000" readonly style="background: #F1F5F9; font-weight: 600;">
-                          </td>
-                          <td>
-                            <button type="button" class="btn-remove-row" title="Hapus Baris">✕</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="table-footer-action">
-                      <button type="button" id="btn-add-purchase-item" class="btn-add-line">+ Tambah Baris Bahan</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Bottom Summary -->
-                <div class="form-bottom-row" style="margin-top: 1.5rem;">
-                  <div class="form-group-erp">
-                    <label>Catatan untuk Vendor & Otorisasi</label>
-                    <textarea id="purchase-notes" class="textarea-erp" placeholder="Instruksi spesifikasi material, standar ISO, dan persyaratan packing..."></textarea>
-                  </div>
-
-                  <div class="summary-calc-card">
-                    <div class="summary-calc-row">
-                      <span>Subtotal Pengadaan:</span>
-                      <strong id="purchase-calc-subtotal">Rp 42.500.000</strong>
-                    </div>
-                    <div class="summary-calc-row">
-                      <span>PPN (11%):</span>
-                      <strong id="purchase-calc-tax">Rp 4.675.000</strong>
-                    </div>
-                    <div class="summary-calc-row total-highlight">
-                      <span>Total Nilai PO:</span>
-                      <strong id="purchase-calc-grandtotal" style="color: var(--primary);">Rp 47.175.000</strong>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-submit-bar">
-                  <button type="button" class="btn-erp btn-erp-secondary" style="max-width: 140px;" id="btn-cancel-purchase">Batal</button>
-                  <button type="submit" class="btn-erp btn-erp-primary" style="max-width: 260px;">
-                    <span>✓ Terbitkan Purchase Order</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- DAFTAR PURCHASE ORDERS -->
-            <div class="table-card-erp" style="margin-top: 1.5rem;">
-              <div class="table-toolbar">
-                <h3>Daftar Purchase Orders (PO)</h3>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">Total 3 PO Terdaftar</span>
-              </div>
-              <div style="overflow-x: auto;">
-                <table class="erp-data-table">
-                  <thead>
-                    <tr>
-                      <th>No. PO</th>
-                      <th>Tanggal</th>
-                      <th>Pemasok (Vendor)</th>
-                      <th>Gudang Tujuan</th>
-                      <th>Nilai PO</th>
-                      <th>Status Dokumen</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="purchase-table-body">
-                    <!-- JS rendered -->
-                  </tbody>
-                </table>
-              </div>
+            <!-- Table or Empty State -->
+            <div class="table-card-erp" style="margin-top: 1rem; text-align: center; padding: 4rem 2rem;">
+              <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 1.5rem auto;">
+                <path d="M10 20C10 14.4772 14.4772 10 20 10H45.5L55.5 20H100C105.523 20 110 24.4772 110 30V80C110 85.5228 105.523 90 100 90H20C14.4772 90 10 85.5228 10 80V20Z" fill="#194bfb" fill-opacity="0.2"/>
+                <path d="M15 35C15 32.2386 17.2386 30 20 30H100C102.761 30 105 32.2386 105 35V80C105 85.5228 100.523 90 95 90H25C19.4772 90 15 85.5228 15 80V35Z" fill="#194bfb"/>
+                <rect x="25" y="25" width="70" height="15" rx="4" fill="#E2E8F0"/>
+              </svg>
+              <h3 style="color: var(--secondary); margin-bottom: 0.5rem; font-family: var(--font-figma); font-weight: 700;">Belum ada faktur pembelian</h3>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">Anda dapat membuat faktur baru melalui tombol "Buat pembelian baru".</p>
             </div>
           </div>
 
@@ -1141,6 +1056,144 @@
     </form>
   </div>
 </div>
+<!-- =====================================================================
+     FIGMA #PEMBELIAN OVERLAY
+     ===================================================================== -->
+<div id="modal-pembelian-overlay" class="overlay-drawer-backdrop">
+  <div class="overlay-penjualan-card">
+    <div class="overlay-header">
+      <h3>Pembelian overlay</h3>
+      <button type="button" class="btn-close-x" id="btn-close-pembelian-overlay">&times;</button>
+    </div>
+
+    <form id="form-purchase-overlay">
+      <div class="overlay-body">
+        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pemasok</label>
+              <select id="overlay-purchase-vendor" class="form-input-figma" required>
+                <option value="">Pilih Pemasok</option>
+                <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
+                <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
+                <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
+              </select>
+            </div>
+
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="overlay-purchase-address" class="form-input-figma" placeholder="Alamat pemasok..." value="Jl. Industri Raya No. 12">
+            </div>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="overlay-purchase-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="overlay-purchase-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="overlay-purchase-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="overlay-purchase-email" class="form-input-figma" placeholder="Email..." value="finance@suppliergemilang.co.id">
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+              <div class="overlay-field" style="flex: 1;">
+                <label>No Transaksi</label>
+                <input type="text" id="overlay-purchase-invoice-no" class="form-input-figma" value="PO-2026-005" required>
+              </div>
+              <button type="button" class="btn-lain-purple">Lain</button>
+            </div>
+
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="overlay-purchase-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
+        <div class="overlay-table-container" style="margin-top: 0.5rem;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Produk</th>
+                <th style="width: 20%;">Deskripsi</th>
+                <th style="width: 8%;">Quantity</th>
+                <th style="width: 8%;">Unit</th>
+                <th style="width: 13%;">Harga Satuan</th>
+                <th style="width: 8%;">Diskon</th>
+                <th style="width: 8%;">Pajak</th>
+                <th style="width: 11%;">Jumlah</th>
+                <th style="width: 4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="overlay-purchase-items-tbody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-add-overlay-purchase-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+
+        <!-- Bottom Calculation & Notes -->
+        <div class="overlay-calc-panel">
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="overlay-purchase-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo penerimaan..."></textarea>
+          </div>
+
+          <div class="overlay-calc-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>Subtotal:</span>
+              <strong id="overlay-purchase-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>PPN (11%):</span>
+              <strong id="overlay-purchase-calc-tax">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
+              <span>Total Tagihan:</span>
+              <strong id="overlay-purchase-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
+      <div class="overlay-actions-bar">
+        <button type="button" id="btn-batal-purchase-overlay" class="btn-batal-text">batal</button>
+        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
+          <span>Simpan & Terbitkan</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Lain Overlay Modal (Figma: Lain overlay) -->
 <div id="modal-lain-overlay" class="modal-backdrop">
   <div class="modal-lain-dialog">
@@ -1148,23 +1201,71 @@
       <button class="btn-close-lain" id="btn-close-lain">&times;</button>
     </div>
     <div class="modal-lain-body">
-      <div class="lain-item"><div class="lain-label">SUMBER</div></div>
-      <div class="lain-item"><div class="lain-label">MODEL LABEL <span>▼</span></div></div>
-      <div class="lain-item"><div class="lain-label">YOURHOLD ID</div></div>
+      <div class="lain-item">
+        <div class="lain-label">SUMBER</div>
+        <input type="text" class="lain-input" placeholder="Isi sumber...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">MODEL LABEL</div>
+        <select class="lain-input">
+          <option>Pilih Model</option>
+          <option>Model A</option>
+          <option>Model B</option>
+        </select>
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">YOURHOLD ID</div>
+        <input type="text" class="lain-input" placeholder="Isi ID...">
+      </div>
       <div class="lain-item">
         <div class="lain-label">EU/ROW</div>
-        <div class="lain-value-box">EURO</div>
+        <div class="lain-value-box">
+          <select class="lain-input" style="border: none; padding: 0; background: transparent;">
+            <option>EURO</option>
+            <option>ROW</option>
+          </select>
+        </div>
       </div>
-      <div class="lain-item"><div class="lain-label">EXPRESS</div></div>
-      <div class="lain-item"><div class="lain-label">NOMOR PO/ST</div></div>
-      <div class="lain-item"><div class="lain-label">ODD GROUP</div></div>
-      <div class="lain-item"><div class="lain-label">MAIN PARTS</div></div>
-      <div class="lain-item"><div class="lain-label">TULIP</div></div>
-      <div class="lain-item"><div class="lain-label">KONTAK</div></div>
-      <div class="lain-item"><div class="lain-label">KONTAK</div></div>
-      <div class="lain-item"><div class="lain-label">ALAMAT</div></div>
-      <div class="lain-item"><div class="lain-label">TEXTH1H2</div></div>
-      <div class="lain-item"><div class="lain-label">PARTNER</div></div>
+      <div class="lain-item">
+        <div class="lain-label">EXPRESS</div>
+        <input type="text" class="lain-input" placeholder="Express...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">NOMOR PO/ST</div>
+        <input type="text" class="lain-input" placeholder="No PO...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">ODD GROUP</div>
+        <input type="text" class="lain-input" placeholder="Odd Group...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">MAIN PARTS</div>
+        <input type="text" class="lain-input" placeholder="Main Parts...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">TULIP</div>
+        <input type="text" class="lain-input" placeholder="Tulip...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">KONTAK</div>
+        <input type="text" class="lain-input" placeholder="Kontak 1...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">KONTAK</div>
+        <input type="text" class="lain-input" placeholder="Kontak 2...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">ALAMAT</div>
+        <input type="text" class="lain-input" placeholder="Alamat...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">TEXTH1H2</div>
+        <input type="text" class="lain-input" placeholder="Text H1H2...">
+      </div>
+      <div class="lain-item">
+        <div class="lain-label">PARTNER</div>
+        <input type="text" class="lain-input" placeholder="Partner...">
+      </div>
     </div>
     <div class="modal-lain-footer">
       <button class="btn-lain-action" style="margin-right: 1.5rem;">Save Local</button>
