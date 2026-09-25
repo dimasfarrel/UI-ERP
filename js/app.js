@@ -1354,26 +1354,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateLainSummary(data) {
     const summaryIds = ['lain-summary-sales', 'lain-summary-purchase'];
-    const filled = Object.entries(data).filter(([k, v]) => v && v.trim() !== '');
+    const SKIP_DEFAULTS = { 'lain-model': '1', 'lain-maxbaris': '100', 'lain-disc-group': '0', 'lain-kurs-rate': '1', 'lain-kurs-currency': 'IDR' };
+
+    // Only show known keys with meaningful non-default values
+    const filled = Object.entries(data).filter(([k, v]) => {
+      if (!LAIN_LABELS[k]) return false;
+      if (v === null || v === undefined) return false;
+      const strV = String(v).trim();
+      if (strV === '' || strV === 'false') return false;
+      if (SKIP_DEFAULTS[k] && strV === SKIP_DEFAULTS[k]) return false;
+      return true;
+    });
 
     summaryIds.forEach(summaryId => {
       const el = document.getElementById(summaryId);
       if (!el) return;
-      if (filled.length === 0) {
-        el.style.display = 'none';
-        return;
-      }
-      const tags = filled.map(([k, v]) =>
-        `<span class="lain-summary-tag"><strong>${LAIN_LABELS[k] || k}:</strong> ${v}</span>`
-      ).join('');
-      el.innerHTML = `
-        <div class="lain-summary-title">📋 Informasi Tambahan (Lain)</div>
-        <div class="lain-summary-tags">${tags}</div>
-      `;
+      if (filled.length === 0) { el.style.display = 'none'; return; }
+      const tags = filled.map(([k, v]) => {
+        const label = LAIN_LABELS[k];
+        const displayVal = k === 'lain-disc-group'
+          ? `Rp ${Number(v).toLocaleString('id-ID')}${data['lain-disc-persen'] ? ' (%)' : ''}`
+          : v;
+        return `<span class="lain-summary-tag"><strong>${label}:</strong> ${displayVal}</span>`;
+      }).join('');
+      el.innerHTML = `<div class="lain-summary-title">📋 Informasi Tambahan (Lain)</div><div class="lain-summary-tags">${tags}</div>`;
       el.style.display = 'block';
     });
 
-    // Mark Lain buttons as active
     document.querySelectorAll('.btn-lain-purple').forEach(btn => {
       if (filled.length > 0) {
         btn.classList.add('lain-has-data');
@@ -1383,15 +1390,22 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = 'Lain';
       }
     });
+
+    if (typeof calculateOverlaySalesTotals === 'function') calculateOverlaySalesTotals();
   }
 
-  // Auto-load lain data on page load if exists
+  // Auto-load lain data on page load — clear stale data from old modal version
   (function() {
     const raw = localStorage.getItem(LAIN_STORAGE_KEY);
     if (!raw) return;
     try {
       const data = JSON.parse(raw);
-      const filled = Object.values(data).filter(v => v && v.trim() !== '');
+      // Detect stale old keys and wipe them
+      const hasStaleKeys = Object.keys(data).some(k => ['lain-eurow','lain-oddgroup','lain-yourhold','lain-mainparts','lain-tulip'].includes(k));
+      if (hasStaleKeys) { localStorage.removeItem(LAIN_STORAGE_KEY); return; }
+      LAIN_FIELDS.forEach(id => { const el = document.getElementById(id); if (el && data[id] !== undefined) el.value = data[id]; });
+      LAIN_CHECKBOXES.forEach(id => { const el = document.getElementById(id); if (el && data[id] !== undefined) el.checked = Boolean(data[id]); });
+      const filled = Object.values(data).filter(v => v && String(v).trim() !== '');
       if (filled.length > 0) updateLainSummary(data);
     } catch(e) {}
   })();
