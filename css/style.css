@@ -2161,3 +2161,100 @@ body {
   border-color: var(--primary);
   box-shadow: 0 0 0 2px rgba(6, 118, 255, 0.1);
 }
+
+/* Jurnal-like Header */
+.module-header-jurnal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-bottom: 0.5rem;
+}
+
+.module-header-jurnal .module-title {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
+}
+
+.module-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-jurnal-outline {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #194bfb;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-jurnal-outline:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+}
+
+.dropdown-jurnal {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-jurnal-primary {
+  background: #194bfb;
+  border: 1px solid #194bfb;
+  color: #FFFFFF;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.btn-jurnal-primary:hover {
+  background: #0f3ad1;
+  border-color: #0f3ad1;
+}
+
+.dropdown-menu-jurnal {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: #FFFFFF;
+  min-width: 220px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 100;
+  padding: 0.5rem 0;
+}
+
+.dropdown-menu-jurnal.show {
+  display: block;
+}
+
+.dropdown-menu-jurnal a {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: #1E293B;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.dropdown-menu-jurnal a:hover {
+  background: #F1F5F9;
+}

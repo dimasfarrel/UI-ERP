@@ -600,9 +600,29 @@
           <!-- =================================================================
                MODULE 2: PENJUALAN (FIGMA: #2038:6090 "Penjualan")
                ================================================================= -->
-          <div id="module-sales" class="module-section" style="display: block;">
+                    <div id="module-sales" class="module-section" style="display: block;">
+            <div class="module-header-jurnal">
+              <h2 class="module-title">Penjualan</h2>
+              <div class="module-header-actions">
+                <button class="btn-jurnal-outline">Impor</button>
+                <div class="dropdown-jurnal">
+                  <button class="btn-jurnal-primary" id="btn-toggle-penjualan-dropdown">
+                    Buat penjualan baru
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <div class="dropdown-menu-jurnal" id="dropdown-menu-penjualan">
+                    <a href="#" id="btn-open-penjualan-overlay">Faktur penjualan</a>
+                    <a href="#">Tukar faktur</a>
+                    <a href="#">Pemesanan penjualan</a>
+                    <a href="#">Penawaran penjualan</a>
+                  </div>
+                </div>
+              </div>
+            </div>
             
-            <!-- 3 Top Metric Cards from Figma (#2038:6169, 6180, 6191) -->
+            <!-- 3 Top Metric Cards -->
             <div class="penjualan-top-metrics">
               <div class="metric-summary-card card-unpaid">
                 <div class="metric-header">
@@ -669,19 +689,6 @@
               </div>
 
               <!-- Dropdown Button "+ Buat Penjualan Baru" -->
-              <div class="dropdown-buat-penjualan">
-                <button id="btn-toggle-penjualan-dropdown" class="btn-buat-penjualan-figma">
-                  <span>Buat penjualan baru</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.25rem;">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-                <div id="dropdown-menu-penjualan" class="dropdown-menu-figma">
-                  <a href="#" class="dropdown-item-figma" id="btn-open-penjualan-overlay">Penagihan Penjualan</a>
-                  <a href="#" class="dropdown-item-figma">Tukar Faktur</a>
-                  <a href="#" class="dropdown-item-figma">Pemesanan Penjualan</a>
-                  <a href="#" class="dropdown-item-figma">Penawaran Penjualan</a>
-                </div>
               </div>
             </div>
 
@@ -716,7 +723,28 @@
           <!-- =================================================================
                MODULE 3: PEMBELIAN (PURCHASING)
                ================================================================= -->
-                    <div id="module-purchasing" class="module-section" style="display: none;">
+                              <div id="module-purchasing" class="module-section" style="display: none;">
+            <div class="module-header-jurnal">
+              <h2 class="module-title">Pembelian</h2>
+              <div class="module-header-actions">
+                <button class="btn-jurnal-outline">Impor</button>
+                <div class="dropdown-jurnal">
+                  <button class="btn-jurnal-primary" id="btn-toggle-pembelian-dropdown">
+                    Buat pembelian baru
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <div class="dropdown-menu-jurnal" id="dropdown-menu-pembelian">
+                    <a href="#" id="btn-open-pembelian-overlay">Faktur pembelian</a>
+                    <a href="#">Tukar pembelian</a>
+                    <a href="#">Pemesanan pembelian</a>
+                    <a href="#">Penawaran pembelian</a>
+                    <a href="#">Permintaan pembelian</a>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <div class="penjualan-top-metrics">
               <div class="metric-summary-card card-unpaid" style="border-top-color: #F59E0B;">
@@ -783,20 +811,6 @@
                 </button>
               </div>
 
-              <div class="dropdown-buat-penjualan">
-                <button id="btn-toggle-pembelian-dropdown" class="btn-buat-penjualan-figma" style="background: #194bfb;">
-                  <span>Buat pembelian baru</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.25rem;">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-                <div id="dropdown-menu-pembelian" class="dropdown-menu-figma">
-                  <a href="#" class="dropdown-item-figma" id="btn-open-pembelian-overlay">Faktur pembelian</a>
-                  <a href="#" class="dropdown-item-figma">Tukar pembelian</a>
-                  <a href="#" class="dropdown-item-figma">Pemesanan pembelian</a>
-                  <a href="#" class="dropdown-item-figma">Penawaran pembelian</a>
-                  <a href="#" class="dropdown-item-figma">Permintaan pembelian</a>
-                </div>
               </div>
             </div>
 
