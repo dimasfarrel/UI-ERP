@@ -1200,6 +1200,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalLain = document.getElementById('modal-lain-overlay');
   const btnCloseLain = document.getElementById('btn-close-lain');
 
+  const LAIN_FIELDS = [
+    'lain-sumber', 'lain-model', 'lain-yourhold', 'lain-eurow',
+    'lain-express', 'lain-nopo', 'lain-oddgroup', 'lain-mainparts',
+    'lain-tulip', 'lain-kontak1', 'lain-kontak2', 'lain-partner',
+    'lain-alamat', 'lain-texth1h2'
+  ];
+  const LAIN_STORAGE_KEY = 'erp_lain_data';
+
   btnLainOverlays.forEach(btn => {
     btn.addEventListener('click', () => {
       if (modalLain) modalLain.classList.add('open');
@@ -1211,6 +1219,49 @@ document.addEventListener('DOMContentLoaded', () => {
       modalLain.classList.remove('open');
     });
   }
+
+  // Close lain modal on backdrop click
+  if (modalLain) {
+    modalLain.addEventListener('click', (e) => {
+      if (e.target === modalLain) modalLain.classList.remove('open');
+    });
+  }
+
+  // Save Local
+  document.getElementById('btn-lain-save-local')?.addEventListener('click', () => {
+    const data = {};
+    LAIN_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    localStorage.setItem(LAIN_STORAGE_KEY, JSON.stringify(data));
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const statusEl = document.getElementById('lain-status-text');
+    if (statusEl) statusEl.textContent = `Tersimpan pukul ${timeStr}`;
+    showToast('Data lain-lain berhasil disimpan!', 'success');
+  });
+
+  // Load Local
+  document.getElementById('btn-lain-load-local')?.addEventListener('click', () => {
+    const raw = localStorage.getItem(LAIN_STORAGE_KEY);
+    if (!raw) {
+      showToast('Tidak ada data tersimpan di lokal.', 'info');
+      return;
+    }
+    try {
+      const data = JSON.parse(raw);
+      LAIN_FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.value = data[id];
+      });
+      const statusEl = document.getElementById('lain-status-text');
+      if (statusEl) statusEl.textContent = 'Data berhasil dimuat';
+      showToast('Data lain-lain berhasil dimuat!', 'success');
+    } catch(e) {
+      showToast('Gagal memuat data.', 'danger');
+    }
+  });
 
 
   // Dropdown Logic for Penjualan and Pembelian

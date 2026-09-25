@@ -2016,89 +2016,167 @@ body {
    FIGMA #LAIN OVERLAY MODAL
    ========================================================================== */
 #modal-lain-overlay {
-  z-index: 1050; /* Higher than penjualan overlay */
+  z-index: 1050;
 }
 
 .modal-lain-dialog {
-  background: #E8E8E8;
-  width: 320px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  background: #FFFFFF;
+  width: 560px;
+  max-width: 95vw;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  max-height: 90vh;
 }
 
 .modal-lain-header {
   display: flex;
-  justify-content: flex-end;
-  padding-bottom: 0.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.modal-lain-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 0.2rem;
+}
+
+.modal-lain-subtitle {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  margin: 0;
 }
 
 .btn-close-lain {
-  background: none;
+  background: #F1F5F9;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  color: #333;
+  color: #64748B;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.btn-close-lain:hover {
+  background: #E2E8F0;
+  color: #1E293B;
 }
 
 .modal-lain-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.lain-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.lain-field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.5rem 0;
+  gap: 0.3rem;
 }
 
-.lain-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.lain-field-full {
+  grid-column: span 2;
 }
 
-.lain-label {
-  background: #FFF9C4;
-  border: 1px solid #D4D4D4;
-  border-radius: 4px;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.75rem;
+.lain-field-label {
+  font-size: 0.72rem;
   font-weight: 600;
-  color: #333;
-  width: 130px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.lain-value-box {
-  background: #FFF9C4;
-  border: 1px solid #D4D4D4;
-  border-radius: 4px;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #333;
+.lain-field-input {
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.85rem;
+  color: #1E293B;
+  outline: none;
+  font-family: inherit;
+  background: #FAFAFA;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lain-field-input:focus {
+  border-color: #194bfb;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(25, 75, 251, 0.08);
 }
 
 .modal-lain-footer {
   display: flex;
-  justify-content: center;
-  padding-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  border-radius: 0 0 10px 10px;
 }
 
-.btn-lain-action {
-  background: white;
-  border: 1px solid #CCC;
-  border-radius: 20px;
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
+.lain-status-text {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-style: italic;
+}
+
+.lain-footer-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.btn-lain-load {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
 }
 
-.btn-lain-action:hover {
-  background: #F0F0F0;
+.btn-lain-load:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.btn-lain-save {
+  background: #194bfb;
+  border: 1px solid #194bfb;
+  color: #FFFFFF;
+  border-radius: 6px;
+  padding: 0.45rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.btn-lain-save:hover {
+  background: #0f3ad1;
 }
 
 /* ==========================================================================

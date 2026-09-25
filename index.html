@@ -1572,78 +1572,86 @@
 <div id="modal-lain-overlay" class="modal-backdrop">
   <div class="modal-lain-dialog">
     <div class="modal-lain-header">
+      <div>
+        <h3 class="modal-lain-title">Informasi Tambahan</h3>
+        <p class="modal-lain-subtitle">Data lain-lain untuk dokumen transaksi ini</p>
+      </div>
       <button class="btn-close-lain" id="btn-close-lain">&times;</button>
     </div>
     <div class="modal-lain-body">
-      <div class="lain-item">
-        <div class="lain-label">SUMBER</div>
-        <input type="text" class="lain-input" placeholder="Isi sumber...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">MODEL LABEL</div>
-        <select class="lain-input">
-          <option>Pilih Model</option>
-          <option>Model A</option>
-          <option>Model B</option>
-        </select>
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">YOURHOLD ID</div>
-        <input type="text" class="lain-input" placeholder="Isi ID...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">EU/ROW</div>
-        <div class="lain-value-box">
-          <select class="lain-input" style="border: none; padding: 0; background: transparent;">
-            <option>EURO</option>
-            <option>ROW</option>
+      <div class="lain-grid">
+        <div class="lain-field">
+          <label class="lain-field-label">Sumber</label>
+          <input type="text" id="lain-sumber" class="lain-field-input" placeholder="Masukkan sumber...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Model Label</label>
+          <select id="lain-model" class="lain-field-input">
+            <option value="">Pilih Model</option>
+            <option value="Model A">Model A</option>
+            <option value="Model B">Model B</option>
+            <option value="Model C">Model C</option>
           </select>
         </div>
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">EXPRESS</div>
-        <input type="text" class="lain-input" placeholder="Express...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">NOMOR PO/ST</div>
-        <input type="text" class="lain-input" placeholder="No PO...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">ODD GROUP</div>
-        <input type="text" class="lain-input" placeholder="Odd Group...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">MAIN PARTS</div>
-        <input type="text" class="lain-input" placeholder="Main Parts...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">TULIP</div>
-        <input type="text" class="lain-input" placeholder="Tulip...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">KONTAK</div>
-        <input type="text" class="lain-input" placeholder="Kontak 1...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">KONTAK</div>
-        <input type="text" class="lain-input" placeholder="Kontak 2...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">ALAMAT</div>
-        <input type="text" class="lain-input" placeholder="Alamat...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">TEXTH1H2</div>
-        <input type="text" class="lain-input" placeholder="Text H1H2...">
-      </div>
-      <div class="lain-item">
-        <div class="lain-label">PARTNER</div>
-        <input type="text" class="lain-input" placeholder="Partner...">
+        <div class="lain-field">
+          <label class="lain-field-label">Yourhold ID</label>
+          <input type="text" id="lain-yourhold" class="lain-field-input" placeholder="ID...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">EU / ROW</label>
+          <select id="lain-eurow" class="lain-field-input">
+            <option value="EURO">EURO</option>
+            <option value="ROW">ROW</option>
+          </select>
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Express</label>
+          <input type="text" id="lain-express" class="lain-field-input" placeholder="Express...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Nomor PO/ST</label>
+          <input type="text" id="lain-nopo" class="lain-field-input" placeholder="No PO...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Odd Group</label>
+          <input type="text" id="lain-oddgroup" class="lain-field-input" placeholder="Odd Group...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Main Parts</label>
+          <input type="text" id="lain-mainparts" class="lain-field-input" placeholder="Main Parts...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Tulip</label>
+          <input type="text" id="lain-tulip" class="lain-field-input" placeholder="Tulip...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Kontak 1</label>
+          <input type="text" id="lain-kontak1" class="lain-field-input" placeholder="No. telepon / WA...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Kontak 2</label>
+          <input type="text" id="lain-kontak2" class="lain-field-input" placeholder="No. telepon / WA...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Partner</label>
+          <input type="text" id="lain-partner" class="lain-field-input" placeholder="Nama partner...">
+        </div>
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Alamat</label>
+          <input type="text" id="lain-alamat" class="lain-field-input" placeholder="Alamat lengkap...">
+        </div>
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Text H1H2</label>
+          <textarea id="lain-texth1h2" class="lain-field-input" rows="2" placeholder="Catatan H1H2..." style="resize: vertical;"></textarea>
+        </div>
       </div>
     </div>
     <div class="modal-lain-footer">
-      <button class="btn-lain-action" style="margin-right: 1.5rem;">Save Local</button>
-      <button class="btn-lain-action">Load Local</button>
+      <span id="lain-status-text" class="lain-status-text"></span>
+      <div class="lain-footer-btns">
+        <button class="btn-lain-load" id="btn-lain-load-local">⬆ Muat Data</button>
+        <button class="btn-lain-save" id="btn-lain-save-local">💾 Simpan</button>
+      </div>
     </div>
   </div>
 </div>
