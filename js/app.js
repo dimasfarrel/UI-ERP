@@ -1249,6 +1249,489 @@ document.addEventListener('DOMContentLoaded', () => {
   setupDropdown(btnTogglePenjualan, menuPenjualan);
   setupDropdown(btnTogglePembelian, menuPembelian);
 
+  // =========================================================================
+  // MASTER DATA STATE (Settings CRUD)
+  // =========================================================================
+  const masterData = {
+    produk: [
+      { id: 1, sku: 'SKU-MCH-001', nama: 'Komponen Mesin Seri MX-400', kategori: 'Mesin & Sparepart', satuan: 'Pcs', harga: 2500000, stok: 48, status: 'Aktif' },
+      { id: 2, sku: 'SKU-RAW-009', nama: 'Pelat Baja Cold-Rolled 3mm', kategori: 'Bahan Baku', satuan: 'Lembar', harga: 850000, stok: 8, status: 'Aktif' },
+      { id: 3, sku: 'SKU-ELC-042', nama: 'Inverter Listrik Industri 5KW', kategori: 'Elektronik', satuan: 'Unit', harga: 4100000, stok: 14, status: 'Aktif' },
+      { id: 4, sku: 'SKU-FLX-012', nama: 'Hydraulic Hose Tube 1/2 Inch', kategori: 'Pneumatik', satuan: 'Roll', harga: 1200000, stok: 6, status: 'Tidak Aktif' },
+    ],
+    pelanggan: [
+      { id: 1, kode: 'CST-001', nama: 'PT Surya Gemilang Kencana', kontak: '0341-512001', kota: 'Malang', tipe: 'B2B Industri', limitKredit: 500000000, status: 'Aktif' },
+      { id: 2, kode: 'CST-002', nama: 'PT Bintang Mitra Sejahtera', kontak: '031-723451', kota: 'Surabaya', tipe: 'B2B Distribusi', limitKredit: 350000000, status: 'Aktif' },
+      { id: 3, kode: 'CST-003', nama: 'CV Cipta Karya Mandiri', kontak: '0341-789012', kota: 'Malang', tipe: 'B2B Retail', limitKredit: 100000000, status: 'Aktif' },
+      { id: 4, kode: 'CST-004', nama: 'Toko Makmur Sentosa Malang', kontak: '0341-445566', kota: 'Batu', tipe: 'Retail Langsung', limitKredit: 50000000, status: 'Aktif' },
+    ],
+    vendor: [
+      { id: 1, kode: 'VND-001', nama: 'CV Multi Baja Nusantara', kontak: '021-8001234', kota: 'Jakarta', kategori: 'Material Baja', leadTime: '7 Hari', status: 'Aktif' },
+      { id: 2, kode: 'VND-002', nama: 'PT Delta Elektronik Utama', kontak: '031-5561890', kota: 'Surabaya', kategori: 'Komponen Elektronik', leadTime: '3 Hari', status: 'Aktif' },
+      { id: 3, kode: 'VND-003', nama: 'PT Logam Presisi Abadi', kontak: '0341-221100', kota: 'Malang', kategori: 'Besi & Logam', leadTime: '5 Hari', status: 'Aktif' },
+    ],
+    gudang: [
+      { id: 1, kode: 'WH-MLG-01', nama: 'Gudang Utama Malang', lokasi: 'Kepanjen, Malang', pic: 'Budi Santoso', kapasitas: '15.000 m²', utilisasi: '84%', status: 'Aktif' },
+      { id: 2, kode: 'WH-SGS-02', nama: 'Gudang Transit Singosari', lokasi: 'Singosari, Malang', pic: 'Deni Kurniawan', kapasitas: '8.000 m²', utilisasi: '58%', status: 'Aktif' },
+      { id: 3, kode: 'WH-BTU-03', nama: 'Gudang Bahan Baku (Batu)', lokasi: 'Batu, Malang', pic: 'Rani Dewi', kapasitas: '7.500 m²', utilisasi: '42%', status: 'Aktif' },
+      { id: 4, kode: 'WH-LKW-04', nama: 'Gudang Distribusi Retail', lokasi: 'Lowokwaru, Malang', pic: 'Ahmad Fauzi', kapasitas: '3.100 m²', utilisasi: '91%', status: 'Hampir Penuh' },
+    ],
+    pengguna: [
+      { id: 1, username: 'admin_malang', nama: 'Agus Administrator', email: 'admin@erp-malang.id', role: 'Super Admin', unit: 'PT Distribusi Logistik', lastLogin: '26 Sep 2026', status: 'Aktif' },
+      { id: 2, username: 'sales_01', nama: 'Wulan Pratiwi', email: 'wulan@erp-malang.id', role: 'Staff Penjualan', unit: 'Malang Retail & Niaga', lastLogin: '25 Sep 2026', status: 'Aktif' },
+      { id: 3, username: 'purchaser_02', nama: 'Randi Susanto', email: 'randi@erp-malang.id', role: 'Staff Pembelian', unit: 'PT Manufaktur Utama', lastLogin: '24 Sep 2026', status: 'Aktif' },
+      { id: 4, username: 'finance_mgr', nama: 'Sri Handayani', email: 'sri@erp-malang.id', role: 'Manager Keuangan', unit: 'PT Distribusi Logistik', lastLogin: '26 Sep 2026', status: 'Aktif' },
+    ],
+    bisnis: [
+      { id: 1, kode: 'MMU-01', nama: 'PT Malang Manufaktur Utama', jenis: 'Manufaktur', pic: 'Hendra Wijaya', kota: 'Malang', status: 'Aktif' },
+      { id: 2, kode: 'DLM-02', nama: 'PT Distribusi Logistik Malang', jenis: 'Distribusi', pic: 'Sari Indah', kota: 'Malang', status: 'Aktif' },
+      { id: 3, kode: 'RNP-03', nama: 'Malang Retail & Niaga Prima', jenis: 'Retail', pic: 'Budi Cahyono', kota: 'Malang', status: 'Aktif' },
+      { id: 4, kode: 'SAM-04', nama: 'PT Solusi Agrobisnis Malang', jenis: 'Agrobisnis', pic: 'Tono Prasetyo', kota: 'Batu', status: 'Aktif' },
+    ],
+  };
+
+  // =========================================================================
+  // SETTINGS CRUD RENDERS
+  // =========================================================================
+  function renderSettingsProduk() {
+    const tbody = document.getElementById('settings-produk-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.produk.map(p => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${p.sku}</td>
+        <td><strong>${p.nama}</strong></td>
+        <td>${p.kategori}</td>
+        <td>${p.satuan}</td>
+        <td style="text-align:right; font-weight:600;">${formatRupiah(p.harga)}</td>
+        <td style="text-align:right;">${p.stok}</td>
+        <td><span class="badge-status ${p.status === 'Aktif' ? 'badge-success' : 'badge-danger'}">● ${p.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="produk" data-id="${p.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="produk" data-id="${p.id}" data-name="${p.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderSettingsPelanggan() {
+    const tbody = document.getElementById('settings-pelanggan-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.pelanggan.map(p => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${p.kode}</td>
+        <td><strong>${p.nama}</strong></td>
+        <td>${p.kontak}</td>
+        <td>${p.kota}</td>
+        <td>${p.tipe}</td>
+        <td>${formatRupiah(p.limitKredit)}</td>
+        <td><span class="badge-status ${p.status === 'Aktif' ? 'badge-success' : 'badge-danger'}">● ${p.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="pelanggan" data-id="${p.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="pelanggan" data-id="${p.id}" data-name="${p.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderSettingsVendor() {
+    const tbody = document.getElementById('settings-vendor-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.vendor.map(v => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${v.kode}</td>
+        <td><strong>${v.nama}</strong></td>
+        <td>${v.kontak}</td>
+        <td>${v.kota}</td>
+        <td>${v.kategori}</td>
+        <td>${v.leadTime}</td>
+        <td><span class="badge-status ${v.status === 'Aktif' ? 'badge-success' : 'badge-danger'}">● ${v.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="vendor" data-id="${v.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="vendor" data-id="${v.id}" data-name="${v.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderSettingsGudang() {
+    const tbody = document.getElementById('settings-gudang-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.gudang.map(g => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${g.kode}</td>
+        <td><strong>${g.nama}</strong></td>
+        <td>${g.lokasi}</td>
+        <td>${g.pic}</td>
+        <td>${g.kapasitas}</td>
+        <td><span class="${parseFloat(g.utilisasi) > 85 ? 'badge-status badge-danger' : 'badge-status badge-success'}">${g.utilisasi}</span></td>
+        <td><span class="badge-status ${g.status === 'Aktif' ? 'badge-success' : 'badge-warning'}">● ${g.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="gudang" data-id="${g.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="gudang" data-id="${g.id}" data-name="${g.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderSettingsPengguna() {
+    const tbody = document.getElementById('settings-pengguna-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.pengguna.map(u => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600;">${u.username}</td>
+        <td><strong>${u.nama}</strong></td>
+        <td>${u.email}</td>
+        <td><span class="badge-status ${u.role === 'Super Admin' ? 'badge-info' : 'badge-success'}">${u.role}</span></td>
+        <td>${u.unit}</td>
+        <td style="color:var(--text-muted); font-size:0.85rem;">${u.lastLogin}</td>
+        <td><span class="badge-status ${u.status === 'Aktif' ? 'badge-success' : 'badge-danger'}">● ${u.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="pengguna" data-id="${u.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="pengguna" data-id="${u.id}" data-name="${u.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderSettingsBisnis() {
+    const tbody = document.getElementById('settings-bisnis-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.bisnis.map(b => `
+      <tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${b.kode}</td>
+        <td><strong>${b.nama}</strong></td>
+        <td>${b.jenis}</td>
+        <td>${b.pic}</td>
+        <td>${b.kota}</td>
+        <td><span class="badge-status ${b.status === 'Aktif' ? 'badge-success' : 'badge-danger'}">● ${b.status}</span></td>
+        <td style="text-align:center;">
+          <button class="btn-crud-edit" data-entity="bisnis" data-id="${b.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer; margin-right:4px;">Edit</button>
+          <button class="btn-crud-delete" data-entity="bisnis" data-id="${b.id}" data-name="${b.nama}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.25rem 0.6rem; font-size:0.75rem; cursor:pointer;">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+    bindCrudButtons();
+  }
+
+  function renderAllSettings() {
+    renderSettingsProduk();
+    renderSettingsPelanggan();
+    renderSettingsVendor();
+    renderSettingsGudang();
+    renderSettingsPengguna();
+    renderSettingsBisnis();
+  }
+
+  // =========================================================================
+  // CRUD MODAL FORMS
+  // =========================================================================
+  const crudFormTemplates = {
+    produk: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Kode SKU *</label><input type="text" id="f-sku" class="form-input-figma" value="${data.sku || ''}" placeholder="SKU-XXX-000" required></div>
+        <div class="overlay-field"><label>Nama Produk *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="Nama produk..." required></div>
+        <div class="overlay-field"><label>Kategori</label><select id="f-kategori" class="form-input-figma"><option ${data.kategori === 'Mesin & Sparepart' ? 'selected' : ''}>Mesin & Sparepart</option><option ${data.kategori === 'Bahan Baku' ? 'selected' : ''}>Bahan Baku</option><option ${data.kategori === 'Elektronik' ? 'selected' : ''}>Elektronik</option><option ${data.kategori === 'Pneumatik' ? 'selected' : ''}>Pneumatik</option><option ${data.kategori === 'Lainnya' ? 'selected' : ''}>Lainnya</option></select></div>
+        <div class="overlay-field"><label>Satuan</label><select id="f-satuan" class="form-input-figma"><option ${data.satuan === 'Pcs' ? 'selected' : ''}>Pcs</option><option ${data.satuan === 'Unit' ? 'selected' : ''}>Unit</option><option ${data.satuan === 'Lembar' ? 'selected' : ''}>Lembar</option><option ${data.satuan === 'Roll' ? 'selected' : ''}>Roll</option><option ${data.satuan === 'Box' ? 'selected' : ''}>Box</option></select></div>
+        <div class="overlay-field"><label>Harga Jual (Rp)</label><input type="number" id="f-harga" class="form-input-figma" value="${data.harga || 0}" min="0"></div>
+        <div class="overlay-field"><label>Stok Awal</label><input type="number" id="f-stok" class="form-input-figma" value="${data.stok || 0}" min="0"></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+    pelanggan: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Kode Pelanggan *</label><input type="text" id="f-kode" class="form-input-figma" value="${data.kode || ''}" placeholder="CST-000" required></div>
+        <div class="overlay-field"><label>Nama Perusahaan *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="PT / CV ..." required></div>
+        <div class="overlay-field"><label>No. Kontak</label><input type="text" id="f-kontak" class="form-input-figma" value="${data.kontak || ''}" placeholder="0341-..."></div>
+        <div class="overlay-field"><label>Kota</label><input type="text" id="f-kota" class="form-input-figma" value="${data.kota || ''}" placeholder="Malang"></div>
+        <div class="overlay-field"><label>Tipe Pelanggan</label><select id="f-tipe" class="form-input-figma"><option ${data.tipe === 'B2B Industri' ? 'selected' : ''}>B2B Industri</option><option ${data.tipe === 'B2B Distribusi' ? 'selected' : ''}>B2B Distribusi</option><option ${data.tipe === 'B2B Retail' ? 'selected' : ''}>B2B Retail</option><option ${data.tipe === 'Retail Langsung' ? 'selected' : ''}>Retail Langsung</option></select></div>
+        <div class="overlay-field"><label>Limit Kredit (Rp)</label><input type="number" id="f-limit" class="form-input-figma" value="${data.limitKredit || 0}" min="0"></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+    vendor: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Kode Vendor *</label><input type="text" id="f-kode" class="form-input-figma" value="${data.kode || ''}" placeholder="VND-000" required></div>
+        <div class="overlay-field"><label>Nama Vendor *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="PT / CV ..." required></div>
+        <div class="overlay-field"><label>No. Kontak</label><input type="text" id="f-kontak" class="form-input-figma" value="${data.kontak || ''}" placeholder="021-..."></div>
+        <div class="overlay-field"><label>Kota</label><input type="text" id="f-kota" class="form-input-figma" value="${data.kota || ''}" placeholder="Jakarta"></div>
+        <div class="overlay-field"><label>Kategori Suplai</label><input type="text" id="f-kategori" class="form-input-figma" value="${data.kategori || ''}" placeholder="Material Baja..."></div>
+        <div class="overlay-field"><label>Lead Time</label><input type="text" id="f-lead" class="form-input-figma" value="${data.leadTime || ''}" placeholder="7 Hari"></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+    gudang: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Kode Gudang *</label><input type="text" id="f-kode" class="form-input-figma" value="${data.kode || ''}" placeholder="WH-XXX-00" required></div>
+        <div class="overlay-field"><label>Nama Gudang *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="Gudang ..." required></div>
+        <div class="overlay-field"><label>Lokasi</label><input type="text" id="f-lokasi" class="form-input-figma" value="${data.lokasi || ''}" placeholder="Kecamatan, Kota"></div>
+        <div class="overlay-field"><label>PIC (Person in Charge)</label><input type="text" id="f-pic" class="form-input-figma" value="${data.pic || ''}" placeholder="Nama PIC"></div>
+        <div class="overlay-field"><label>Kapasitas (m²)</label><input type="text" id="f-kapasitas" class="form-input-figma" value="${data.kapasitas || ''}" placeholder="10.000 m²"></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Hampir Penuh' ? 'selected' : ''}>Hampir Penuh</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+    pengguna: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Username *</label><input type="text" id="f-username" class="form-input-figma" value="${data.username || ''}" placeholder="user_name" required></div>
+        <div class="overlay-field"><label>Nama Lengkap *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="Nama Lengkap" required></div>
+        <div class="overlay-field"><label>Email</label><input type="email" id="f-email" class="form-input-figma" value="${data.email || ''}" placeholder="email@domain.id"></div>
+        <div class="overlay-field"><label>Role</label><select id="f-role" class="form-input-figma"><option ${data.role === 'Super Admin' ? 'selected' : ''}>Super Admin</option><option ${data.role === 'Manager Keuangan' ? 'selected' : ''}>Manager Keuangan</option><option ${data.role === 'Staff Penjualan' ? 'selected' : ''}>Staff Penjualan</option><option ${data.role === 'Staff Pembelian' ? 'selected' : ''}>Staff Pembelian</option><option ${data.role === 'Kepala Gudang' ? 'selected' : ''}>Kepala Gudang</option></select></div>
+        <div class="overlay-field"><label>Unit Bisnis</label><select id="f-unit" class="form-input-figma">${masterData.bisnis.map(b => `<option ${data.unit === b.nama ? 'selected' : ''}>${b.nama}</option>`).join('')}</select></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+    bisnis: (data = {}) => `
+      <div class="overlay-inputs-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.5rem;">
+        <div class="overlay-field"><label>Kode Unit *</label><input type="text" id="f-kode" class="form-input-figma" value="${data.kode || ''}" placeholder="XXX-00" required></div>
+        <div class="overlay-field"><label>Nama Unit *</label><input type="text" id="f-nama" class="form-input-figma" value="${data.nama || ''}" placeholder="PT / CV ..." required></div>
+        <div class="overlay-field"><label>Jenis Unit</label><select id="f-jenis" class="form-input-figma"><option ${data.jenis === 'Manufaktur' ? 'selected' : ''}>Manufaktur</option><option ${data.jenis === 'Distribusi' ? 'selected' : ''}>Distribusi</option><option ${data.jenis === 'Retail' ? 'selected' : ''}>Retail</option><option ${data.jenis === 'Agrobisnis' ? 'selected' : ''}>Agrobisnis</option><option ${data.jenis === 'Jasa' ? 'selected' : ''}>Jasa</option></select></div>
+        <div class="overlay-field"><label>PIC</label><input type="text" id="f-pic" class="form-input-figma" value="${data.pic || ''}" placeholder="Nama PIC"></div>
+        <div class="overlay-field"><label>Kota</label><input type="text" id="f-kota" class="form-input-figma" value="${data.kota || ''}" placeholder="Malang"></div>
+        <div class="overlay-field"><label>Status</label><select id="f-status" class="form-input-figma"><option ${data.status === 'Aktif' ? 'selected' : ''}>Aktif</option><option ${data.status === 'Tidak Aktif' ? 'selected' : ''}>Tidak Aktif</option></select></div>
+      </div>`,
+  };
+
+  const entityLabels = {
+    produk: 'Produk', pelanggan: 'Pelanggan', vendor: 'Vendor',
+    gudang: 'Gudang', pengguna: 'Pengguna', bisnis: 'Unit Bisnis'
+  };
+
+  let crudState = { entity: null, mode: null, id: null };
+
+  function openCrudModal(entity, mode, id = null) {
+    const modal = document.getElementById('modal-crud-settings');
+    const titleEl = document.getElementById('crud-modal-title');
+    const bodyEl = document.getElementById('crud-modal-body');
+    if (!modal) return;
+
+    crudState = { entity, mode, id };
+    const label = entityLabels[entity];
+    titleEl.textContent = mode === 'add' ? `Tambah ${label} Baru` : `Edit ${label}`;
+
+    let data = {};
+    if (mode === 'edit' && id) {
+      data = masterData[entity].find(d => d.id === id) || {};
+    }
+    bodyEl.innerHTML = crudFormTemplates[entity](data);
+    modal.classList.add('open');
+  }
+
+  function closeCrudModal() {
+    const modal = document.getElementById('modal-crud-settings');
+    if (modal) modal.classList.remove('open');
+    crudState = { entity: null, mode: null, id: null };
+  }
+
+  function saveCrudData() {
+    const { entity, mode, id } = crudState;
+    if (!entity) return;
+
+    let newData = {};
+    const nextId = Math.max(...masterData[entity].map(d => d.id), 0) + 1;
+
+    try {
+      if (entity === 'produk') {
+        newData = { id: id || nextId, sku: document.getElementById('f-sku').value, nama: document.getElementById('f-nama').value, kategori: document.getElementById('f-kategori').value, satuan: document.getElementById('f-satuan').value, harga: parseFloat(document.getElementById('f-harga').value) || 0, stok: parseInt(document.getElementById('f-stok').value) || 0, status: document.getElementById('f-status').value };
+      } else if (entity === 'pelanggan') {
+        newData = { id: id || nextId, kode: document.getElementById('f-kode').value, nama: document.getElementById('f-nama').value, kontak: document.getElementById('f-kontak').value, kota: document.getElementById('f-kota').value, tipe: document.getElementById('f-tipe').value, limitKredit: parseFloat(document.getElementById('f-limit').value) || 0, status: document.getElementById('f-status').value };
+      } else if (entity === 'vendor') {
+        newData = { id: id || nextId, kode: document.getElementById('f-kode').value, nama: document.getElementById('f-nama').value, kontak: document.getElementById('f-kontak').value, kota: document.getElementById('f-kota').value, kategori: document.getElementById('f-kategori').value, leadTime: document.getElementById('f-lead').value, status: document.getElementById('f-status').value };
+      } else if (entity === 'gudang') {
+        newData = { id: id || nextId, kode: document.getElementById('f-kode').value, nama: document.getElementById('f-nama').value, lokasi: document.getElementById('f-lokasi').value, pic: document.getElementById('f-pic').value, kapasitas: document.getElementById('f-kapasitas').value, utilisasi: '0%', status: document.getElementById('f-status').value };
+      } else if (entity === 'pengguna') {
+        newData = { id: id || nextId, username: document.getElementById('f-username').value, nama: document.getElementById('f-nama').value, email: document.getElementById('f-email').value, role: document.getElementById('f-role').value, unit: document.getElementById('f-unit').value, lastLogin: '-', status: document.getElementById('f-status').value };
+      } else if (entity === 'bisnis') {
+        newData = { id: id || nextId, kode: document.getElementById('f-kode').value, nama: document.getElementById('f-nama').value, jenis: document.getElementById('f-jenis').value, pic: document.getElementById('f-pic').value, kota: document.getElementById('f-kota').value, status: document.getElementById('f-status').value };
+      }
+
+      const requiredField = Object.values(newData).find((v, i) => i > 0 && typeof v === 'string' && v.trim() === '' && i < 3);
+      if (!newData.nama || newData.nama.trim() === '') {
+        showToast('Nama tidak boleh kosong!', 'danger');
+        return;
+      }
+
+      if (mode === 'add') {
+        masterData[entity].push(newData);
+        showToast(`${entityLabels[entity]} berhasil ditambahkan!`, 'success');
+      } else {
+        const idx = masterData[entity].findIndex(d => d.id === id);
+        if (idx !== -1) masterData[entity][idx] = newData;
+        showToast(`${entityLabels[entity]} berhasil diperbarui!`, 'success');
+      }
+
+      closeCrudModal();
+      renderAllSettings();
+    } catch (e) {
+      showToast('Terjadi kesalahan saat menyimpan data.', 'danger');
+    }
+  }
+
+  function bindCrudButtons() {
+    document.querySelectorAll('.btn-crud-edit').forEach(btn => {
+      btn.onclick = () => {
+        const entity = btn.dataset.entity;
+        const id = parseInt(btn.dataset.id);
+        openCrudModal(entity, 'edit', id);
+      };
+    });
+
+    document.querySelectorAll('.btn-crud-delete').forEach(btn => {
+      btn.onclick = () => {
+        const entity = btn.dataset.entity;
+        const id = parseInt(btn.dataset.id);
+        const name = btn.dataset.name;
+        const modal = document.getElementById('modal-confirm-delete');
+        const textEl = document.getElementById('delete-confirm-text');
+        if (modal && textEl) {
+          textEl.textContent = `Data "${name}" akan dihapus secara permanen dari sistem.`;
+          modal._deleteCallback = () => {
+            masterData[entity] = masterData[entity].filter(d => d.id !== id);
+            showToast(`Data "${name}" berhasil dihapus.`, 'success');
+            renderAllSettings();
+          };
+          modal.classList.add('open');
+        }
+      };
+    });
+  }
+
+  // CRUD Modal Events
+  const crudModal = document.getElementById('modal-crud-settings');
+  document.getElementById('btn-close-crud-modal')?.addEventListener('click', closeCrudModal);
+  document.getElementById('btn-cancel-crud')?.addEventListener('click', closeCrudModal);
+  document.getElementById('btn-save-crud')?.addEventListener('click', saveCrudData);
+
+  const deleteModal = document.getElementById('modal-confirm-delete');
+  document.getElementById('btn-cancel-delete')?.addEventListener('click', () => deleteModal?.classList.remove('open'));
+  document.getElementById('btn-confirm-delete')?.addEventListener('click', () => {
+    if (deleteModal?._deleteCallback) deleteModal._deleteCallback();
+    deleteModal?.classList.remove('open');
+  });
+
+  // Close modals on backdrop click
+  [crudModal, deleteModal].forEach(modal => {
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('open');
+          if (modal === crudModal) crudState = { entity: null, mode: null, id: null };
+        }
+      });
+    }
+  });
+
+  // Add buttons for each settings entity
+  document.getElementById('btn-add-produk')?.addEventListener('click', () => openCrudModal('produk', 'add'));
+  document.getElementById('btn-add-pelanggan')?.addEventListener('click', () => openCrudModal('pelanggan', 'add'));
+  document.getElementById('btn-add-vendor')?.addEventListener('click', () => openCrudModal('vendor', 'add'));
+  document.getElementById('btn-add-gudang')?.addEventListener('click', () => openCrudModal('gudang', 'add'));
+  document.getElementById('btn-add-pengguna')?.addEventListener('click', () => openCrudModal('pengguna', 'add'));
+  document.getElementById('btn-add-bisnis')?.addEventListener('click', () => openCrudModal('bisnis', 'add'));
+
+  // =========================================================================
+  // SETTINGS TABS NAVIGATION
+  // =========================================================================
+  document.querySelectorAll('[data-settings-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-settings-tab]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const tabName = tab.dataset.settingsTab;
+      document.querySelectorAll('.settings-tab-content').forEach(c => c.style.display = 'none');
+      const targetTab = document.getElementById(`settings-tab-${tabName}`);
+      if (targetTab) targetTab.style.display = 'block';
+    });
+  });
+
+  // =========================================================================
+  // ACCOUNTING TABS (simple tab toggle, no separate data needed)
+  // =========================================================================
+  document.querySelectorAll('[data-accounting-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-accounting-tab]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // =========================================================================
+  // REPORT: Print / Download (simulated)
+  // =========================================================================
+  document.getElementById('btn-print-report')?.addEventListener('click', () => {
+    showToast('Menyiapkan dokumen cetak...', 'info');
+    setTimeout(() => window.print(), 500);
+  });
+
+  document.getElementById('btn-download-report')?.addEventListener('click', () => {
+    showToast('Laporan PDF sedang diunduh...', 'info');
+  });
+
+  document.getElementById('btn-export-finance')?.addEventListener('click', () => {
+    showToast('Export laporan keuangan berhasil!', 'success');
+  });
+
+  // =========================================================================
+  // INVENTORY: Make table interactive (add CRUD for inventory items)
+  // =========================================================================
+  function syncInventoryWithProducts() {
+    const tbody = document.querySelector('#module-inventory table tbody');
+    if (!tbody) return;
+    tbody.innerHTML = masterData.produk.map(p => {
+      const stokStatus = p.stok <= 5 ? 'badge-danger' : p.stok <= 15 ? 'badge-warning' : 'badge-success';
+      const stokLabel = p.stok <= 5 ? '● Menipis (Restock)' : p.stok <= 15 ? '● Mendekati Batas' : '● Aman';
+      const stokMin = Math.ceil(p.stok * 0.3);
+      return `<tr>
+        <td style="font-family:monospace; font-weight:600; color:var(--primary);">${p.sku}</td>
+        <td><strong>${p.nama}</strong></td>
+        <td>${p.kategori}</td>
+        <td><strong>${p.stok} ${p.satuan}</strong></td>
+        <td>${stokMin} ${p.satuan}</td>
+        <td>${formatRupiah(p.harga)}</td>
+        <td><span class="badge-status ${stokStatus}">${stokLabel}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // =========================================================================
+  // SEARCH FUNCTIONALITY
+  // =========================================================================
+  document.getElementById('search-sales-input')?.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const tbody = document.getElementById('sales-table-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+
+  document.getElementById('search-purchase-input')?.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const tbody = document.getElementById('purchase-table-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+
+  // =========================================================================
+  // PURCHASE TABS (tab highlight only)
+  // =========================================================================
+  document.querySelectorAll('[data-purchase-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-purchase-tab]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // =========================================================================
+  // SALES TABS (tab highlight only)
+  // =========================================================================
+  document.querySelectorAll('[data-sales-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-sales-tab]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
   // Initial Render Calls
   calculateSalesTotals();
   calculatePurchaseTotals();
@@ -1258,4 +1741,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBusinessGrid();
   renderCostCenterGrid();
   renderGudangGrid();
+  renderAllSettings();
+  syncInventoryWithProducts();
 });
