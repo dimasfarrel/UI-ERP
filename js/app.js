@@ -448,11 +448,86 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${inv.warehouse}</td>
         <td style="font-weight: 600; color: #0F172A;">${inv.amount}</td>
         <td><span class="badge-status ${inv.badgeClass}">● ${inv.status}</span></td>
-        <td>
-          <button style="background:none; border:none; color:var(--primary); font-weight: 600; cursor:pointer;" onclick="alert('Mencetak faktur: ${inv.id}')">Cetak Faktur</button>
+        <td style="white-space:nowrap;">
+          <button class="btn-inv-edit" data-inv-id="${inv.id}" style="background:none; border:1px solid var(--primary); color:var(--primary); border-radius:4px; padding:0.2rem 0.55rem; font-size:0.72rem; cursor:pointer; margin-right:3px; font-weight:600;">Edit</button>
+          <button class="btn-inv-delete" data-inv-id="${inv.id}" style="background:none; border:1px solid #EF4444; color:#EF4444; border-radius:4px; padding:0.2rem 0.55rem; font-size:0.72rem; cursor:pointer; font-weight:600;">Hapus</button>
         </td>
       </tr>
     `).join('');
+
+    // Bind edit/delete after render
+    tbody.querySelectorAll('.btn-inv-edit').forEach(btn => {
+      btn.onclick = () => {
+        const inv = state.salesInvoices.find(i => i.id === btn.dataset.invId);
+        if (!inv) return;
+        openEditSalesModal(inv);
+      };
+    });
+    tbody.querySelectorAll('.btn-inv-delete').forEach(btn => {
+      btn.onclick = () => {
+        const inv = state.salesInvoices.find(i => i.id === btn.dataset.invId);
+        if (!inv) return;
+        const modal = document.getElementById('modal-confirm-delete');
+        const textEl = document.getElementById('delete-confirm-text');
+        if (modal && textEl) {
+          textEl.textContent = `Faktur "${inv.id}" (${inv.customer}) akan dihapus secara permanen.`;
+          modal._deleteCallback = () => {
+            state.salesInvoices = state.salesInvoices.filter(i => i.id !== inv.id);
+            renderSalesTable();
+            showToast(`Faktur ${inv.id} berhasil dihapus.`, 'success');
+          };
+          modal.classList.add('open');
+        }
+      };
+    });
+  }
+
+  // =========================================================================
+  // SALES INVOICE EDIT
+  // =========================================================================
+  function openEditSalesModal(inv) {
+    // Open the penjualan overlay and pre-fill header fields with existing invoice data
+    const modal = document.getElementById('modal-penjualan-overlay');
+    if (!modal) return;
+
+    // Store the id being edited so on submit we update instead of add
+    modal.dataset.editId = inv.id;
+
+    // Pre-fill fields
+    const customerEl = document.getElementById('overlay-sales-customer');
+    if (customerEl) {
+      // Try to match existing option or add temp
+      let found = false;
+      for (let opt of customerEl.options) {
+        if (opt.value === inv.customer || opt.text === inv.customer) {
+          customerEl.value = opt.value;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        const opt = new Option(inv.customer, inv.customer, true, true);
+        customerEl.add(opt);
+      }
+    }
+    const warehouseEl = document.getElementById('overlay-sales-warehouse');
+    if (warehouseEl) {
+      for (let opt of warehouseEl.options) {
+        if (opt.value.includes(inv.warehouse.split(' (')[0])) {
+          warehouseEl.value = opt.value;
+          break;
+        }
+      }
+    }
+    const invNoEl = document.getElementById('overlay-sales-invoice-no');
+    if (invNoEl) invNoEl.value = inv.id;
+
+    const dateEl = document.getElementById('overlay-sales-date');
+    if (dateEl) dateEl.value = inv.date;
+
+    calculateOverlaySalesTotals();
+    modal.classList.add('open');
+    showToast(`Mengedit faktur ${inv.id}`, 'info');
   }
 
   // =========================================================================
@@ -478,16 +553,37 @@ document.addEventListener('DOMContentLoaded', () => {
       if (totalField) totalField.value = formatRupiah(rowTotal);
     });
 
-    const tax = subtotal * 0.11; // 11% PPN
-    const grandTotal = subtotal + tax;
+    // Check if PPN is included via Lain checkbox
+    const includePPN = document.getElementById('lain-termasuk-ppn')?.checked !== false;
+    const discPersen = document.getElementById('lain-disc-persen')?.checked || false;
+    const discGroup = parseFloat(document.getElementById('lain-disc-group')?.value) || 0;
+
+    let tax = 0;
+    if (includePPN) tax = subtotal * 0.11; // 11% PPN
+
+    // DISC GROUP: if disc-persen checked, treat as %, else as nominal
+    let discAmount = 0;
+    if (discGroup > 0) {
+      discAmount = discPersen ? (subtotal * discGroup / 100) : discGroup;
+    }
+
+    const grandTotal = subtotal + tax - discAmount;
 
     const subtotalEl = document.getElementById('overlay-calc-subtotal');
     const taxEl = document.getElementById('overlay-calc-tax');
     const grandTotalEl = document.getElementById('overlay-calc-grandtotal');
+    const discGroupDisplayEl = document.getElementById('overlay-calc-discgroup');
 
     if (subtotalEl) subtotalEl.textContent = formatRupiah(subtotal);
-    if (taxEl) taxEl.textContent = formatRupiah(tax);
-    if (grandTotalEl) grandTotalEl.textContent = formatRupiah(grandTotal);
+    if (taxEl) taxEl.textContent = includePPN ? formatRupiah(tax) : 'Tidak dikenakan';
+    if (grandTotalEl) grandTotalEl.textContent = formatRupiah(Math.max(0, grandTotal));
+
+    // Show/hide disc group row
+    if (discGroupDisplayEl) {
+      const discRow = document.getElementById('overlay-discgroup-row');
+      if (discRow) discRow.style.display = discAmount > 0 ? 'flex' : 'none';
+      discGroupDisplayEl.textContent = `- ${formatRupiah(discAmount)}${discPersen ? ` (${discGroup}%)` : ''}`;
+    }
   }
 
   function addOverlaySalesRow(product = '', desc = '', qty = 1, unit = 'Pcs', price = 0, disc = 0, tax = 11) {
@@ -1201,11 +1297,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCloseLain = document.getElementById('btn-close-lain');
 
   const LAIN_FIELDS = [
-    'lain-sumber', 'lain-model', 'lain-yourhold', 'lain-eurow',
-    'lain-express', 'lain-nopo', 'lain-oddgroup', 'lain-mainparts',
-    'lain-tulip', 'lain-kontak1', 'lain-kontak2', 'lain-partner',
-    'lain-alamat', 'lain-texth1h2'
+    'lain-sumber', 'lain-model', 'lain-cctr', 'lain-warehouse',
+    'lain-kurs-currency', 'lain-kurs-rate', 'lain-expedisi', 'lain-nopo',
+    'lain-disc-group', 'lain-maxbaris', 'lain-telp1', 'lain-kontak1',
+    'lain-kontak2', 'lain-partner', 'lain-alamat', 'lain-rekening',
+    'lain-partner2a', 'lain-partner2b', 'lain-texth1h2'
   ];
+  const LAIN_CHECKBOXES = ['lain-termasuk-ppn', 'lain-tambah-baris', 'lain-langsung-cetak', 'lain-disc-persen'];
   const LAIN_STORAGE_KEY = 'erp_lain_data';
 
   btnLainOverlays.forEach(btn => {
@@ -1227,13 +1325,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Real-time: when Disc Group or PPN checkbox changes, recalculate totals immediately
+  function bindLainRealtime() {
+    const discGroupEl = document.getElementById('lain-disc-group');
+    const ppnCheckEl = document.getElementById('lain-termasuk-ppn');
+    const discPersenEl = document.getElementById('lain-disc-persen');
+
+    [discGroupEl, ppnCheckEl, discPersenEl].forEach(el => {
+      if (el) {
+        el.addEventListener('input', calculateOverlaySalesTotals);
+        el.addEventListener('change', calculateOverlaySalesTotals);
+      }
+    });
+  }
+  bindLainRealtime();
+
   // Lain field labels for summary display
   const LAIN_LABELS = {
-    'lain-sumber': 'Sumber', 'lain-model': 'Model', 'lain-yourhold': 'Yourhold ID',
-    'lain-eurow': 'EU/ROW', 'lain-express': 'Express', 'lain-nopo': 'No PO/ST',
-    'lain-oddgroup': 'Odd Group', 'lain-mainparts': 'Main Parts', 'lain-tulip': 'Tulip',
-    'lain-kontak1': 'Kontak 1', 'lain-kontak2': 'Kontak 2', 'lain-partner': 'Partner',
-    'lain-alamat': 'Alamat', 'lain-texth1h2': 'Text H1H2'
+    'lain-sumber': 'Sumber', 'lain-model': 'Model Label', 'lain-cctr': 'C.CTR',
+    'lain-warehouse': 'Warehouse', 'lain-kurs-currency': 'Kurs', 'lain-kurs-rate': 'Rate',
+    'lain-expedisi': 'Expedisi', 'lain-nopo': 'No Resi/PO',
+    'lain-disc-group': 'Disc Group ⚡', 'lain-maxbaris': 'Max Baris',
+    'lain-telp1': 'Telp 1', 'lain-kontak1': 'Telp 2',
+    'lain-kontak2': 'Kontak 1', 'lain-partner': 'Kontak 2',
+    'lain-alamat': 'Alamat', 'lain-rekening': 'Rekening',
+    'lain-partner2a': 'Partner A', 'lain-partner2b': 'Partner B', 'lain-texth1h2': 'Kode Partner'
   };
 
   function updateLainSummary(data) {
@@ -1287,6 +1403,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const el = document.getElementById(id);
       if (el) data[id] = el.value;
     });
+    LAIN_CHECKBOXES.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.checked;
+    });
+    // Save radio
+    const mpEl = document.querySelector('input[name="lain-model-produk"]:checked');
+    if (mpEl) data['lain-model-produk'] = mpEl.value;
     localStorage.setItem(LAIN_STORAGE_KEY, JSON.stringify(data));
     const now = new Date();
     const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -1309,6 +1432,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
         if (el && data[id] !== undefined) el.value = data[id];
       });
+      LAIN_CHECKBOXES.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.checked = Boolean(data[id]);
+      });
+      if (data['lain-model-produk']) {
+        const radioEl = document.querySelector(`input[name="lain-model-produk"][value="${data['lain-model-produk']}"]`);
+        if (radioEl) radioEl.checked = true;
+      }
       const statusEl = document.getElementById('lain-status-text');
       if (statusEl) statusEl.textContent = 'Data berhasil dimuat';
       updateLainSummary(data);

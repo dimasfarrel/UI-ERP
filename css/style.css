@@ -2376,3 +2376,65 @@ body {
   color: white;
   border-color: #194bfb;
 }
+
+/* Lain Modal - Radio & Checkbox */
+.lain-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.83rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.lain-radio-label input[type="radio"] {
+  cursor: pointer;
+  accent-color: #194bfb;
+}
+
+.lain-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.lain-check-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.83rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.lain-check-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #194bfb;
+}
+
+/* Disc Group label emphasis */
+#lain-disc-group {
+  border-color: #FCA5A5;
+  background: #FFF7F7;
+}
+
+#lain-disc-group:focus {
+  border-color: #DC2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Sales Invoice table CRUD action buttons */
+.btn-inv-edit, .btn-inv-delete {
+  transition: all 0.15s;
+}
+
+.btn-inv-edit:hover {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+.btn-inv-delete:hover {
+  background: #EF4444 !important;
+  color: white !important;
+}
