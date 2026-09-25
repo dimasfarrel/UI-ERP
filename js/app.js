@@ -970,6 +970,43 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnBatalOverlay) {
     btnBatalOverlay.addEventListener('click', closePenjualanOverlayModal);
   }
+
+  // =========================================================================
+  // FIGMA PEMBELIAN OVERLAY EVENT LISTENERS
+  // =========================================================================
+  const modalPembelianOverlay = document.getElementById('modal-pembelian-overlay');
+  const btnOpenPembelianOverlay = document.getElementById('btn-open-pembelian-overlay');
+  const btnClosePembelianOverlay = document.getElementById('btn-close-pembelian-overlay');
+  const btnBatalPurchaseOverlay = document.getElementById('btn-batal-purchase-overlay');
+
+  function openPembelianOverlayModal(e) {
+    if (e) e.preventDefault();
+    if (!modalPembelianOverlay) return;
+    const tbody = document.getElementById('overlay-purchase-items-tbody');
+    if (tbody && tbody.children.length === 0) {
+      if (typeof addOverlayPurchaseRow === 'function') {
+        addOverlayPurchaseRow('', '', 1, 'Pcs', 0, 0, 11);
+      }
+    }
+    if (typeof calculateOverlayPurchaseTotals === 'function') calculateOverlayPurchaseTotals();
+    modalPembelianOverlay.classList.add('open');
+  }
+
+  function closePembelianOverlayModal() {
+    if (modalPembelianOverlay) {
+      modalPembelianOverlay.classList.remove('open');
+    }
+  }
+
+  if (btnOpenPembelianOverlay) {
+    btnOpenPembelianOverlay.addEventListener('click', openPembelianOverlayModal);
+  }
+  if (btnClosePembelianOverlay) {
+    btnClosePembelianOverlay.addEventListener('click', closePembelianOverlayModal);
+  }
+  if (btnBatalPurchaseOverlay) {
+    btnBatalPurchaseOverlay.addEventListener('click', closePembelianOverlayModal);
+  }
   if (modalPenjualanOverlay) {
     modalPenjualanOverlay.addEventListener('click', (e) => {
       if (e.target === modalPenjualanOverlay) closePenjualanOverlayModal();
@@ -1175,34 +1212,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Buat Penjualan Dropdown Logic
-  const btnToggleDropdown = document.getElementById('btn-toggle-penjualan-dropdown');
-  const dropdownMenu = document.getElementById('dropdown-menu-penjualan');
+
+  // Dropdown Logic for Penjualan and Pembelian
+  const btnTogglePenjualan = document.getElementById('btn-toggle-penjualan-dropdown');
+  const menuPenjualan = document.getElementById('dropdown-menu-penjualan');
   
-  if (btnToggleDropdown && dropdownMenu) {
-    btnToggleDropdown.addEventListener('click', (e) => {
+  const btnTogglePembelian = document.getElementById('btn-toggle-pembelian-dropdown');
+  const menuPembelian = document.getElementById('dropdown-menu-pembelian');
+
+  function setupDropdown(btn, menu) {
+    if (!btn || !menu) return;
+    
+    btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      dropdownMenu.classList.toggle('show');
+      e.preventDefault();
+      // Close other menus if any
+      if (menuPenjualan && menuPenjualan !== menu) menuPenjualan.classList.remove('show');
+      if (menuPembelian && menuPembelian !== menu) menuPembelian.classList.remove('show');
+      
+      menu.classList.toggle('show');
     });
-  }
 
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (e) => {
-    if (dropdownMenu && dropdownMenu.classList.contains('show')) {
-      if (!dropdownMenu.contains(e.target) && e.target !== btnToggleDropdown) {
-        dropdownMenu.classList.remove('show');
+    document.addEventListener('click', (e) => {
+      if (menu.classList.contains('show') && !menu.contains(e.target) && e.target !== btn) {
+        menu.classList.remove('show');
       }
-    }
-  });
+    });
 
-  // Also close dropdown when an item is clicked
-  if (dropdownMenu) {
-    dropdownMenu.querySelectorAll('.dropdown-item-figma').forEach(item => {
+    menu.querySelectorAll('a').forEach(item => {
       item.addEventListener('click', () => {
-        dropdownMenu.classList.remove('show');
+        menu.classList.remove('show');
       });
     });
   }
+
+  setupDropdown(btnTogglePenjualan, menuPenjualan);
+  setupDropdown(btnTogglePembelian, menuPembelian);
 
   // Initial Render Calls
   calculateSalesTotals();
