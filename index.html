@@ -1355,7 +1355,7 @@
                 <label>No Transaksi</label>
                 <input type="text" id="overlay-sales-invoice-no" class="form-input-figma" value="INV-2026-005" required>
               </div>
-              <button type="button" class="btn-lain-purple">Lain</button>
+              <button type="button" class="btn-lain-purple" id="btn-lain-sales">Lain</button>
             </div>
 
             <div class="overlay-field">
@@ -1398,6 +1398,9 @@
 
         <!-- Bottom Calculation & Notes -->
         <div class="overlay-calc-panel">
+          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
+          <div id="lain-summary-sales" class="lain-summary-bar" style="display:none;"></div>
+
           <div class="overlay-field">
             <label>Catatan Faktur</label>
             <textarea id="overlay-sales-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo pengiriman..."></textarea>
@@ -1492,7 +1495,7 @@
                 <label>No Transaksi</label>
                 <input type="text" id="overlay-purchase-invoice-no" class="form-input-figma" value="PO-2026-005" required>
               </div>
-              <button type="button" class="btn-lain-purple">Lain</button>
+              <button type="button" class="btn-lain-purple" id="btn-lain-purchase">Lain</button>
             </div>
 
             <div class="overlay-field">
@@ -1535,6 +1538,9 @@
 
         <!-- Bottom Calculation & Notes -->
         <div class="overlay-calc-panel">
+          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
+          <div id="lain-summary-purchase" class="lain-summary-bar" style="display:none;"></div>
+
           <div class="overlay-field">
             <label>Catatan Faktur</label>
             <textarea id="overlay-purchase-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo penerimaan..."></textarea>

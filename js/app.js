@@ -1227,6 +1227,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Lain field labels for summary display
+  const LAIN_LABELS = {
+    'lain-sumber': 'Sumber', 'lain-model': 'Model', 'lain-yourhold': 'Yourhold ID',
+    'lain-eurow': 'EU/ROW', 'lain-express': 'Express', 'lain-nopo': 'No PO/ST',
+    'lain-oddgroup': 'Odd Group', 'lain-mainparts': 'Main Parts', 'lain-tulip': 'Tulip',
+    'lain-kontak1': 'Kontak 1', 'lain-kontak2': 'Kontak 2', 'lain-partner': 'Partner',
+    'lain-alamat': 'Alamat', 'lain-texth1h2': 'Text H1H2'
+  };
+
+  function updateLainSummary(data) {
+    const summaryIds = ['lain-summary-sales', 'lain-summary-purchase'];
+    const filled = Object.entries(data).filter(([k, v]) => v && v.trim() !== '');
+
+    summaryIds.forEach(summaryId => {
+      const el = document.getElementById(summaryId);
+      if (!el) return;
+      if (filled.length === 0) {
+        el.style.display = 'none';
+        return;
+      }
+      const tags = filled.map(([k, v]) =>
+        `<span class="lain-summary-tag"><strong>${LAIN_LABELS[k] || k}:</strong> ${v}</span>`
+      ).join('');
+      el.innerHTML = `
+        <div class="lain-summary-title">📋 Informasi Tambahan (Lain)</div>
+        <div class="lain-summary-tags">${tags}</div>
+      `;
+      el.style.display = 'block';
+    });
+
+    // Mark Lain buttons as active
+    document.querySelectorAll('.btn-lain-purple').forEach(btn => {
+      if (filled.length > 0) {
+        btn.classList.add('lain-has-data');
+        btn.textContent = `Lain (${filled.length})`;
+      } else {
+        btn.classList.remove('lain-has-data');
+        btn.textContent = 'Lain';
+      }
+    });
+  }
+
+  // Auto-load lain data on page load if exists
+  (function() {
+    const raw = localStorage.getItem(LAIN_STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      const filled = Object.values(data).filter(v => v && v.trim() !== '');
+      if (filled.length > 0) updateLainSummary(data);
+    } catch(e) {}
+  })();
+
   // Save Local
   document.getElementById('btn-lain-save-local')?.addEventListener('click', () => {
     const data = {};
@@ -1239,7 +1292,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
     const statusEl = document.getElementById('lain-status-text');
     if (statusEl) statusEl.textContent = `Tersimpan pukul ${timeStr}`;
-    showToast('Data lain-lain berhasil disimpan!', 'success');
+    updateLainSummary(data);
+    showToast('Data lain-lain berhasil disimpan & diterapkan ke form!', 'success');
   });
 
   // Load Local
@@ -1257,7 +1311,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const statusEl = document.getElementById('lain-status-text');
       if (statusEl) statusEl.textContent = 'Data berhasil dimuat';
-      showToast('Data lain-lain berhasil dimuat!', 'success');
+      updateLainSummary(data);
+      showToast('Data lain-lain berhasil dimuat & diterapkan ke form!', 'success');
     } catch(e) {
       showToast('Gagal memuat data.', 'danger');
     }

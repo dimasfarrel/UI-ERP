@@ -2336,3 +2336,43 @@ body {
 .dropdown-menu-jurnal a:hover {
   background: #F1F5F9;
 }
+
+/* Lain Summary Bar (shown in overlay after Simpan) */
+.lain-summary-bar {
+  background: #F0F7FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 6px;
+  padding: 0.65rem 0.9rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.78rem;
+  color: #1E40AF;
+}
+
+.lain-summary-bar .lain-summary-title {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lain-summary-bar .lain-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lain-summary-tag {
+  background: #DBEAFE;
+  border-radius: 4px;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #1E40AF;
+}
+
+.btn-lain-purple.lain-has-data {
+  background: #194bfb;
+  color: white;
+  border-color: #194bfb;
+}
