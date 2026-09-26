@@ -1055,14 +1055,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSalesOverlay = document.getElementById('form-sales-overlay');
 
   function openPenjualanOverlayModal() {
-    if (!modalPenjualanOverlay) return;
-    const tbody = document.getElementById('overlay-sales-items-tbody');
-    if (tbody && tbody.children.length === 0) {
-      addOverlaySalesRow('Komponen Mesin MX-4', 'Modul perakitan hidrolik', 10, 'Pcs', 2500000, 0, 11);
-      addOverlaySalesRow('Inverter Listrik Industri 5KW', 'Inverter 3-phase', 2, 'Unit', 4100000, 0, 11);
-    }
-    calculateOverlaySalesTotals();
-    modalPenjualanOverlay.classList.add('open');
+    // Redirected to full-page form
+    openFormPenjualan();
   }
 
   function closePenjualanOverlayModal() {
@@ -1076,9 +1070,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => openFormPenjualan());
   });
 
-  if (btnOpenPenjualanOverlay) {
-    btnOpenPenjualanOverlay.addEventListener('click', openPenjualanOverlayModal);
-  }
+  // Old overlay listener removed — now handled by openFormPenjualan via data-open-form
   if (btnClosePenjualanOverlay) {
     btnClosePenjualanOverlay.addEventListener('click', closePenjualanOverlayModal);
   }
