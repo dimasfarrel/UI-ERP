@@ -802,23 +802,26 @@
                   <input type="text" id="search-purchase-input" placeholder="Cari transaksi">
                 </div>
                 
-                <button class="btn-filter-icon" style="background: transparent; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 1rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--secondary); font-size: 0.85rem; font-weight: 500;">
+                <button class="btn-filter-icon" style="background: transparent; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 1rem; height: 38px; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--secondary); font-size: 0.85rem; font-weight: 500;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                   </svg>
                   <span>Filter</span>
                 </button>
               </div>
+            </div>
 
             <!-- Table or Empty State -->
-            <div class="table-card-erp" style="margin-top: 1rem; text-align: center; padding: 4rem 2rem;">
-              <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 1.5rem auto;">
-                <path d="M10 20C10 14.4772 14.4772 10 20 10H45.5L55.5 20H100C105.523 20 110 24.4772 110 30V80C110 85.5228 105.523 90 100 90H20C14.4772 90 10 85.5228 10 80V20Z" fill="#194bfb" fill-opacity="0.2"/>
-                <path d="M15 35C15 32.2386 17.2386 30 20 30H100C102.761 30 105 32.2386 105 35V80C105 85.5228 100.523 90 95 90H25C19.4772 90 15 85.5228 15 80V35Z" fill="#194bfb"/>
-                <rect x="25" y="25" width="70" height="15" rx="4" fill="#E2E8F0"/>
-              </svg>
-              <h3 style="color: var(--secondary); margin-bottom: 0.5rem; font-family: var(--font-figma); font-weight: 700;">Belum ada faktur pembelian</h3>
-              <p style="color: var(--text-muted); font-size: 0.9rem;">Anda dapat membuat faktur baru melalui tombol "Buat pembelian baru".</p>
+            <div id="purchase-table-container" class="table-card-erp" style="margin-top: 1rem;">
+              <div style="text-align: center; padding: 4rem 2rem;">
+                <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 1.5rem auto; display: block;">
+                  <path d="M10 20C10 14.4772 14.4772 10 20 10H45.5L55.5 20H100C105.523 20 110 24.4772 110 30V80C110 85.5228 105.523 90 100 90H20C14.4772 90 10 85.5228 10 80V20Z" fill="#194bfb" fill-opacity="0.2"/>
+                  <path d="M15 35C15 32.2386 17.2386 30 20 30H100C102.761 30 105 32.2386 105 35V80C105 85.5228 100.523 90 95 90H25C19.4772 90 15 85.5228 15 80V35Z" fill="#194bfb"/>
+                  <rect x="25" y="25" width="70" height="15" rx="4" fill="#E2E8F0"/>
+                </svg>
+                <h3 style="color: var(--secondary); margin-bottom: 0.5rem; font-family: var(--font-figma); font-weight: 700;">Belum ada faktur pembelian</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Anda dapat membuat faktur baru melalui tombol "Buat pembelian baru".</p>
+              </div>
             </div>
           </div>
 
