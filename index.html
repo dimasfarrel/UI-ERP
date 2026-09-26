@@ -1260,53 +1260,84 @@
           <!-- Column 1 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Pelanggan</label>
-              <select id="fps-customer" class="form-input-figma" required>
-                <option value="">Pilih Pelanggan</option>
-                <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
-                <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
-                <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
-                <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
-              </select>
+              <label>Partner [F3]</label>
+              <div class="f3-wrap" data-f3="kontak" style="width:100%;">
+                <select id="fps-customer" class="form-input-figma" required>
+                  <option value="">Pilih Partner...</option>
+                  <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
+                  <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
+                  <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
+                  <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
+                </select>
+              </div>
             </div>
             <div class="overlay-field">
-              <label>Alamat</label>
-              <input type="text" id="fps-address" class="form-input-figma" placeholder="Alamat pelanggan..." value="Jl. Raya Industri No. 5, Kepanjen">
+              <label>Induk [F3]</label>
+              <div class="f3-wrap" data-f3="alamat">
+                <input type="text" class="form-input-figma f3-input" id="fps-address" placeholder="Cari induk dokumen..." value="Jl. Raya Industri No. 5, Kepanjen" autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Staff [F3]</label>
+              <div class="f3-wrap" data-f3="kontak">
+                <input type="text" class="form-input-figma f3-input" id="fps-staff" placeholder="Cari nama staff..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Tempo [F3]</label>
+              <div style="display:flex; gap:0.4rem;">
+                <div class="f3-wrap" data-f3="tempo" style="flex:1;">
+                  <input type="text" class="form-input-figma f3-input" id="fps-tempo-label" placeholder="30 HARI..." value="30 HARI" autocomplete="off">
+                  <div class="f3-dropdown"></div>
+                </div>
+                <input type="number" id="fps-tempo-value" class="form-input-figma" value="30" min="0" style="width:65px; flex-shrink:0; text-align:center;">
+              </div>
             </div>
           </div>
           <!-- Column 2 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Tanggal Kirim</label>
-              <input type="date" id="fps-ship-date" class="form-input-figma" value="2026-09-24" required>
-            </div>
-            <div class="overlay-field">
-              <label>Tanggal Transaksi</label>
+              <label>Tgl. Input</label>
               <input type="date" id="fps-date" class="form-input-figma" value="2026-09-22" required>
             </div>
             <div class="overlay-field">
-              <label>Tgl. Jatuh Tempo</label>
+              <label>Tgl. Kirim</label>
+              <input type="date" id="fps-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tgl. Jatem</label>
               <input type="date" id="fps-due-date" class="form-input-figma" value="2026-10-22" required>
             </div>
           </div>
           <!-- Column 3 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Email</label>
-              <input type="email" id="fps-email" class="form-input-figma" placeholder="Email..." value="finance@suryagemilang.co.id">
+              <label>Keterangan</label>
+              <input type="text" id="fps-keterangan" class="form-input-figma" placeholder="Keterangan atas dokumen..." value="">
             </div>
             <div class="overlay-field">
-              <label>No Transaksi</label>
+              <label>Nomor Nota</label>
               <input type="text" id="fps-invoice-no" class="form-input-figma" value="INV-2026-006" required>
             </div>
             <div class="overlay-field">
-              <label>Gudang</label>
-              <select id="fps-warehouse" class="form-input-figma" required>
-                <option value="">Pilih Gudang</option>
-                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
-                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
-              </select>
+              <label>Gudang [F3]</label>
+              <div class="f3-wrap" data-f3="gudang">
+                <select id="fps-warehouse" class="form-input-figma" required>
+                  <option value="">Pilih Gudang...</option>
+                  <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                  <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                  <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+                </select>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Cursor [F3/F4]</label>
+              <div class="f3-wrap" data-f3="sumber">
+                <input type="text" class="form-input-figma f3-input" id="fps-cursor" placeholder="Cari cursor..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1581,52 +1612,83 @@
           <!-- Column 1 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Pemasok</label>
-              <select id="fpp-vendor" class="form-input-figma" required>
-                <option value="">Pilih Pemasok</option>
-                <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
-                <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
-                <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
-              </select>
+              <label>Partner [F3]</label>
+              <div class="f3-wrap" data-f3="kontak" style="width:100%;">
+                <select id="fpp-vendor" class="form-input-figma" required>
+                  <option value="">Pilih Partner...</option>
+                  <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
+                  <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
+                  <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
+                </select>
+              </div>
             </div>
             <div class="overlay-field">
-              <label>Alamat</label>
-              <input type="text" id="fpp-address" class="form-input-figma" placeholder="Alamat pemasok..." value="Jl. Industri Raya No. 12">
+              <label>Induk [F3]</label>
+              <div class="f3-wrap" data-f3="alamat">
+                <input type="text" class="form-input-figma f3-input" id="fpp-address" placeholder="Cari induk dokumen..." value="Jl. Industri Raya No. 12" autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Staff [F3]</label>
+              <div class="f3-wrap" data-f3="kontak">
+                <input type="text" class="form-input-figma f3-input" id="fpp-staff" placeholder="Cari nama staff..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Tempo [F3]</label>
+              <div style="display:flex; gap:0.4rem;">
+                <div class="f3-wrap" data-f3="tempo" style="flex:1;">
+                  <input type="text" class="form-input-figma f3-input" id="fpp-tempo-label" placeholder="30 HARI..." value="30 HARI" autocomplete="off">
+                  <div class="f3-dropdown"></div>
+                </div>
+                <input type="number" id="fpp-tempo-value" class="form-input-figma" value="30" min="0" style="width:65px; flex-shrink:0; text-align:center;">
+              </div>
             </div>
           </div>
           <!-- Column 2 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Tanggal Kirim</label>
-              <input type="date" id="fpp-ship-date" class="form-input-figma" value="2026-09-24" required>
-            </div>
-            <div class="overlay-field">
-              <label>Tanggal Transaksi</label>
+              <label>Tgl. Input</label>
               <input type="date" id="fpp-date" class="form-input-figma" value="2026-09-22" required>
             </div>
             <div class="overlay-field">
-              <label>Tgl. Jatuh Tempo</label>
+              <label>Tgl. Kirim</label>
+              <input type="date" id="fpp-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tgl. Jatem</label>
               <input type="date" id="fpp-due-date" class="form-input-figma" value="2026-10-22" required>
             </div>
           </div>
           <!-- Column 3 -->
           <div class="overlay-input-col">
             <div class="overlay-field">
-              <label>Email</label>
-              <input type="email" id="fpp-email" class="form-input-figma" placeholder="Email..." value="finance@suppliergemilang.co.id">
+              <label>Keterangan</label>
+              <input type="text" id="fpp-keterangan" class="form-input-figma" placeholder="Keterangan atas dokumen..." value="">
             </div>
             <div class="overlay-field">
-              <label>No Transaksi</label>
+              <label>Nomor Nota</label>
               <input type="text" id="fpp-invoice-no" class="form-input-figma" value="PO-2026-006" required>
             </div>
             <div class="overlay-field">
-              <label>Gudang</label>
-              <select id="fpp-warehouse" class="form-input-figma" required>
-                <option value="">Pilih Gudang</option>
-                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
-                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
-              </select>
+              <label>Gudang [F3]</label>
+              <div class="f3-wrap" data-f3="gudang">
+                <select id="fpp-warehouse" class="form-input-figma" required>
+                  <option value="">Pilih Gudang...</option>
+                  <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                  <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                  <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+                </select>
+              </div>
+            </div>
+            <div class="overlay-field">
+              <label>Cursor [F3/F4]</label>
+              <div class="f3-wrap" data-f3="sumber">
+                <input type="text" class="form-input-figma f3-input" id="fpp-cursor" placeholder="Cari cursor..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
             </div>
           </div>
         </div>

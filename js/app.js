@@ -2027,6 +2027,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const from = (masterData.pelanggan || []).map(p => p.alamat || p.address || '').filter(Boolean);
       return from.length > 0 ? from : [];
     },
+    tempo: () => ['7 HARI', '14 HARI', '30 HARI', '45 HARI', '60 HARI', '90 HARI', 'CASH', 'COD'],
     partner: () => {
       const from = (masterData.pelanggan || []).map(p => p.nama || p.name || '').filter(Boolean);
       const vendors = (masterData.vendor || []).map(v => v.nama || v.name || '').filter(Boolean);
