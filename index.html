@@ -1226,530 +1226,7 @@
           </div><!-- end module-settings -->
 
         </div>
-      </main>
-    </div>
-  </section>
 
-</div>
-
-<!-- =====================================================================
-     CRUD MODAL: SETTINGS (Generic, reused for all entities)
-     ===================================================================== -->
-<div id="modal-crud-settings" class="modal-backdrop">
-  <div class="modal-dialog" style="max-width: 580px;">
-    <div class="modal-header">
-      <h3 id="crud-modal-title">Tambah Data</h3>
-      <button class="btn-close-modal" id="btn-close-crud-modal">&times;</button>
-    </div>
-    <div class="modal-body" id="crud-modal-body">
-      <!-- Dynamically injected -->
-    </div>
-    <div style="padding: 1rem 1.5rem; display:flex; gap:0.75rem; justify-content:flex-end; border-top: 1px solid var(--border-light);">
-      <button class="btn-batal-text" id="btn-cancel-crud">Batal</button>
-      <button class="btn-jurnal-primary" id="btn-save-crud">Simpan</button>
-    </div>
-  </div>
-</div>
-
-<!-- =====================================================================
-     CONFIRM DELETE MODAL
-     ===================================================================== -->
-<div id="modal-confirm-delete" class="modal-backdrop">
-  <div class="modal-dialog" style="max-width: 400px; text-align:center;">
-    <div class="modal-body" style="padding: 2rem 1.5rem;">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🗑️</div>
-      <h3 style="margin-bottom: 0.5rem; color: #1E293B;">Hapus Data?</h3>
-      <p id="delete-confirm-text" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Data akan dihapus secara permanen.</p>
-      <div style="display:flex; gap:0.75rem; justify-content:center;">
-        <button class="btn-batal-text" id="btn-cancel-delete">Batal</button>
-        <button style="background:#EF4444; color:white; border:none; padding:0.6rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer;" id="btn-confirm-delete">Ya, Hapus</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Quick Transaction Dialog Modal -->
-<div id="modal-quick-transaction" class="modal-backdrop">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3>Pilih Jenis Transaksi Baru</h3>
-      <button class="btn-close-modal" id="btn-close-modal">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-        <div class="selection-card" id="card-modal-sales">
-          <div class="card-icon-bubble">💰</div>
-          <h3>Faktur Penjualan (Sales)</h3>
-          <p class="card-desc">Terbitkan faktur untuk pesanan pelanggan dan kurangi stok barang jadi di gudang.</p>
-          <button class="btn-card-select">Buka Form Penjualan →</button>
-        </div>
-
-        <div class="selection-card" id="card-modal-purchase">
-          <div class="card-icon-bubble">📦</div>
-          <h3>Purchase Order (PO)</h3>
-          <p class="card-desc">Buat pesanan pengadaan bahan baku/komponen kepada vendor dan jadwalkan logistik masuk.</p>
-          <button class="btn-card-select">Buka Form Pembelian →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- =====================================================================
-     FIGMA #PENJUALAN OVERLAY (FIGMA: #2038:6036 - PROTOTYPE MODAL BACKDROP)
-     ===================================================================== -->
-<div id="modal-penjualan-overlay" class="overlay-drawer-backdrop">
-  <div class="overlay-penjualan-card">
-    <div class="overlay-header">
-      <h3>Penjualan overlay</h3>
-      <button type="button" class="btn-close-x" id="btn-close-penjualan-overlay">&times;</button>
-    </div>
-
-    <form id="form-sales-overlay">
-      <div class="overlay-body">
-        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
-        <div class="overlay-inputs-grid">
-          <!-- Column 1 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Pelanggan</label>
-              <select id="overlay-sales-customer" class="form-input-figma" required>
-                <option value="">Pilih Pelanggan</option>
-                <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
-                <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
-                <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
-                <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
-              </select>
-            </div>
-
-            <div class="overlay-field">
-              <label>Alamat</label>
-              <input type="text" id="overlay-sales-address" class="form-input-figma" placeholder="Alamat pengiriman..." value="Jl. Industri Raya No. 12">
-            </div>
-          </div>
-
-          <!-- Column 2 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Tanggal Kirim</label>
-              <input type="date" id="overlay-sales-ship-date" class="form-input-figma" value="2026-09-24" required>
-            </div>
-
-            <div class="overlay-field">
-              <label>Tanggal Transaksi</label>
-              <input type="date" id="overlay-sales-date" class="form-input-figma" value="2026-09-22" required>
-            </div>
-
-            <div class="overlay-field">
-              <label>Tgl. Jatuh Tempo</label>
-              <input type="date" id="overlay-sales-due-date" class="form-input-figma" value="2026-10-22" required>
-            </div>
-          </div>
-
-          <!-- Column 3 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Email</label>
-              <input type="email" id="overlay-sales-email" class="form-input-figma" placeholder="Email..." value="finance@suryagemilang.co.id">
-            </div>
-
-            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-              <div class="overlay-field" style="flex: 1;">
-                <label>No Transaksi</label>
-                <input type="text" id="overlay-sales-invoice-no" class="form-input-figma" value="INV-2026-005" required>
-              </div>
-              <button type="button" class="btn-lain-purple" id="btn-lain-sales">Lain</button>
-            </div>
-
-            <div class="overlay-field">
-              <label>Gudang</label>
-              <select id="overlay-sales-warehouse" class="form-input-figma" required>
-                <option value="">Pilih Gudang</option>
-                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
-                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
-        <div class="overlay-table-container" style="margin-top: 0.5rem;">
-          <table class="overlay-table">
-            <thead>
-              <tr>
-                <th style="width: 20%;">Produk</th>
-                <th style="width: 20%;">Deskripsi</th>
-                <th style="width: 8%;">Quantity</th>
-                <th style="width: 8%;">Unit</th>
-                <th style="width: 13%;">Harga Satuan</th>
-                <th style="width: 8%;">Diskon</th>
-                <th style="width: 8%;">Pajak</th>
-                <th style="width: 11%;">Jumlah</th>
-                <th style="width: 4%;"></th>
-              </tr>
-            </thead>
-            <tbody id="overlay-sales-items-tbody">
-              <!-- Dynamically populated via JS -->
-            </tbody>
-          </table>
-
-          <div class="overlay-table-footer">
-            <button type="button" id="btn-add-overlay-sales-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
-          </div>
-        </div>
-
-        <!-- Bottom Calculation & Notes -->
-        <div class="overlay-calc-panel">
-          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
-          <div id="lain-summary-sales" class="lain-summary-bar" style="display:none;"></div>
-
-          <div class="overlay-field">
-            <label>Catatan Faktur</label>
-            <textarea id="overlay-sales-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo pengiriman..."></textarea>
-          </div>
-
-          <div class="overlay-calc-box">
-            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
-              <span>Subtotal:</span>
-              <strong id="overlay-calc-subtotal">Rp 0</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
-              <span>PPN (11%):</span>
-              <strong id="overlay-calc-tax">Rp 0</strong>
-            </div>
-            <div id="overlay-discgroup-row" style="display:none; justify-content: space-between; font-size: 0.85rem; color: #DC2626;">
-              <span>Disc Group:</span>
-              <strong id="overlay-calc-discgroup" style="color:#DC2626;">- Rp 0</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
-              <span>Total Tagihan:</span>
-              <strong id="overlay-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
-      <div class="overlay-actions-bar">
-        <button type="button" id="btn-batal-overlay" class="btn-batal-text">batal</button>
-        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
-          <span>Simpan & Terbitkan</span>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-<!-- =====================================================================
-     FIGMA #PEMBELIAN OVERLAY
-     ===================================================================== -->
-<div id="modal-pembelian-overlay" class="overlay-drawer-backdrop">
-  <div class="overlay-penjualan-card">
-    <div class="overlay-header">
-      <h3>Pembelian overlay</h3>
-      <button type="button" class="btn-close-x" id="btn-close-pembelian-overlay">&times;</button>
-    </div>
-
-    <form id="form-purchase-overlay">
-      <div class="overlay-body">
-        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
-        <div class="overlay-inputs-grid">
-          <!-- Column 1 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Pemasok</label>
-              <select id="overlay-purchase-vendor" class="form-input-figma" required>
-                <option value="">Pilih Pemasok</option>
-                <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
-                <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
-                <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
-              </select>
-            </div>
-
-            <div class="overlay-field">
-              <label>Alamat</label>
-              <input type="text" id="overlay-purchase-address" class="form-input-figma" placeholder="Alamat pemasok..." value="Jl. Industri Raya No. 12">
-            </div>
-          </div>
-
-          <!-- Column 2 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Tanggal Kirim</label>
-              <input type="date" id="overlay-purchase-ship-date" class="form-input-figma" value="2026-09-24" required>
-            </div>
-
-            <div class="overlay-field">
-              <label>Tanggal Transaksi</label>
-              <input type="date" id="overlay-purchase-date" class="form-input-figma" value="2026-09-22" required>
-            </div>
-
-            <div class="overlay-field">
-              <label>Tgl. Jatuh Tempo</label>
-              <input type="date" id="overlay-purchase-due-date" class="form-input-figma" value="2026-10-22" required>
-            </div>
-          </div>
-
-          <!-- Column 3 -->
-          <div class="overlay-input-col">
-            <div class="overlay-field">
-              <label>Email</label>
-              <input type="email" id="overlay-purchase-email" class="form-input-figma" placeholder="Email..." value="finance@suppliergemilang.co.id">
-            </div>
-
-            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-              <div class="overlay-field" style="flex: 1;">
-                <label>No Transaksi</label>
-                <input type="text" id="overlay-purchase-invoice-no" class="form-input-figma" value="PO-2026-005" required>
-              </div>
-              <button type="button" class="btn-lain-purple" id="btn-lain-purchase">Lain</button>
-            </div>
-
-            <div class="overlay-field">
-              <label>Gudang</label>
-              <select id="overlay-purchase-warehouse" class="form-input-figma" required>
-                <option value="">Pilih Gudang</option>
-                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
-                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
-                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
-        <div class="overlay-table-container" style="margin-top: 0.5rem;">
-          <table class="overlay-table">
-            <thead>
-              <tr>
-                <th style="width: 20%;">Produk</th>
-                <th style="width: 20%;">Deskripsi</th>
-                <th style="width: 8%;">Quantity</th>
-                <th style="width: 8%;">Unit</th>
-                <th style="width: 13%;">Harga Satuan</th>
-                <th style="width: 8%;">Diskon</th>
-                <th style="width: 8%;">Pajak</th>
-                <th style="width: 11%;">Jumlah</th>
-                <th style="width: 4%;"></th>
-              </tr>
-            </thead>
-            <tbody id="overlay-purchase-items-tbody">
-              <!-- Dynamically populated via JS -->
-            </tbody>
-          </table>
-
-          <div class="overlay-table-footer">
-            <button type="button" id="btn-add-overlay-purchase-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
-          </div>
-        </div>
-
-        <!-- Bottom Calculation & Notes -->
-        <div class="overlay-calc-panel">
-          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
-          <div id="lain-summary-purchase" class="lain-summary-bar" style="display:none;"></div>
-
-          <div class="overlay-field">
-            <label>Catatan Faktur</label>
-            <textarea id="overlay-purchase-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo penerimaan..."></textarea>
-          </div>
-
-          <div class="overlay-calc-box">
-            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
-              <span>Subtotal:</span>
-              <strong id="overlay-purchase-calc-subtotal">Rp 0</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
-              <span>PPN (11%):</span>
-              <strong id="overlay-purchase-calc-tax">Rp 0</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
-              <span>Total Tagihan:</span>
-              <strong id="overlay-purchase-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
-      <div class="overlay-actions-bar">
-        <button type="button" id="btn-batal-purchase-overlay" class="btn-batal-text">batal</button>
-        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
-          <span>Simpan & Terbitkan</span>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Lain Overlay Modal (Figma: Lain overlay) -->
-<div id="modal-lain-overlay" class="modal-backdrop">
-  <div class="modal-lain-dialog">
-    <div class="modal-lain-header">
-      <div>
-        <h3 class="modal-lain-title">INV. [LAIN]</h3>
-        <p class="modal-lain-subtitle">Informasi tambahan transaksi — perubahan mempengaruhi total</p>
-      </div>
-      <button class="btn-close-lain" id="btn-close-lain">&times;</button>
-    </div>
-    <div class="modal-lain-body">
-      <div class="lain-grid">
-
-        <!-- Row 1: SUMBER -->
-        <div class="lain-field lain-field-full">
-          <label class="lain-field-label">Sumber [F3]</label>
-          <input type="text" id="lain-sumber" class="lain-field-input" placeholder="Sumber transaksi...">
-        </div>
-
-        <!-- Row 2: MODEL LABEL -->
-        <div class="lain-field">
-          <label class="lain-field-label">Model Label</label>
-          <select id="lain-model" class="lain-field-input">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-        </div>
-
-        <!-- Row 3: C.CTR -->
-        <div class="lain-field">
-          <label class="lain-field-label">C.CTR [F3]</label>
-          <input type="text" id="lain-cctr" class="lain-field-input" placeholder="Cost Center..." value="MAIN STORE">
-        </div>
-
-        <!-- Row 4: WAREHOUSE -->
-        <div class="lain-field">
-          <label class="lain-field-label">Warehouse [F3]</label>
-          <input type="text" id="lain-warehouse" class="lain-field-input" placeholder="Kode gudang..." value="G001">
-        </div>
-
-        <!-- Row 5: KURS (Currency + Rate) -->
-        <div class="lain-field">
-          <label class="lain-field-label">Kurs [F3]</label>
-          <div style="display:flex; gap:0.4rem;">
-            <select id="lain-kurs-currency" class="lain-field-input" style="width:90px; flex-shrink:0;">
-              <option value="IDR">IDR</option>
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="SGD">SGD</option>
-            </select>
-            <input type="number" id="lain-kurs-rate" class="lain-field-input" placeholder="Rate..." value="1">
-          </div>
-        </div>
-
-        <!-- Row 6: EXPEDISI -->
-        <div class="lain-field">
-          <label class="lain-field-label">Expedisi [F3]</label>
-          <input type="text" id="lain-expedisi" class="lain-field-input" placeholder="Nama ekspedisi...">
-        </div>
-
-        <!-- Row 7: NOMOR RESI -->
-        <div class="lain-field">
-          <label class="lain-field-label">Nomor Resi</label>
-          <input type="text" id="lain-nopo" class="lain-field-input" placeholder="No. resi / PO...">
-        </div>
-
-        <!-- Row 8: DISC GROUP — affects grand total -->
-        <div class="lain-field">
-          <label class="lain-field-label" style="color:#DC2626; font-weight:700;">Disc Group ⚡</label>
-          <input type="number" id="lain-disc-group" class="lain-field-input" placeholder="0.00" value="0" min="0" step="0.01">
-        </div>
-
-        <!-- Row 9: MAX BARIS -->
-        <div class="lain-field">
-          <label class="lain-field-label">Max Baris</label>
-          <input type="number" id="lain-maxbaris" class="lain-field-input" value="100" min="1">
-        </div>
-
-        <!-- Row 10-11: TELP 2 fields -->
-        <div class="lain-field">
-          <label class="lain-field-label">Telp [F3] (1)</label>
-          <input type="text" id="lain-telp1" class="lain-field-input" placeholder="No. telepon...">
-        </div>
-        <div class="lain-field">
-          <label class="lain-field-label">Telp [F3] (2)</label>
-          <input type="text" id="lain-kontak1" class="lain-field-input" placeholder="No. telepon...">
-        </div>
-
-        <!-- Row 12-13: KONTAK 2 fields -->
-        <div class="lain-field">
-          <label class="lain-field-label">Kontak [F3] (1)</label>
-          <input type="text" id="lain-kontak2" class="lain-field-input" placeholder="Nama kontak...">
-        </div>
-        <div class="lain-field">
-          <label class="lain-field-label">Kontak [F3] (2)</label>
-          <input type="text" id="lain-partner" class="lain-field-input" placeholder="Nama kontak...">
-        </div>
-
-        <!-- Row 14: ALAMAT full -->
-        <div class="lain-field lain-field-full">
-          <label class="lain-field-label">Alamat [F3]</label>
-          <input type="text" id="lain-alamat" class="lain-field-input" placeholder="Alamat lengkap...">
-        </div>
-
-        <!-- Row 15: REKENING full -->
-        <div class="lain-field lain-field-full">
-          <label class="lain-field-label">Rekening [F3]</label>
-          <input type="text" id="lain-rekening" class="lain-field-input" placeholder="No. rekening bank...">
-        </div>
-
-        <!-- Row 16: PARTNER 3 fields -->
-        <div class="lain-field lain-field-full">
-          <label class="lain-field-label">Partner² [F3]</label>
-          <div style="display:flex; gap:0.4rem;">
-            <input type="text" id="lain-partner2a" class="lain-field-input" placeholder="Partner A...">
-            <input type="text" id="lain-partner2b" class="lain-field-input" placeholder="Partner B...">
-            <input type="text" id="lain-texth1h2" class="lain-field-input" placeholder="Kode...">
-          </div>
-        </div>
-
-        <!-- Row 17: MODEL PRODUK radio -->
-        <div class="lain-field lain-field-full">
-          <label class="lain-field-label">Model Produk</label>
-          <div style="display:flex; gap:1.25rem; margin-top:0.2rem;">
-            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="jasa" id="lain-mp-jasa"> Jasa</label>
-            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="komersial" id="lain-mp-komersial"> Komersial</label>
-            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="semua" id="lain-mp-semua" checked> Semua Produk</label>
-          </div>
-        </div>
-
-        <!-- Row 18: CHECKBOXES -->
-        <div class="lain-field lain-field-full">
-          <div class="lain-checkbox-group">
-            <label class="lain-check-label">
-              <input type="checkbox" id="lain-termasuk-ppn" checked> Termasuk PPN
-            </label>
-            <label class="lain-check-label">
-              <input type="checkbox" id="lain-tambah-baris" checked> Jika ada item, tambahkan baris
-            </label>
-            <label class="lain-check-label">
-              <input type="checkbox" id="lain-langsung-cetak" checked> Langsung cetak
-            </label>
-            <label class="lain-check-label">
-              <input type="checkbox" id="lain-disc-persen"> Disc persen
-            </label>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="modal-lain-footer">
-      <span id="lain-status-text" class="lain-status-text"></span>
-      <div class="lain-footer-btns">
-        <button class="btn-lain-load" id="btn-lain-load-local">⬆ Load Local</button>
-        <button class="btn-lain-save" id="btn-lain-save-local">💾 Save Local</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Container -->
-<div id="toast-container" class="toast-container"></div>
-
-<script src="js/app.js"></script>
-
-<!-- ================================================================
-     MODULE: FORM PENJUALAN FULL PAGE
-     ================================================================ -->
 <div id="module-form-penjualan" class="module-section" style="display:none;">
 
   <!-- Page Header -->
@@ -2366,5 +1843,530 @@
   </form>
 </div>
 
+
+      </main>
+    </div>
+  </section>
+
+</div>
+
+<!-- =====================================================================
+     CRUD MODAL: SETTINGS (Generic, reused for all entities)
+     ===================================================================== -->
+<div id="modal-crud-settings" class="modal-backdrop">
+  <div class="modal-dialog" style="max-width: 580px;">
+    <div class="modal-header">
+      <h3 id="crud-modal-title">Tambah Data</h3>
+      <button class="btn-close-modal" id="btn-close-crud-modal">&times;</button>
+    </div>
+    <div class="modal-body" id="crud-modal-body">
+      <!-- Dynamically injected -->
+    </div>
+    <div style="padding: 1rem 1.5rem; display:flex; gap:0.75rem; justify-content:flex-end; border-top: 1px solid var(--border-light);">
+      <button class="btn-batal-text" id="btn-cancel-crud">Batal</button>
+      <button class="btn-jurnal-primary" id="btn-save-crud">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     CONFIRM DELETE MODAL
+     ===================================================================== -->
+<div id="modal-confirm-delete" class="modal-backdrop">
+  <div class="modal-dialog" style="max-width: 400px; text-align:center;">
+    <div class="modal-body" style="padding: 2rem 1.5rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🗑️</div>
+      <h3 style="margin-bottom: 0.5rem; color: #1E293B;">Hapus Data?</h3>
+      <p id="delete-confirm-text" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Data akan dihapus secara permanen.</p>
+      <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <button class="btn-batal-text" id="btn-cancel-delete">Batal</button>
+        <button style="background:#EF4444; color:white; border:none; padding:0.6rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer;" id="btn-confirm-delete">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Transaction Dialog Modal -->
+<div id="modal-quick-transaction" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>Pilih Jenis Transaksi Baru</h3>
+      <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="selection-card" id="card-modal-sales">
+          <div class="card-icon-bubble">💰</div>
+          <h3>Faktur Penjualan (Sales)</h3>
+          <p class="card-desc">Terbitkan faktur untuk pesanan pelanggan dan kurangi stok barang jadi di gudang.</p>
+          <button class="btn-card-select">Buka Form Penjualan →</button>
+        </div>
+
+        <div class="selection-card" id="card-modal-purchase">
+          <div class="card-icon-bubble">📦</div>
+          <h3>Purchase Order (PO)</h3>
+          <p class="card-desc">Buat pesanan pengadaan bahan baku/komponen kepada vendor dan jadwalkan logistik masuk.</p>
+          <button class="btn-card-select">Buka Form Pembelian →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     FIGMA #PENJUALAN OVERLAY (FIGMA: #2038:6036 - PROTOTYPE MODAL BACKDROP)
+     ===================================================================== -->
+<div id="modal-penjualan-overlay" class="overlay-drawer-backdrop">
+  <div class="overlay-penjualan-card">
+    <div class="overlay-header">
+      <h3>Penjualan overlay</h3>
+      <button type="button" class="btn-close-x" id="btn-close-penjualan-overlay">&times;</button>
+    </div>
+
+    <form id="form-sales-overlay">
+      <div class="overlay-body">
+        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pelanggan</label>
+              <select id="overlay-sales-customer" class="form-input-figma" required>
+                <option value="">Pilih Pelanggan</option>
+                <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
+                <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
+                <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
+                <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
+              </select>
+            </div>
+
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="overlay-sales-address" class="form-input-figma" placeholder="Alamat pengiriman..." value="Jl. Industri Raya No. 12">
+            </div>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="overlay-sales-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="overlay-sales-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="overlay-sales-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="overlay-sales-email" class="form-input-figma" placeholder="Email..." value="finance@suryagemilang.co.id">
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+              <div class="overlay-field" style="flex: 1;">
+                <label>No Transaksi</label>
+                <input type="text" id="overlay-sales-invoice-no" class="form-input-figma" value="INV-2026-005" required>
+              </div>
+              <button type="button" class="btn-lain-purple" id="btn-lain-sales">Lain</button>
+            </div>
+
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="overlay-sales-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
+        <div class="overlay-table-container" style="margin-top: 0.5rem;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Produk</th>
+                <th style="width: 20%;">Deskripsi</th>
+                <th style="width: 8%;">Quantity</th>
+                <th style="width: 8%;">Unit</th>
+                <th style="width: 13%;">Harga Satuan</th>
+                <th style="width: 8%;">Diskon</th>
+                <th style="width: 8%;">Pajak</th>
+                <th style="width: 11%;">Jumlah</th>
+                <th style="width: 4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="overlay-sales-items-tbody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-add-overlay-sales-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+
+        <!-- Bottom Calculation & Notes -->
+        <div class="overlay-calc-panel">
+          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
+          <div id="lain-summary-sales" class="lain-summary-bar" style="display:none;"></div>
+
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="overlay-sales-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo pengiriman..."></textarea>
+          </div>
+
+          <div class="overlay-calc-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>Subtotal:</span>
+              <strong id="overlay-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>PPN (11%):</span>
+              <strong id="overlay-calc-tax">Rp 0</strong>
+            </div>
+            <div id="overlay-discgroup-row" style="display:none; justify-content: space-between; font-size: 0.85rem; color: #DC2626;">
+              <span>Disc Group:</span>
+              <strong id="overlay-calc-discgroup" style="color:#DC2626;">- Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
+              <span>Total Tagihan:</span>
+              <strong id="overlay-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
+      <div class="overlay-actions-bar">
+        <button type="button" id="btn-batal-overlay" class="btn-batal-text">batal</button>
+        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
+          <span>Simpan & Terbitkan</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- =====================================================================
+     FIGMA #PEMBELIAN OVERLAY
+     ===================================================================== -->
+<div id="modal-pembelian-overlay" class="overlay-drawer-backdrop">
+  <div class="overlay-penjualan-card">
+    <div class="overlay-header">
+      <h3>Pembelian overlay</h3>
+      <button type="button" class="btn-close-x" id="btn-close-pembelian-overlay">&times;</button>
+    </div>
+
+    <form id="form-purchase-overlay">
+      <div class="overlay-body">
+        <!-- 3 Columns Input Layout exactly matching Figma Screenshot -->
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pemasok</label>
+              <select id="overlay-purchase-vendor" class="form-input-figma" required>
+                <option value="">Pilih Pemasok</option>
+                <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
+                <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
+                <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
+              </select>
+            </div>
+
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="overlay-purchase-address" class="form-input-figma" placeholder="Alamat pemasok..." value="Jl. Industri Raya No. 12">
+            </div>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="overlay-purchase-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="overlay-purchase-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="overlay-purchase-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="overlay-purchase-email" class="form-input-figma" placeholder="Email..." value="finance@suppliergemilang.co.id">
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+              <div class="overlay-field" style="flex: 1;">
+                <label>No Transaksi</label>
+                <input type="text" id="overlay-purchase-invoice-no" class="form-input-figma" value="PO-2026-005" required>
+              </div>
+              <button type="button" class="btn-lain-purple" id="btn-lain-purchase">Lain</button>
+            </div>
+
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="overlay-purchase-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table with Figma Grey Header #D9D9D9: Produk, Deskripsi, Quantity, Unit, Harga Satuan, Diskon, Pajak, Jumlah -->
+        <div class="overlay-table-container" style="margin-top: 0.5rem;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Produk</th>
+                <th style="width: 20%;">Deskripsi</th>
+                <th style="width: 8%;">Quantity</th>
+                <th style="width: 8%;">Unit</th>
+                <th style="width: 13%;">Harga Satuan</th>
+                <th style="width: 8%;">Diskon</th>
+                <th style="width: 8%;">Pajak</th>
+                <th style="width: 11%;">Jumlah</th>
+                <th style="width: 4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="overlay-purchase-items-tbody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-add-overlay-purchase-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+
+        <!-- Bottom Calculation & Notes -->
+        <div class="overlay-calc-panel">
+          <!-- Lain Data Summary (shown after Simpan in Lain modal) -->
+          <div id="lain-summary-purchase" class="lain-summary-bar" style="display:none;"></div>
+
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="overlay-purchase-notes" class="form-input-figma" style="height: 90px; padding: 0.75rem;" placeholder="Catatan atau memo penerimaan..."></textarea>
+          </div>
+
+          <div class="overlay-calc-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>Subtotal:</span>
+              <strong id="overlay-purchase-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748B;">
+              <span>PPN (11%):</span>
+              <strong id="overlay-purchase-calc-tax">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 700; color: #1E293B; border-top: 1.5px solid #E2E8F0; padding-top: 0.5rem;">
+              <span>Total Tagihan:</span>
+              <strong id="overlay-purchase-calc-grandtotal" style="color: var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Footer matching Figma with 'batal' text and blue submit -->
+      <div class="overlay-actions-bar">
+        <button type="button" id="btn-batal-purchase-overlay" class="btn-batal-text">batal</button>
+        <button type="submit" class="btn-dash-action" style="padding: 0 1.75rem;">
+          <span>Simpan & Terbitkan</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Lain Overlay Modal (Figma: Lain overlay) -->
+<div id="modal-lain-overlay" class="modal-backdrop">
+  <div class="modal-lain-dialog">
+    <div class="modal-lain-header">
+      <div>
+        <h3 class="modal-lain-title">INV. [LAIN]</h3>
+        <p class="modal-lain-subtitle">Informasi tambahan transaksi — perubahan mempengaruhi total</p>
+      </div>
+      <button class="btn-close-lain" id="btn-close-lain">&times;</button>
+    </div>
+    <div class="modal-lain-body">
+      <div class="lain-grid">
+
+        <!-- Row 1: SUMBER -->
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Sumber [F3]</label>
+          <input type="text" id="lain-sumber" class="lain-field-input" placeholder="Sumber transaksi...">
+        </div>
+
+        <!-- Row 2: MODEL LABEL -->
+        <div class="lain-field">
+          <label class="lain-field-label">Model Label</label>
+          <select id="lain-model" class="lain-field-input">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+
+        <!-- Row 3: C.CTR -->
+        <div class="lain-field">
+          <label class="lain-field-label">C.CTR [F3]</label>
+          <input type="text" id="lain-cctr" class="lain-field-input" placeholder="Cost Center..." value="MAIN STORE">
+        </div>
+
+        <!-- Row 4: WAREHOUSE -->
+        <div class="lain-field">
+          <label class="lain-field-label">Warehouse [F3]</label>
+          <input type="text" id="lain-warehouse" class="lain-field-input" placeholder="Kode gudang..." value="G001">
+        </div>
+
+        <!-- Row 5: KURS (Currency + Rate) -->
+        <div class="lain-field">
+          <label class="lain-field-label">Kurs [F3]</label>
+          <div style="display:flex; gap:0.4rem;">
+            <select id="lain-kurs-currency" class="lain-field-input" style="width:90px; flex-shrink:0;">
+              <option value="IDR">IDR</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="SGD">SGD</option>
+            </select>
+            <input type="number" id="lain-kurs-rate" class="lain-field-input" placeholder="Rate..." value="1">
+          </div>
+        </div>
+
+        <!-- Row 6: EXPEDISI -->
+        <div class="lain-field">
+          <label class="lain-field-label">Expedisi [F3]</label>
+          <input type="text" id="lain-expedisi" class="lain-field-input" placeholder="Nama ekspedisi...">
+        </div>
+
+        <!-- Row 7: NOMOR RESI -->
+        <div class="lain-field">
+          <label class="lain-field-label">Nomor Resi</label>
+          <input type="text" id="lain-nopo" class="lain-field-input" placeholder="No. resi / PO...">
+        </div>
+
+        <!-- Row 8: DISC GROUP — affects grand total -->
+        <div class="lain-field">
+          <label class="lain-field-label" style="color:#DC2626; font-weight:700;">Disc Group ⚡</label>
+          <input type="number" id="lain-disc-group" class="lain-field-input" placeholder="0.00" value="0" min="0" step="0.01">
+        </div>
+
+        <!-- Row 9: MAX BARIS -->
+        <div class="lain-field">
+          <label class="lain-field-label">Max Baris</label>
+          <input type="number" id="lain-maxbaris" class="lain-field-input" value="100" min="1">
+        </div>
+
+        <!-- Row 10-11: TELP 2 fields -->
+        <div class="lain-field">
+          <label class="lain-field-label">Telp [F3] (1)</label>
+          <input type="text" id="lain-telp1" class="lain-field-input" placeholder="No. telepon...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Telp [F3] (2)</label>
+          <input type="text" id="lain-kontak1" class="lain-field-input" placeholder="No. telepon...">
+        </div>
+
+        <!-- Row 12-13: KONTAK 2 fields -->
+        <div class="lain-field">
+          <label class="lain-field-label">Kontak [F3] (1)</label>
+          <input type="text" id="lain-kontak2" class="lain-field-input" placeholder="Nama kontak...">
+        </div>
+        <div class="lain-field">
+          <label class="lain-field-label">Kontak [F3] (2)</label>
+          <input type="text" id="lain-partner" class="lain-field-input" placeholder="Nama kontak...">
+        </div>
+
+        <!-- Row 14: ALAMAT full -->
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Alamat [F3]</label>
+          <input type="text" id="lain-alamat" class="lain-field-input" placeholder="Alamat lengkap...">
+        </div>
+
+        <!-- Row 15: REKENING full -->
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Rekening [F3]</label>
+          <input type="text" id="lain-rekening" class="lain-field-input" placeholder="No. rekening bank...">
+        </div>
+
+        <!-- Row 16: PARTNER 3 fields -->
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Partner² [F3]</label>
+          <div style="display:flex; gap:0.4rem;">
+            <input type="text" id="lain-partner2a" class="lain-field-input" placeholder="Partner A...">
+            <input type="text" id="lain-partner2b" class="lain-field-input" placeholder="Partner B...">
+            <input type="text" id="lain-texth1h2" class="lain-field-input" placeholder="Kode...">
+          </div>
+        </div>
+
+        <!-- Row 17: MODEL PRODUK radio -->
+        <div class="lain-field lain-field-full">
+          <label class="lain-field-label">Model Produk</label>
+          <div style="display:flex; gap:1.25rem; margin-top:0.2rem;">
+            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="jasa" id="lain-mp-jasa"> Jasa</label>
+            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="komersial" id="lain-mp-komersial"> Komersial</label>
+            <label class="lain-radio-label"><input type="radio" name="lain-model-produk" value="semua" id="lain-mp-semua" checked> Semua Produk</label>
+          </div>
+        </div>
+
+        <!-- Row 18: CHECKBOXES -->
+        <div class="lain-field lain-field-full">
+          <div class="lain-checkbox-group">
+            <label class="lain-check-label">
+              <input type="checkbox" id="lain-termasuk-ppn" checked> Termasuk PPN
+            </label>
+            <label class="lain-check-label">
+              <input type="checkbox" id="lain-tambah-baris" checked> Jika ada item, tambahkan baris
+            </label>
+            <label class="lain-check-label">
+              <input type="checkbox" id="lain-langsung-cetak" checked> Langsung cetak
+            </label>
+            <label class="lain-check-label">
+              <input type="checkbox" id="lain-disc-persen"> Disc persen
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-lain-footer">
+      <span id="lain-status-text" class="lain-status-text"></span>
+      <div class="lain-footer-btns">
+        <button class="btn-lain-load" id="btn-lain-load-local">⬆ Load Local</button>
+        <button class="btn-lain-save" id="btn-lain-save-local">💾 Save Local</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+
+<!-- ================================================================
+     MODULE: FORM PENJUALAN FULL PAGE
+     ================================================================ -->
 </body>
 </html>

@@ -1088,15 +1088,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openPembelianOverlayModal(e) {
     if (e) e.preventDefault();
-    if (!modalPembelianOverlay) return;
-    const tbody = document.getElementById('overlay-purchase-items-tbody');
-    if (tbody && tbody.children.length === 0) {
-      if (typeof addOverlayPurchaseRow === 'function') {
-        addOverlayPurchaseRow('', '', 1, 'Pcs', 0, 0, 11);
-      }
-    }
-    if (typeof calculateOverlayPurchaseTotals === 'function') calculateOverlayPurchaseTotals();
-    modalPembelianOverlay.classList.add('open');
+    // Redirected to full-page form
+    openFormPembelian();
   }
 
   function closePembelianOverlayModal() {
@@ -1105,9 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (btnOpenPembelianOverlay) {
-    btnOpenPembelianOverlay.addEventListener('click', openPembelianOverlayModal);
-  }
+  // Old pembelian overlay listener removed — handled by openFormPembelian
   if (btnClosePembelianOverlay) {
     btnClosePembelianOverlay.addEventListener('click', closePembelianOverlayModal);
   }
