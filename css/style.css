@@ -2662,40 +2662,38 @@ body {
 #module-form-pembelian {
   background: #F4F6F9;
   min-height: 100%;
-  padding: 1.5rem 2rem 3rem;
+  padding: 0.25rem 2rem 3rem;
 }
 
-/* Colorful gradient header banner */
+/* Light & Clean Header Banner */
 .form-page-header {
-  background: linear-gradient(135deg, #1B2B4B 0%, #1e3a6e 60%, #1d4ed8 100%);
-  border-radius: 14px;
-  padding: 1.5rem 1.75rem 1.25rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem 1rem;
   margin-bottom: 1.25rem;
-  box-shadow: 0 4px 14px rgba(27, 43, 75, 0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #E2E8F0;
 }
 
 .btn-form-back {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.35);
-  color: #FFFFFF;
-  font-size: 0.8rem;
-  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: #2563EB;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
-  padding: 0.35rem 0.9rem;
-  border-radius: 20px;
+  padding: 0 0 0.5rem 0;
   font-family: inherit;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   transition: all 0.18s;
-  backdrop-filter: blur(4px);
 }
 
 .btn-form-back:hover {
-  background: rgba(255,255,255,0.28);
-  opacity: 1;
-  transform: translateX(-2px);
+  color: #1d4ed8;
+  transform: translateX(-3px);
 }
 
 .form-page-title-row {
@@ -2707,15 +2705,15 @@ body {
 .form-page-title {
   font-size: 1.4rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: #1E293B;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .form-draft-badge {
-  background: rgba(255,255,255,0.2);
-  color: #FFFFFF;
-  border: 1.5px solid rgba(255,255,255,0.5);
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
   border-radius: 6px;
   padding: 0.2rem 0.65rem;
   font-size: 0.7rem;
