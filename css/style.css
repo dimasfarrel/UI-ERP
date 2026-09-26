@@ -2438,3 +2438,204 @@ body {
   background: #EF4444 !important;
   color: white !important;
 }
+
+
+/* ============================================================
+   FULL PAGE FORM MODULES
+   ============================================================ */
+.form-page-header {
+  margin-bottom: 1.25rem;
+}
+
+.btn-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  margin-bottom: 0.5rem;
+  transition: opacity 0.15s;
+}
+
+.btn-form-back:hover { opacity: 0.7; }
+
+.form-page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-page-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
+}
+
+.form-draft-badge {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Form Tab Navigation */
+.form-tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 1.25rem;
+}
+
+.form-tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #94A3B8;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  transition: all 0.15s;
+}
+
+.form-tab-btn:hover {
+  color: #334155;
+  background: #F8FAFC;
+}
+
+.form-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Form Page Card */
+.form-page-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+/* Form Page Footer Bar */
+.form-page-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.btn-form-draft {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  border-radius: 8px;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.btn-form-draft:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+}
+
+/* ============================================================
+   F3 SEARCHABLE COMPONENT
+   ============================================================ */
+.f3-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.f3-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 2rem !important;
+}
+
+.f3-wrap::after {
+  content: "🔍";
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.f3-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 2000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.f3-dropdown.open {
+  display: block;
+}
+
+.f3-result-item {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.83rem;
+  color: #1E293B;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.f3-result-item:last-child {
+  border-bottom: none;
+}
+
+.f3-result-item:hover {
+  background: #EFF6FF;
+  color: var(--primary);
+}
+
+.f3-result-item mark {
+  background: #DBEAFE;
+  color: var(--primary);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.f3-no-result {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.83rem;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+.f3-result-item.f3-add-new {
+  color: var(--primary);
+  font-weight: 600;
+  border-top: 1px dashed #BFDBFE;
+}

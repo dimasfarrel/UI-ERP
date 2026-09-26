@@ -211,10 +211,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function switchModule(moduleName) {
     state.activeModule = moduleName;
 
+    // Map form sub-pages to their parent module for sidebar highlighting
+    const sidebarMap = {
+      'form-penjualan': 'penjualan',
+      'form-pembelian': 'pembelian',
+    };
+    const sidebarActive = sidebarMap[moduleName] || moduleName;
+
     // Update Sidebar Active state
     document.querySelectorAll('.sidebar-nav-item').forEach(item => {
       const mod = item.getAttribute('data-module');
-      if (mod === moduleName) {
+      if (mod === sidebarActive) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');
@@ -486,6 +493,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // SALES INVOICE EDIT
   // =========================================================================
   function openEditSalesModal(inv) {
+    openFormPenjualan(inv);
+    return; // Use full page form now
     // Open the penjualan overlay and pre-fill header fields with existing invoice data
     const modal = document.getElementById('modal-penjualan-overlay');
     if (!modal) return;
@@ -997,6 +1006,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => switchModule('purchasing'));
   });
 
+  // "Buat pembelian baru" opens full page form
+  document.querySelectorAll('#btn-buat-pembelian-baru, [data-open-form="pembelian"]').forEach(btn => {
+    btn.addEventListener('click', () => openFormPembelian());
+  });
+
   // Modal: Quick Transaction
   const modalBackdrop = document.getElementById('modal-quick-transaction');
   const btnOpenModal = document.getElementById('btn-open-quick-modal');
@@ -1056,6 +1070,11 @@ document.addEventListener('DOMContentLoaded', () => {
       modalPenjualanOverlay.classList.remove('open');
     }
   }
+
+  // Wire "Buat penjualan baru" to openFormPenjualan
+  document.querySelectorAll('#btn-open-penjualan-overlay, [data-open-form="penjualan"]').forEach(btn => {
+    btn.addEventListener('click', () => openFormPenjualan());
+  });
 
   if (btnOpenPenjualanOverlay) {
     btnOpenPenjualanOverlay.addEventListener('click', openPenjualanOverlayModal);
@@ -1994,4 +2013,382 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGudangGrid();
   renderAllSettings();
   syncInventoryWithProducts();
+
+
+  // =========================================================================
+  // FULL PAGE FORMS: PENJUALAN & PEMBELIAN
+  // =========================================================================
+
+  // F3 Data Sources
+  const F3_DATA = {
+    sumber: () => ['Manual', 'Import', 'EDI', 'API', 'Web Order', 'Telepon', 'WhatsApp'],
+    cctr: () => {
+      const base = ['MAIN STORE', 'CC-LOG', 'CC-RETAIL', 'CC-ADMIN', 'CC-OPERASIONAL', 'CC-FINANCE'];
+      return base;
+    },
+    gudang: () => {
+      const base = ['G001 - Gudang Utama Kepanjen', 'G002 - Gudang Transit Singosari', 'G003 - Gudang Distribusi Retail'];
+      const fromMaster = (masterData.gudang || []).map(g => `${g.kode || g.id || ''} - ${g.nama || g.name || ''}`).filter(s => s.trim() !== ' - ');
+      return fromMaster.length > 0 ? fromMaster : base;
+    },
+    expedisi: () => ['JNE', 'JNT Express', 'SiCepat', 'AnterAja', 'TIKI', 'Pos Indonesia', 'GoSend', 'GrabExpress', 'Ninja Xpress', 'Lion Parcel'],
+    telp: () => {
+      const from = (masterData.pelanggan || []).map(p => p.telepon || p.phone || '').filter(Boolean);
+      return from.length > 0 ? from : ['08123456789', '08987654321'];
+    },
+    kontak: () => {
+      const from = (masterData.pelanggan || []).map(p => p.nama || p.name || '').filter(Boolean);
+      return from.length > 0 ? from : [];
+    },
+    alamat: () => {
+      const from = (masterData.pelanggan || []).map(p => p.alamat || p.address || '').filter(Boolean);
+      return from.length > 0 ? from : [];
+    },
+    partner: () => {
+      const from = (masterData.pelanggan || []).map(p => p.nama || p.name || '').filter(Boolean);
+      const vendors = (masterData.vendor || []).map(v => v.nama || v.name || '').filter(Boolean);
+      return [...from, ...vendors];
+    },
+  };
+
+  function highlightMatch(text, query) {
+    if (!query) return text;
+    const idx = text.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return text;
+    return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+  }
+
+  function initF3Field(wrap) {
+    const source = wrap.dataset.f3;
+    const input = wrap.querySelector('.f3-input');
+    const dropdown = wrap.querySelector('.f3-dropdown');
+    if (!input || !dropdown) return;
+
+    function renderDropdown(query = '') {
+      const getItems = F3_DATA[source];
+      if (!getItems) return;
+      const allItems = getItems();
+      const filtered = allItems.filter(item => !query || String(item).toLowerCase().includes(query.toLowerCase())).slice(0, 20);
+
+      if (filtered.length === 0) {
+        dropdown.innerHTML = `<div class="f3-no-result">Tidak ada data untuk "${query}"</div>`;
+      } else {
+        dropdown.innerHTML = filtered.map(item =>
+          `<div class="f3-result-item" data-value="${item}">${highlightMatch(item, query)}</div>`
+        ).join('');
+      }
+      dropdown.classList.add('open');
+    }
+
+    input.addEventListener('focus', () => renderDropdown(input.value));
+    input.addEventListener('input', () => renderDropdown(input.value));
+
+    dropdown.addEventListener('mousedown', (e) => {
+      const item = e.target.closest('.f3-result-item');
+      if (item) {
+        e.preventDefault();
+        input.value = item.dataset.value;
+        dropdown.classList.remove('open');
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      setTimeout(() => dropdown.classList.remove('open'), 150);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) dropdown.classList.remove('open');
+    });
+  }
+
+  function initAllF3Fields(container) {
+    (container || document).querySelectorAll('.f3-wrap').forEach(initF3Field);
+  }
+
+  // -------------------------------------------------------------------------
+  // Tab switching within form pages
+  // -------------------------------------------------------------------------
+  document.querySelectorAll('.form-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.ftab;
+      const formPage = btn.closest('.module-section');
+      if (!formPage) return;
+      formPage.querySelectorAll('.form-tab-panel').forEach(p => p.style.display = 'none');
+      formPage.querySelectorAll('.form-tab-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+      btn.classList.add('active');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Back buttons
+  // -------------------------------------------------------------------------
+  document.querySelectorAll('.btn-form-back').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      if (target) switchModule(target);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Product row helpers for full-page forms
+  // -------------------------------------------------------------------------
+  function addFpsRow(product='', desc='', qty=1, unit='Pcs', price=0, disc=0, tax=11) {
+    const tbody = document.getElementById('fps-items-tbody');
+    if (!tbody) return;
+    const row = document.createElement('tr');
+    const units = ['Pcs', 'Unit', 'Kg', 'Ltr', 'Box', 'Set', 'Lusin', 'Karton'];
+    const taxOptions = [0, 5, 11].map(t => `<option value="${t}" ${t==tax?'selected':''}>${t}%</option>`).join('');
+    row.innerHTML = `
+      <td><input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..." required></td>
+      <td><input type="text" class="table-input-cell" value="${desc}" placeholder="Deskripsi..."></td>
+      <td><input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" style="width:60px;text-align:center;"></td>
+      <td>
+        <select class="table-input-cell overlay-item-unit" style="width:60px;">
+          ${units.map(u => `<option ${u===unit?'selected':''}>${u}</option>`).join('')}
+        </select>
+      </td>
+      <td><input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0" step="1000"></td>
+      <td><input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0"></td>
+      <td>
+        <select class="table-input-cell overlay-item-tax" style="width:70px;">${taxOptions}</select>
+      </td>
+      <td><input type="text" class="table-input-cell overlay-item-total" value="Rp 0" readonly style="background:#F8FAFC;font-weight:600;"></td>
+      <td><button type="button" class="btn-remove-overlay-row" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:1rem;">×</button></td>
+    `;
+    row.querySelectorAll('.overlay-item-qty,.overlay-item-price,.overlay-item-disc,.overlay-item-tax').forEach(el => {
+      el.addEventListener('input', calculateFpsTotals);
+      el.addEventListener('change', calculateFpsTotals);
+    });
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => { row.remove(); calculateFpsTotals(); });
+    tbody.appendChild(row);
+    calculateFpsTotals();
+  }
+
+  function addFppRow(product='', desc='', qty=1, unit='Pcs', price=0, disc=0, tax=11) {
+    const tbody = document.getElementById('fpp-items-tbody');
+    if (!tbody) return;
+    const row = document.createElement('tr');
+    const units = ['Pcs', 'Unit', 'Kg', 'Ltr', 'Box', 'Set', 'Lusin', 'Karton'];
+    const taxOptions = [0, 5, 11].map(t => `<option value="${t}" ${t==tax?'selected':''}>${t}%</option>`).join('');
+    row.innerHTML = `
+      <td><input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..." required></td>
+      <td><input type="text" class="table-input-cell" value="${desc}" placeholder="Deskripsi..."></td>
+      <td><input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" style="width:60px;text-align:center;"></td>
+      <td>
+        <select class="table-input-cell overlay-item-unit" style="width:60px;">
+          ${units.map(u => `<option ${u===unit?'selected':''}>${u}</option>`).join('')}
+        </select>
+      </td>
+      <td><input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0" step="1000"></td>
+      <td><input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0"></td>
+      <td>
+        <select class="table-input-cell overlay-item-tax" style="width:70px;">${taxOptions}</select>
+      </td>
+      <td><input type="text" class="table-input-cell overlay-item-total" value="Rp 0" readonly style="background:#F8FAFC;font-weight:600;"></td>
+      <td><button type="button" class="btn-remove-overlay-row" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:1rem;">×</button></td>
+    `;
+    row.querySelectorAll('.overlay-item-qty,.overlay-item-price,.overlay-item-disc,.overlay-item-tax').forEach(el => {
+      el.addEventListener('input', calculateFppTotals);
+      el.addEventListener('change', calculateFppTotals);
+    });
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => { row.remove(); calculateFppTotals(); });
+    tbody.appendChild(row);
+    calculateFppTotals();
+  }
+
+  // -------------------------------------------------------------------------
+  // Calculation functions for full-page forms
+  // -------------------------------------------------------------------------
+  function calculateFpsTotals() {
+    const tbody = document.getElementById('fps-items-tbody');
+    if (!tbody) return;
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+      const base = Math.max(0, (qty * price) - discount);
+      const rowTax = base * (taxRate / 100);
+      subtotal += base;
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(base + rowTax);
+    });
+    const includePPN = document.getElementById('fps-lain-ppn')?.checked !== false;
+    const discPersen = document.getElementById('fps-lain-disc-persen')?.checked || false;
+    const discGroup = parseFloat(document.getElementById('fps-lain-disc-group')?.value) || 0;
+    const tax = includePPN ? subtotal * 0.11 : 0;
+    const discAmount = discGroup > 0 ? (discPersen ? subtotal * discGroup / 100 : discGroup) : 0;
+    const grandTotal = Math.max(0, subtotal + tax - discAmount);
+    const sub = document.getElementById('fps-calc-subtotal');
+    const taxEl = document.getElementById('fps-calc-tax');
+    const gt = document.getElementById('fps-calc-grandtotal');
+    const discRow = document.getElementById('fps-discgroup-row');
+    const discEl = document.getElementById('fps-calc-discgroup');
+    if (sub) sub.textContent = formatRupiah(subtotal);
+    if (taxEl) taxEl.textContent = includePPN ? formatRupiah(tax) : 'Tidak dikenakan';
+    if (gt) gt.textContent = formatRupiah(grandTotal);
+    if (discRow) discRow.style.display = discAmount > 0 ? 'flex' : 'none';
+    if (discEl) discEl.textContent = `- ${formatRupiah(discAmount)}${discPersen ? ` (${discGroup}%)` : ''}`;
+  }
+
+  function calculateFppTotals() {
+    const tbody = document.getElementById('fpp-items-tbody');
+    if (!tbody) return;
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+      const base = Math.max(0, (qty * price) - discount);
+      subtotal += base;
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(base + base * (taxRate / 100));
+    });
+    const includePPN = document.getElementById('fpp-lain-ppn')?.checked !== false;
+    const discPersen = document.getElementById('fpp-lain-disc-persen')?.checked || false;
+    const discGroup = parseFloat(document.getElementById('fpp-lain-disc-group')?.value) || 0;
+    const tax = includePPN ? subtotal * 0.11 : 0;
+    const discAmount = discGroup > 0 ? (discPersen ? subtotal * discGroup / 100 : discGroup) : 0;
+    const grandTotal = Math.max(0, subtotal + tax - discAmount);
+    const sub = document.getElementById('fpp-calc-subtotal');
+    const taxEl = document.getElementById('fpp-calc-tax');
+    const gt = document.getElementById('fpp-calc-grandtotal');
+    const discRow = document.getElementById('fpp-discgroup-row');
+    const discEl = document.getElementById('fpp-calc-discgroup');
+    if (sub) sub.textContent = formatRupiah(subtotal);
+    if (taxEl) taxEl.textContent = includePPN ? formatRupiah(tax) : 'Tidak dikenakan';
+    if (gt) gt.textContent = formatRupiah(grandTotal);
+    if (discRow) discRow.style.display = discAmount > 0 ? 'flex' : 'none';
+    if (discEl) discEl.textContent = `- ${formatRupiah(discAmount)}${discPersen ? ` (${discGroup}%)` : ''}`;
+  }
+
+  // -------------------------------------------------------------------------
+  // Open Form Penjualan (full page)
+  // -------------------------------------------------------------------------
+  function openFormPenjualan(editInv = null) {
+    // Reset tabs to UTAMA
+    const formModule = document.getElementById('module-form-penjualan');
+    if (formModule) {
+      formModule.querySelectorAll('.form-tab-panel').forEach(p => p.style.display = 'none');
+      formModule.querySelectorAll('.form-tab-btn').forEach(b => b.classList.remove('active'));
+      const utama = document.getElementById('fps-utama');
+      const firstBtn = formModule.querySelector('.form-tab-btn');
+      if (utama) utama.style.display = 'block';
+      if (firstBtn) firstBtn.classList.add('active');
+    }
+
+    // Pre-fill if editing
+    if (editInv) {
+      document.getElementById('fps-page-title').textContent = `Edit Faktur ${editInv.id}`;
+      const invNoEl = document.getElementById('fps-invoice-no');
+      if (invNoEl) invNoEl.value = editInv.id;
+      if (editInv.date) { const dateEl = document.getElementById('fps-date'); if (dateEl) dateEl.value = editInv.date; }
+      formModule.dataset.editId = editInv.id;
+    } else {
+      document.getElementById('fps-page-title').textContent = 'Buat Faktur Penjualan Baru';
+      if (formModule) delete formModule.dataset.editId;
+      // Init with sample rows if empty
+      const tbody = document.getElementById('fps-items-tbody');
+      if (tbody && tbody.children.length === 0) {
+        addFpsRow('Komponen Mesin MX-4', 'Modul perakitan hidrolik', 10, 'Pcs', 2500000, 0, 11);
+        addFpsRow('Inverter Listrik Industri 5KW', 'Inverter 3-phase', 2, 'Unit', 4100000, 0, 11);
+      }
+    }
+
+    calculateFpsTotals();
+    initAllF3Fields(formModule);
+
+    // Bind disc group real-time for fps
+    ['fps-lain-disc-group','fps-lain-ppn','fps-lain-disc-persen'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.removeEventListener('input', calculateFpsTotals); el.removeEventListener('change', calculateFpsTotals); el.addEventListener('input', calculateFpsTotals); el.addEventListener('change', calculateFpsTotals); }
+    });
+
+    switchModule('form-penjualan');
+  }
+
+  function openFormPembelian(editInv = null) {
+    const formModule = document.getElementById('module-form-pembelian');
+    if (formModule) {
+      formModule.querySelectorAll('.form-tab-panel').forEach(p => p.style.display = 'none');
+      formModule.querySelectorAll('.form-tab-btn').forEach(b => b.classList.remove('active'));
+      const utama = document.getElementById('fpp-utama');
+      const firstBtn = formModule.querySelector('.form-tab-btn');
+      if (utama) utama.style.display = 'block';
+      if (firstBtn) firstBtn.classList.add('active');
+    }
+    if (editInv) {
+      document.getElementById('fpp-page-title').textContent = `Edit PO ${editInv.id}`;
+    } else {
+      document.getElementById('fpp-page-title').textContent = 'Buat Purchase Order Baru';
+      const tbody = document.getElementById('fpp-items-tbody');
+      if (tbody && tbody.children.length === 0) {
+        addFppRow('Bahan Baku Aluminium A1', 'Grade industri 6061', 50, 'Kg', 85000, 0, 11);
+      }
+    }
+    calculateFppTotals();
+    initAllF3Fields(formModule);
+    ['fpp-lain-disc-group','fpp-lain-ppn','fpp-lain-disc-persen'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.removeEventListener('input', calculateFppTotals); el.removeEventListener('change', calculateFppTotals); el.addEventListener('input', calculateFppTotals); el.addEventListener('change', calculateFppTotals); }
+    });
+    switchModule('form-pembelian');
+  }
+
+  // Add row buttons
+  // Event delegation for all [data-open-form] links
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-open-form]');
+    if (!link) return;
+    e.preventDefault();
+    const form = link.dataset.openForm;
+    // Close any open dropdown
+    document.querySelectorAll('.dropdown-menu-jurnal.show').forEach(d => d.classList.remove('show'));
+    if (form === 'penjualan') openFormPenjualan();
+    else if (form === 'pembelian') openFormPembelian();
+  });
+
+  document.getElementById('btn-fps-add-row')?.addEventListener('click', () => addFpsRow());
+  document.getElementById('btn-fpp-add-row')?.addEventListener('click', () => addFppRow());
+
+  // Form submit handlers
+  document.getElementById('form-penjualan-page')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const invNo = document.getElementById('fps-invoice-no')?.value || ('INV-2026-00' + (state.salesInvoices.length + 1));
+    const customer = document.getElementById('fps-customer')?.value || 'Pelanggan';
+    const date = document.getElementById('fps-date')?.value || new Date().toISOString().split('T')[0];
+    const warehouse = document.getElementById('fps-warehouse')?.value || '';
+    const grandTotalText = document.getElementById('fps-calc-grandtotal')?.textContent || 'Rp 0';
+
+    const editId = document.getElementById('module-form-penjualan')?.dataset.editId;
+    if (editId) {
+      const idx = state.salesInvoices.findIndex(i => i.id === editId);
+      if (idx !== -1) {
+        state.salesInvoices[idx] = { ...state.salesInvoices[idx], customer, date, warehouse: warehouse.split(' (')[0] || warehouse, amount: grandTotalText };
+        showToast(`Faktur ${editId} berhasil diperbarui!`, 'success');
+      }
+    } else {
+      const newInv = {
+        id: invNo, date, customer,
+        warehouse: warehouse.split(' (')[0] || warehouse,
+        amount: grandTotalText, status: 'Belum Bayar', badgeClass: 'badge-warning'
+      };
+      state.salesInvoices.unshift(newInv);
+      showToast(`Faktur ${invNo} berhasil diterbitkan!`, 'success');
+    }
+    renderSalesTable();
+    switchModule('penjualan');
+  });
+
+  document.getElementById('form-pembelian-page')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    showToast('Purchase Order berhasil disimpan!', 'success');
+    switchModule('pembelian');
+  });
+
 });

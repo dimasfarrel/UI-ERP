@@ -613,7 +613,7 @@
                     </svg>
                   </button>
                   <div class="dropdown-menu-jurnal" id="dropdown-menu-penjualan">
-                    <a href="#" id="btn-open-penjualan-overlay">Faktur penjualan</a>
+                    <a href="#" id="btn-open-penjualan-overlay" data-open-form="penjualan">Faktur penjualan</a>
                     <a href="#">Tukar faktur</a>
                     <a href="#">Pemesanan penjualan</a>
                     <a href="#">Penawaran penjualan</a>
@@ -735,7 +735,7 @@
                     </svg>
                   </button>
                   <div class="dropdown-menu-jurnal" id="dropdown-menu-pembelian">
-                    <a href="#" id="btn-open-pembelian-overlay">Faktur pembelian</a>
+                    <a href="#" id="btn-open-pembelian-overlay" data-open-form="pembelian">Faktur pembelian</a>
                     <a href="#">Tukar pembelian</a>
                     <a href="#">Pemesanan pembelian</a>
                     <a href="#">Penawaran pembelian</a>
@@ -1746,5 +1746,625 @@
 <div id="toast-container" class="toast-container"></div>
 
 <script src="js/app.js"></script>
+
+<!-- ================================================================
+     MODULE: FORM PENJUALAN FULL PAGE
+     ================================================================ -->
+<div id="module-form-penjualan" class="module-section" style="display:none;">
+
+  <!-- Page Header -->
+  <div class="form-page-header">
+    <button type="button" class="btn-form-back" data-target="penjualan">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Kembali ke Penjualan
+    </button>
+    <div class="form-page-title-row">
+      <h2 class="form-page-title" id="fps-page-title">Buat Faktur Penjualan Baru</h2>
+      <span class="form-draft-badge">DRAFT</span>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="form-tab-nav">
+    <button type="button" class="form-tab-btn active" data-ftab="fps-utama">[UTAMA]</button>
+    <button type="button" class="form-tab-btn" data-ftab="fps-lain">[LAIN]</button>
+    <button type="button" class="form-tab-btn" data-ftab="fps-history">[HISTORY]</button>
+  </div>
+
+  <form id="form-penjualan-page" autocomplete="off">
+
+    <!-- ======================================================
+         TAB: UTAMA
+         ====================================================== -->
+    <div id="fps-utama" class="form-tab-panel">
+
+      <div class="form-page-card">
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pelanggan</label>
+              <select id="fps-customer" class="form-input-figma" required>
+                <option value="">Pilih Pelanggan</option>
+                <option value="PT Surya Gemilang Kencana" selected>PT Surya Gemilang Kencana</option>
+                <option value="PT Bintang Mitra Sejahtera">PT Bintang Mitra Sejahtera</option>
+                <option value="CV Cipta Karya Mandiri">CV Cipta Karya Mandiri</option>
+                <option value="Toko Makmur Sentosa Malang">Toko Makmur Sentosa Malang</option>
+              </select>
+            </div>
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="fps-address" class="form-input-figma" placeholder="Alamat pelanggan..." value="Jl. Raya Industri No. 5, Kepanjen">
+            </div>
+          </div>
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="fps-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="fps-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="fps-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="fps-email" class="form-input-figma" placeholder="Email..." value="finance@suryagemilang.co.id">
+            </div>
+            <div class="overlay-field">
+              <label>No Transaksi</label>
+              <input type="text" id="fps-invoice-no" class="form-input-figma" value="INV-2026-006" required>
+            </div>
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="fps-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Table -->
+      <div class="form-page-card" style="margin-top:1rem;">
+        <div class="overlay-table-container" style="margin-top:0;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width:20%">Produk</th>
+                <th style="width:18%">Deskripsi</th>
+                <th style="width:8%">Quantity</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Harga Satuan</th>
+                <th style="width:8%">Diskon</th>
+                <th style="width:8%">Pajak</th>
+                <th style="width:13%">Jumlah</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="fps-items-tbody"></tbody>
+          </table>
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-fps-add-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lain Summary Bar -->
+      <div id="fps-lain-summary" class="lain-summary-bar" style="display:none; margin-top:1rem;"></div>
+
+      <!-- Calc + Notes -->
+      <div class="form-page-card" style="margin-top:1rem;">
+        <div class="overlay-calc-panel" style="margin-top:0;">
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="fps-notes" class="form-input-figma" style="height:90px;padding:0.75rem;" placeholder="Catatan atau memo pengiriman..."></textarea>
+          </div>
+          <div class="overlay-calc-box">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#64748B;">
+              <span>Subtotal:</span><strong id="fps-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#64748B;">
+              <span>PPN (11%):</span><strong id="fps-calc-tax">Rp 0</strong>
+            </div>
+            <div id="fps-discgroup-row" style="display:none;justify-content:space-between;font-size:0.85rem;color:#DC2626;">
+              <span>Disc Group:</span><strong id="fps-calc-discgroup" style="color:#DC2626;">- Rp 0</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:1.05rem;font-weight:700;color:#1E293B;border-top:1.5px solid #E2E8F0;padding-top:0.5rem;">
+              <span>Total Tagihan:</span><strong id="fps-calc-grandtotal" style="color:var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TAB: LAIN
+         ====================================================== -->
+    <div id="fps-lain" class="form-tab-panel" style="display:none;">
+      <div class="form-page-card">
+        <div class="lain-grid">
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Sumber [F3]</label>
+            <div class="f3-wrap" data-f3="sumber">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-sumber" placeholder="Ketik untuk mencari sumber..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Model Label</label>
+            <select id="fps-lain-model" class="lain-field-input">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">C.CTR [F3]</label>
+            <div class="f3-wrap" data-f3="cctr">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-cctr" placeholder="Cari cost center..." value="MAIN STORE" autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Warehouse [F3]</label>
+            <div class="f3-wrap" data-f3="gudang">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-warehouse" placeholder="Cari gudang..." value="G001" autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Kurs [F3]</label>
+            <div style="display:flex;gap:0.4rem;">
+              <select id="fps-lain-kurs-currency" class="lain-field-input" style="width:90px;flex-shrink:0;">
+                <option value="IDR">IDR</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="SGD">SGD</option>
+              </select>
+              <input type="number" id="fps-lain-kurs-rate" class="lain-field-input" placeholder="Rate..." value="1">
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Expedisi [F3]</label>
+            <div class="f3-wrap" data-f3="expedisi">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-expedisi" placeholder="Cari ekspedisi..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Nomor Resi</label>
+            <input type="text" id="fps-lain-nopo" class="lain-field-input" placeholder="No. resi / PO...">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label" style="color:#DC2626;font-weight:700;">Disc Group ⚡</label>
+            <input type="number" id="fps-lain-disc-group" class="lain-field-input" placeholder="0.00" value="0" min="0" step="0.01">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Max Baris</label>
+            <input type="number" id="fps-lain-maxbaris" class="lain-field-input" value="100" min="1">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Telp [F3] (1)</label>
+            <div class="f3-wrap" data-f3="telp">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-telp1" placeholder="Cari no. telepon..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Telp [F3] (2)</label>
+            <div class="f3-wrap" data-f3="telp">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-telp2" placeholder="Cari no. telepon..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Kontak [F3] (1)</label>
+            <div class="f3-wrap" data-f3="kontak">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-kontak1" placeholder="Cari kontak..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Kontak [F3] (2)</label>
+            <div class="f3-wrap" data-f3="kontak">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-kontak2" placeholder="Cari kontak..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Alamat [F3]</label>
+            <div class="f3-wrap" data-f3="alamat">
+              <input type="text" class="lain-field-input f3-input" id="fps-lain-alamat" placeholder="Cari alamat..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Rekening [F3]</label>
+            <input type="text" id="fps-lain-rekening" class="lain-field-input" placeholder="No. rekening bank...">
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Partner&#178; [F3]</label>
+            <div style="display:flex;gap:0.4rem;">
+              <div class="f3-wrap" data-f3="partner" style="flex:1;">
+                <input type="text" class="lain-field-input f3-input" id="fps-lain-partner2a" placeholder="Cari partner A..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+              <div class="f3-wrap" data-f3="partner" style="flex:1;">
+                <input type="text" class="lain-field-input f3-input" id="fps-lain-partner2b" placeholder="Cari partner B..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+              <input type="text" id="fps-lain-texth1h2" class="lain-field-input" placeholder="Kode..." style="flex:0.5;">
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Model Produk</label>
+            <div style="display:flex;gap:1.25rem;margin-top:0.2rem;">
+              <label class="lain-radio-label"><input type="radio" name="fps-model-produk" value="jasa"> Jasa</label>
+              <label class="lain-radio-label"><input type="radio" name="fps-model-produk" value="komersial"> Komersial</label>
+              <label class="lain-radio-label"><input type="radio" name="fps-model-produk" value="semua" checked> Semua Produk</label>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <div class="lain-checkbox-group">
+              <label class="lain-check-label"><input type="checkbox" id="fps-lain-ppn" checked> Termasuk PPN</label>
+              <label class="lain-check-label"><input type="checkbox" id="fps-lain-tambah-baris" checked> Jika ada item, tambahkan baris</label>
+              <label class="lain-check-label"><input type="checkbox" id="fps-lain-langsung-cetak" checked> Langsung cetak</label>
+              <label class="lain-check-label"><input type="checkbox" id="fps-lain-disc-persen"> Disc persen</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TAB: HISTORY
+         ====================================================== -->
+    <div id="fps-history" class="form-tab-panel" style="display:none;">
+      <div class="form-page-card">
+        <div class="table-toolbar" style="margin-bottom:1rem;">
+          <h3>Riwayat Transaksi</h3>
+        </div>
+        <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 1rem;display:block;opacity:0.35;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p style="font-size:0.9rem;">Belum ada riwayat untuk dokumen ini.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Footer -->
+    <div class="form-page-footer-bar">
+      <button type="button" class="btn-batal-text btn-form-back" data-target="penjualan">Batal</button>
+      <div style="display:flex;gap:0.75rem;">
+        <button type="button" class="btn-form-draft">Simpan Draft</button>
+        <button type="submit" class="btn-dash-action" style="padding:0 1.75rem;"><span>Simpan &amp; Terbitkan</span></button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<!-- ================================================================
+     MODULE: FORM PEMBELIAN FULL PAGE
+     ================================================================ -->
+<div id="module-form-pembelian" class="module-section" style="display:none;">
+
+  <!-- Page Header -->
+  <div class="form-page-header">
+    <button type="button" class="btn-form-back" data-target="pembelian">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Kembali ke Pembelian
+    </button>
+    <div class="form-page-title-row">
+      <h2 class="form-page-title" id="fpp-page-title">Buat Purchase Order Baru</h2>
+      <span class="form-draft-badge">DRAFT</span>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="form-tab-nav">
+    <button type="button" class="form-tab-btn active" data-ftab="fpp-utama">[UTAMA]</button>
+    <button type="button" class="form-tab-btn" data-ftab="fpp-lain">[LAIN]</button>
+    <button type="button" class="form-tab-btn" data-ftab="fpp-history">[HISTORY]</button>
+  </div>
+
+  <form id="form-pembelian-page" autocomplete="off">
+
+    <!-- ======================================================
+         TAB: UTAMA
+         ====================================================== -->
+    <div id="fpp-utama" class="form-tab-panel">
+
+      <div class="form-page-card">
+        <div class="overlay-inputs-grid">
+          <!-- Column 1 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Pemasok</label>
+              <select id="fpp-vendor" class="form-input-figma" required>
+                <option value="">Pilih Pemasok</option>
+                <option value="PT Supplier Gemilang Kencana" selected>PT Supplier Gemilang Kencana</option>
+                <option value="PT Vendor Mitra Sejahtera">PT Vendor Mitra Sejahtera</option>
+                <option value="CV Pabrik Karya Mandiri">CV Pabrik Karya Mandiri</option>
+              </select>
+            </div>
+            <div class="overlay-field">
+              <label>Alamat</label>
+              <input type="text" id="fpp-address" class="form-input-figma" placeholder="Alamat pemasok..." value="Jl. Industri Raya No. 12">
+            </div>
+          </div>
+          <!-- Column 2 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Tanggal Kirim</label>
+              <input type="date" id="fpp-ship-date" class="form-input-figma" value="2026-09-24" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tanggal Transaksi</label>
+              <input type="date" id="fpp-date" class="form-input-figma" value="2026-09-22" required>
+            </div>
+            <div class="overlay-field">
+              <label>Tgl. Jatuh Tempo</label>
+              <input type="date" id="fpp-due-date" class="form-input-figma" value="2026-10-22" required>
+            </div>
+          </div>
+          <!-- Column 3 -->
+          <div class="overlay-input-col">
+            <div class="overlay-field">
+              <label>Email</label>
+              <input type="email" id="fpp-email" class="form-input-figma" placeholder="Email..." value="finance@suppliergemilang.co.id">
+            </div>
+            <div class="overlay-field">
+              <label>No Transaksi</label>
+              <input type="text" id="fpp-invoice-no" class="form-input-figma" value="PO-2026-006" required>
+            </div>
+            <div class="overlay-field">
+              <label>Gudang</label>
+              <select id="fpp-warehouse" class="form-input-figma" required>
+                <option value="">Pilih Gudang</option>
+                <option value="Gudang Utama Malang (Kepanjen)" selected>Gudang Utama Malang (Kepanjen)</option>
+                <option value="Gudang Transit Singosari">Gudang Transit Singosari</option>
+                <option value="Gudang Distribusi Retail">Gudang Distribusi Retail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Table -->
+      <div class="form-page-card" style="margin-top:1rem;">
+        <div class="overlay-table-container" style="margin-top:0;">
+          <table class="overlay-table">
+            <thead>
+              <tr>
+                <th style="width:20%">Produk</th>
+                <th style="width:18%">Deskripsi</th>
+                <th style="width:8%">Quantity</th>
+                <th style="width:8%">Unit</th>
+                <th style="width:13%">Harga Satuan</th>
+                <th style="width:8%">Diskon</th>
+                <th style="width:8%">Pajak</th>
+                <th style="width:13%">Jumlah</th>
+                <th style="width:4%"></th>
+              </tr>
+            </thead>
+            <tbody id="fpp-items-tbody"></tbody>
+          </table>
+          <div class="overlay-table-footer">
+            <button type="button" id="btn-fpp-add-row" class="btn-add-line-dashed">+ Tambah Baris Produk</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calc + Notes -->
+      <div class="form-page-card" style="margin-top:1rem;">
+        <div class="overlay-calc-panel" style="margin-top:0;">
+          <div class="overlay-field">
+            <label>Catatan Faktur</label>
+            <textarea id="fpp-notes" class="form-input-figma" style="height:90px;padding:0.75rem;" placeholder="Catatan atau memo penerimaan..."></textarea>
+          </div>
+          <div class="overlay-calc-box">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#64748B;">
+              <span>Subtotal:</span><strong id="fpp-calc-subtotal">Rp 0</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#64748B;">
+              <span>PPN (11%):</span><strong id="fpp-calc-tax">Rp 0</strong>
+            </div>
+            <div id="fpp-discgroup-row" style="display:none;justify-content:space-between;font-size:0.85rem;color:#DC2626;">
+              <span>Disc Group:</span><strong id="fpp-calc-discgroup" style="color:#DC2626;">- Rp 0</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:1.05rem;font-weight:700;color:#1E293B;border-top:1.5px solid #E2E8F0;padding-top:0.5rem;">
+              <span>Total Tagihan:</span><strong id="fpp-calc-grandtotal" style="color:var(--primary);">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TAB: LAIN
+         ====================================================== -->
+    <div id="fpp-lain" class="form-tab-panel" style="display:none;">
+      <div class="form-page-card">
+        <div class="lain-grid">
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Sumber [F3]</label>
+            <div class="f3-wrap" data-f3="sumber">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-sumber" placeholder="Ketik untuk mencari sumber..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Model Label</label>
+            <select id="fpp-lain-model" class="lain-field-input">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">C.CTR [F3]</label>
+            <div class="f3-wrap" data-f3="cctr">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-cctr" placeholder="Cari cost center..." value="MAIN STORE" autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Warehouse [F3]</label>
+            <div class="f3-wrap" data-f3="gudang">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-warehouse" placeholder="Cari gudang..." value="G001" autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Kurs [F3]</label>
+            <div style="display:flex;gap:0.4rem;">
+              <select id="fpp-lain-kurs-currency" class="lain-field-input" style="width:90px;flex-shrink:0;">
+                <option value="IDR">IDR</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="SGD">SGD</option>
+              </select>
+              <input type="number" id="fpp-lain-kurs-rate" class="lain-field-input" placeholder="Rate..." value="1">
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Expedisi [F3]</label>
+            <div class="f3-wrap" data-f3="expedisi">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-expedisi" placeholder="Cari ekspedisi..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Nomor Resi</label>
+            <input type="text" id="fpp-lain-nopo" class="lain-field-input" placeholder="No. resi / PO...">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label" style="color:#DC2626;font-weight:700;">Disc Group ⚡</label>
+            <input type="number" id="fpp-lain-disc-group" class="lain-field-input" placeholder="0.00" value="0" min="0" step="0.01">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Max Baris</label>
+            <input type="number" id="fpp-lain-maxbaris" class="lain-field-input" value="100" min="1">
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Telp [F3] (1)</label>
+            <div class="f3-wrap" data-f3="telp">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-telp1" placeholder="Cari no. telepon..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field">
+            <label class="lain-field-label">Kontak [F3]</label>
+            <div class="f3-wrap" data-f3="kontak">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-kontak1" placeholder="Cari kontak..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Alamat [F3]</label>
+            <div class="f3-wrap" data-f3="alamat">
+              <input type="text" class="lain-field-input f3-input" id="fpp-lain-alamat" placeholder="Cari alamat..." autocomplete="off">
+              <div class="f3-dropdown"></div>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Rekening [F3]</label>
+            <input type="text" id="fpp-lain-rekening" class="lain-field-input" placeholder="No. rekening bank...">
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Partner&#178; [F3]</label>
+            <div style="display:flex;gap:0.4rem;">
+              <div class="f3-wrap" data-f3="partner" style="flex:1;">
+                <input type="text" class="lain-field-input f3-input" id="fpp-lain-partner2a" placeholder="Cari partner A..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+              <div class="f3-wrap" data-f3="partner" style="flex:1;">
+                <input type="text" class="lain-field-input f3-input" id="fpp-lain-partner2b" placeholder="Cari partner B..." autocomplete="off">
+                <div class="f3-dropdown"></div>
+              </div>
+              <input type="text" id="fpp-lain-texth1h2" class="lain-field-input" placeholder="Kode..." style="flex:0.5;">
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <label class="lain-field-label">Model Produk</label>
+            <div style="display:flex;gap:1.25rem;margin-top:0.2rem;">
+              <label class="lain-radio-label"><input type="radio" name="fpp-model-produk" value="jasa"> Jasa</label>
+              <label class="lain-radio-label"><input type="radio" name="fpp-model-produk" value="komersial"> Komersial</label>
+              <label class="lain-radio-label"><input type="radio" name="fpp-model-produk" value="semua" checked> Semua Produk</label>
+            </div>
+          </div>
+
+          <div class="lain-field lain-field-full">
+            <div class="lain-checkbox-group">
+              <label class="lain-check-label"><input type="checkbox" id="fpp-lain-ppn" checked> Termasuk PPN</label>
+              <label class="lain-check-label"><input type="checkbox" id="fpp-lain-tambah-baris" checked> Jika ada item, tambahkan baris</label>
+              <label class="lain-check-label"><input type="checkbox" id="fpp-lain-langsung-cetak" checked> Langsung cetak</label>
+              <label class="lain-check-label"><input type="checkbox" id="fpp-lain-disc-persen"> Disc persen</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TAB: HISTORY
+         ====================================================== -->
+    <div id="fpp-history" class="form-tab-panel" style="display:none;">
+      <div class="form-page-card">
+        <div class="table-toolbar" style="margin-bottom:1rem;"><h3>Riwayat Transaksi</h3></div>
+        <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 1rem;display:block;opacity:0.35;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p style="font-size:0.9rem;">Belum ada riwayat untuk dokumen ini.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Footer -->
+    <div class="form-page-footer-bar">
+      <button type="button" class="btn-batal-text btn-form-back" data-target="pembelian">Batal</button>
+      <div style="display:flex;gap:0.75rem;">
+        <button type="button" class="btn-form-draft">Simpan Draft</button>
+        <button type="submit" class="btn-dash-action" style="padding:0 1.75rem;"><span>Simpan &amp; Terbitkan</span></button>
+      </div>
+    </div>
+  </form>
+</div>
+
 </body>
 </html>
