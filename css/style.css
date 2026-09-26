@@ -2639,3 +2639,278 @@ body {
   font-weight: 600;
   border-top: 1px dashed #BFDBFE;
 }
+
+/* ============================================================
+   FORM PAGE REDESIGN — Cheerful & Clean
+   ============================================================ */
+
+/* Form page overall background */
+#module-form-penjualan,
+#module-form-pembelian {
+  background: #F0F4FF;
+  min-height: 100%;
+  padding: 1.5rem 2rem 3rem;
+}
+
+/* Colorful gradient header banner */
+.form-page-header {
+  background: linear-gradient(135deg, #1a56db 0%, #4f46e5 50%, #7c3aed 100%);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 18px rgba(79, 70, 229, 0.25);
+}
+
+.btn-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-family: inherit;
+  margin-bottom: 0.75rem;
+  transition: all 0.18s;
+  backdrop-filter: blur(4px);
+}
+
+.btn-form-back:hover {
+  background: rgba(255,255,255,0.28);
+  opacity: 1;
+  transform: translateX(-2px);
+}
+
+.form-page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-page-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.form-draft-badge {
+  background: rgba(255,255,255,0.2);
+  color: #FFFFFF;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 6px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+/* Cheerful tab nav */
+.form-tab-nav {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: none;
+  margin-bottom: 1.25rem;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 0.35rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.form-tab-btn {
+  background: none;
+  border: none;
+  border-bottom: none;
+  border-radius: 7px;
+  margin-bottom: 0;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+  flex: 1;
+  text-align: center;
+}
+
+.form-tab-btn:hover {
+  color: #4f46e5;
+  background: #EEF2FF;
+}
+
+.form-tab-btn.active {
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+}
+
+/* Form Page Card */
+.form-page-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* ============================================================
+   FORM HEADER GRID — Row-based for proper alignment
+   ============================================================ */
+.overlay-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0 1.5rem;
+  align-items: start;
+}
+
+.overlay-input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.overlay-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.overlay-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input-figma {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: #1E293B;
+  font-family: inherit;
+  background: #FAFBFF;
+  transition: all 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input-figma:focus {
+  outline: none;
+  border-color: #4f46e5;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.form-input-figma:hover:not(:focus) {
+  border-color: #CBD5E1;
+}
+
+/* Field accent colors for cheerful feel */
+.overlay-input-col:nth-child(1) .overlay-field label {
+  color: #4f46e5;
+}
+.overlay-input-col:nth-child(2) .overlay-field label {
+  color: #0891b2;
+}
+.overlay-input-col:nth-child(3) .overlay-field label {
+  color: #059669;
+}
+
+/* ============================================================
+   FOOTER BAR — Visible buttons
+   ============================================================ */
+.form-page-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  margin-top: 1.25rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #E2E8F0;
+}
+
+.btn-batal-text {
+  background: #FFFFFF;
+  border: 2px solid #EF4444;
+  color: #EF4444;
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.btn-batal-text:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-form-draft {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: #475569;
+  border-radius: 8px;
+  padding: 0.6rem 1.3rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.btn-form-draft:hover {
+  background: #F8FAFC;
+  border-color: #4f46e5;
+  color: #4f46e5;
+}
+
+/* ============================================================
+   LAIN MODAL — Cheerful accents
+   ============================================================ */
+.modal-lain-dialog {
+  border-top: 4px solid #4f46e5;
+}
+
+/* Table styling in form page */
+#module-form-penjualan .overlay-table,
+#module-form-pembelian .overlay-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#module-form-penjualan .overlay-table thead tr,
+#module-form-pembelian .overlay-table thead tr {
+  background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
+  color: #4338CA;
+}
+
+/* Calc box cheerful accent */
+#module-form-penjualan .overlay-calc-box,
+#module-form-pembelian .overlay-calc-box {
+  border-left: 3px solid #4f46e5;
+  border-radius: 0 8px 8px 0;
+  background: #FAFBFF;
+  padding: 1rem;
+}
+
+#fps-calc-grandtotal,
+#fpp-calc-grandtotal {
+  color: #4f46e5 !important;
+  font-size: 1.1rem !important;
+}

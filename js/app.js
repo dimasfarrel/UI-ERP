@@ -211,12 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function switchModule(moduleName) {
     state.activeModule = moduleName;
 
-    // Map form sub-pages to their parent module for sidebar highlighting
+    // Module aliases: map logical names to actual element IDs
+    const moduleIdMap = {
+      'penjualan': 'sales',
+      'pembelian': 'purchasing',
+      'sales': 'sales',
+      'purchasing': 'purchasing',
+    };
+    // Sidebar highlight map
     const sidebarMap = {
       'form-penjualan': 'penjualan',
       'form-pembelian': 'pembelian',
+      'sales': 'penjualan',
+      'purchasing': 'pembelian',
     };
     const sidebarActive = sidebarMap[moduleName] || moduleName;
+    const actualModuleId = moduleIdMap[moduleName] || moduleName;
 
     // Update Sidebar Active state
     document.querySelectorAll('.sidebar-nav-item').forEach(item => {
@@ -233,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       section.style.display = 'none';
     });
 
-    const targetSection = document.getElementById(`module-${moduleName}`);
+    const targetSection = document.getElementById(`module-${actualModuleId}`);
     if (targetSection) {
       targetSection.style.display = 'block';
     } else {
