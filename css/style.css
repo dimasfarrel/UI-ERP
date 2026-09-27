@@ -22,6 +22,9 @@
   --bg-surface: #FFFFFF;
   --bg-card: #FFFFFF;
 
+  /* 4. Radius & Style */
+  --radius-form: 8px;
+
   /* ============================================================== */
 
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -208,7 +211,7 @@ body {
   width: 44px;
   height: 44px;
   background: linear-gradient(135deg, #0676FF 0%, #004ecc 100%);
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,7 +273,7 @@ body {
   padding: 0 1rem 0 2.75rem;
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-family: 'Poppins', sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
@@ -313,7 +316,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 600;
@@ -499,7 +502,7 @@ body {
 .btn-card-select {
   width: 100%;
   height: 42px;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   background: #F1F5F9;
   border: 1px solid var(--border-light);
   color: var(--secondary);
@@ -727,7 +730,7 @@ body {
   color: #94A3B8;
   cursor: pointer;
   padding: 0.4rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   transition: all var(--transition-fast);
 }
 
@@ -781,7 +784,7 @@ body {
   gap: 0.4rem;
   padding: 0.25rem 0.65rem;
   background: white;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--secondary);
@@ -825,7 +828,7 @@ body {
   height: 38px;
   padding: 0 1rem 0 2.25rem;
   border: 1px solid var(--border-light);
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-size: 0.85rem;
   background: #F8FAFC;
   width: 240px;
@@ -850,7 +853,7 @@ body {
 .topbar-action-icon {
   width: 38px;
   height: 38px;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   border: 1px solid var(--border-light);
   background: white;
   display: flex;
@@ -911,7 +914,7 @@ body {
 .btn-dash-action {
   height: 40px;
   padding: 0 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-size: 0.88rem;
   font-weight: 600;
   display: inline-flex;
@@ -1311,7 +1314,7 @@ body {
   padding: 0 1rem;
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-family: var(--font-primary);
   font-size: 0.9rem;
   color: #1E293B;
@@ -1329,7 +1332,7 @@ body {
 .items-table-wrapper {
   background: #F8FAFC;
   border: 1px solid var(--border-light);
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   overflow: hidden;
 }
 
@@ -1362,7 +1365,7 @@ body {
   height: 38px;
   padding: 0 0.75rem;
   border: 1px solid var(--border-light);
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   font-size: 0.88rem;
   outline: none;
   transition: border-color var(--transition-fast);
@@ -1383,7 +1386,7 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   transition: background var(--transition-fast);
 }
 
@@ -1403,7 +1406,7 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1428,7 +1431,7 @@ body {
   min-height: 100px;
   padding: 0.75rem 1rem;
   border: 1px solid #CBD5E1;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-family: var(--font-primary);
   font-size: 0.88rem;
   resize: vertical;
@@ -1442,7 +1445,7 @@ body {
 .summary-calc-card {
   background: #F8FAFC;
   border: 1px solid var(--border-light);
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -1576,7 +1579,7 @@ body {
   background: var(--secondary);
   color: white;
   padding: 1rem 1.25rem;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
@@ -1677,7 +1680,7 @@ body {
 
 .metric-summary-card {
   background: #FFFFFF;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   padding: 1.25rem 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   border: 1px solid #E2E8F0;
@@ -1796,7 +1799,7 @@ body {
   height: 40px;
   padding: 0 1rem;
   border: 1px solid #CBD5E1;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   background: white;
   font-family: var(--font-figma);
   font-size: 0.85rem;
@@ -1815,7 +1818,7 @@ body {
   height: 40px;
   padding: 0 1rem 0 2.4rem;
   border: 1px solid #CBD5E1;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   background: white;
   font-family: var(--font-figma);
   font-size: 0.85rem;
@@ -1834,7 +1837,7 @@ body {
 .btn-buat-penjualan-figma {
   height: 40px;
   padding: 0 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   background: var(--primary);
   color: white;
   font-family: var(--font-figma);
@@ -1916,7 +1919,7 @@ body {
 .btn-close-x {
   background: transparent;
   border: 1px solid #CBD5E1;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   width: 32px;
   height: 32px;
   display: flex;
@@ -1972,7 +1975,7 @@ body {
   padding: 0 0.85rem;
   background: #FFFFFF;
   border: 1px solid var(--border-input);
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-family: var(--font-figma);
   font-size: 0.88rem;
   color: #1E293B;
@@ -1992,7 +1995,7 @@ body {
   color: white;
   font-weight: 600;
   font-size: 0.88rem;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   border: none;
   cursor: pointer;
   transition: background 0.2s;
@@ -2041,7 +2044,7 @@ body {
   height: 36px;
   padding: 0 0.6rem;
   border: 1px solid var(--border-input);
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   font-size: 0.85rem;
   outline: none;
 }
@@ -2063,7 +2066,7 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
   padding: 0.45rem 0.85rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -2082,7 +2085,7 @@ body {
 .overlay-calc-box {
   background: white;
   border: 1px solid var(--border-input);
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -2221,7 +2224,7 @@ body {
 
 .lain-field-input {
   border: 1px solid #CBD5E1;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.45rem 0.65rem;
   font-size: 0.85rem;
   color: #1E293B;
@@ -2264,7 +2267,7 @@ body {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   color: #334155;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.45rem 1rem;
   font-size: 0.82rem;
   font-weight: 600;
@@ -2282,7 +2285,7 @@ body {
   background: #194bfb;
   border: 1px solid #194bfb;
   color: #FFFFFF;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.45rem 1.2rem;
   font-size: 0.82rem;
   font-weight: 600;
@@ -2311,7 +2314,7 @@ body {
   background-color: #FFFFFF;
   min-width: 220px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   border: 1px solid #E2E8F0;
   z-index: 100;
   overflow: hidden;
@@ -2387,7 +2390,7 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.6rem 1.5rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -2410,7 +2413,7 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.6rem 1.25rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2430,7 +2433,7 @@ body {
   background: #FFFFFF;
   min-width: 220px;
   border: 1px solid #E2E8F0;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   z-index: 100;
   padding: 0.5rem 0;
@@ -2457,7 +2460,7 @@ body {
 .lain-summary-bar {
   background: #F0F7FF;
   border: 1px solid #BFDBFE;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.65rem 0.9rem;
   margin-bottom: 0.85rem;
   font-size: 0.78rem;
@@ -2601,7 +2604,7 @@ body {
   background: #FEF3C7;
   color: #92400E;
   border: 1px solid #FDE68A;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.2rem 0.6rem;
   font-size: 0.72rem;
   font-weight: 700;
@@ -2663,7 +2666,7 @@ body {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   color: #334155;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   padding: 0.55rem 1.2rem;
   font-size: 0.85rem;
   font-weight: 600;
@@ -2774,7 +2777,7 @@ body {
 /* Light & Clean Header Banner */
 .form-page-header {
   background: #FFFFFF;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   padding: 1.25rem 1.5rem 1rem;
   margin-bottom: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -2820,7 +2823,7 @@ body {
   background: #FEF3C7;
   color: #92400E;
   border: 1px solid #FDE68A;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   padding: 0.2rem 0.65rem;
   font-size: 0.7rem;
   font-weight: 800;
@@ -2872,7 +2875,7 @@ body {
 .form-page-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   padding: 1.5rem 1.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -2909,7 +2912,7 @@ body {
 
 .form-input-figma {
   border: 1.5px solid #E2E8F0;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   padding: 0.55rem 0.75rem;
   font-size: 0.875rem;
   color: #1E293B;
@@ -2954,7 +2957,7 @@ body {
   padding: 1.25rem 1.75rem;
   margin-top: 1.25rem;
   background: #FFFFFF;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1px solid #E2E8F0;
 }
@@ -2963,7 +2966,7 @@ body {
   background: #FFFFFF;
   border: 2px solid #EF4444;
   color: #EF4444;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   padding: 0.6rem 1.4rem;
   font-size: 0.875rem;
   font-weight: 700;
@@ -2984,7 +2987,7 @@ body {
   background: #FFFFFF;
   border: 1.5px solid #CBD5E1;
   color: #475569;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   padding: 0.6rem 1.3rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -3009,7 +3012,7 @@ body {
 /* Table styling in form page */
 #module-form-penjualan .overlay-table,
 #module-form-pembelian .overlay-table {
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   overflow: hidden;
 }
 
@@ -3034,8 +3037,61 @@ body {
   font-size: 1.1rem !important;
 }
 
+
 /* ============================================================
-   THEME CONFIGURATOR WIDGET
+   DARK MODE OVERRIDES
+   ============================================================ */
+body.dark-mode {
+  --bg-app: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-card: #1E293B;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border-light: #334155;
+  --bg-sidebar: #0B1120;
+  --bg-sidebar-active: #1E293B;
+}
+
+body.dark-mode .panel-card-erp,
+body.dark-mode .table-card-erp,
+body.dark-mode .form-page-card,
+body.dark-mode .metric-summary-card,
+body.dark-mode .form-page-header {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .erp-main-area,
+body.dark-mode #module-form-penjualan,
+body.dark-mode #module-form-pembelian {
+  background: var(--bg-app);
+}
+
+body.dark-mode .form-input-figma,
+body.dark-mode .lain-field-input {
+  background: #0F172A;
+  color: #F8FAFC;
+  border-color: #334155;
+}
+
+body.dark-mode .erp-data-table th {
+  background: #0F172A;
+  color: #F8FAFC;
+  border-color: #334155;
+}
+body.dark-mode .erp-data-table td {
+  border-color: #334155;
+}
+
+body.dark-mode .penjualan-tab {
+  color: #94A3B8;
+}
+body.dark-mode .penjualan-tab.active {
+  color: var(--primary);
+}
+
+/* ============================================================
+   THEME CONFIGURATOR WIDGET (OLD)
    ============================================================ */
 .theme-configurator {
   position: fixed;
@@ -3074,7 +3130,7 @@ body {
   right: 0;
   width: 280px;
   background: white;
-  border-radius: 12px;
+  border-radius: calc(var(--radius-form) * 1.5);
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
   border: 1px solid #E2E8F0;
   transform: translateY(20px);
@@ -3149,7 +3205,7 @@ body {
   height: 36px;
   padding: 0;
   border: 2px solid #E2E8F0;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   cursor: pointer;
   background: none;
 }
@@ -3170,7 +3226,7 @@ body {
   color: #1E293B;
   background: #F8FAFC;
   padding: 0.4rem 0.75rem;
-  border-radius: 6px;
+  border-radius: calc(var(--radius-form) * 0.75);
   border: 1px solid #E2E8F0;
   flex: 1;
   text-transform: uppercase;
@@ -3181,7 +3237,7 @@ body {
   border: 1px solid #CBD5E1;
   color: #475569;
   padding: 0.6rem;
-  border-radius: 8px;
+  border-radius: var(--radius-form);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;

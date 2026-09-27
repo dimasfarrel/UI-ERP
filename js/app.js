@@ -2389,25 +2389,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // =========================================================================
-// THEME CONFIGURATOR LOGIC
+// THEME CONFIGURATOR LOGIC (Settings Module)
 // =========================================================================
 (function initThemeConfigurator() {
-  const toggleBtn = document.getElementById('btn-theme-toggle');
-  const panel = document.getElementById('theme-panel');
-  const closeBtn = document.getElementById('btn-close-theme');
-  const resetBtn = document.getElementById('btn-reset-theme');
-  
-  if (!toggleBtn || !panel) return;
-
-  // Toggle Panel
-  toggleBtn.addEventListener('click', () => panel.classList.toggle('open'));
-  closeBtn.addEventListener('click', () => panel.classList.remove('open'));
-
-  // Default values
   const defaults = {
     '--primary': '#2563EB',
     '--bg-sidebar': '#1B2B4B',
-    '--bg-sidebar-active': '#243655'
+    '--bg-sidebar-active': '#243655',
+    '--text-main': '#0F172A',
+    '--radius-form': '8px'
   };
 
   // Convert hex to rgba for hover/glow effects
@@ -2418,7 +2408,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
-  // Handle color change
   function setupColorControl(inputId, hexId, cssVarName, isPrimary = false) {
     const input = document.getElementById(inputId);
     const hexLabel = document.getElementById(hexId);
@@ -2430,7 +2419,6 @@ document.addEventListener('DOMContentLoaded', () => {
       input.value = saved;
       hexLabel.textContent = saved;
       document.documentElement.style.setProperty(cssVarName, saved);
-      
       if (isPrimary) {
         document.documentElement.style.setProperty('--primary-light', hexToRgba(saved, 0.08));
         document.documentElement.style.setProperty('--primary-glow', hexToRgba(saved, 0.35));
@@ -2443,7 +2431,6 @@ document.addEventListener('DOMContentLoaded', () => {
       hexLabel.textContent = val;
       document.documentElement.style.setProperty(cssVarName, val);
       localStorage.setItem('theme_' + cssVarName, val);
-
       if (isPrimary) {
         document.documentElement.style.setProperty('--primary-light', hexToRgba(val, 0.08));
         document.documentElement.style.setProperty('--primary-glow', hexToRgba(val, 0.35));
@@ -2451,27 +2438,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Init Color Pickers
   setupColorControl('color-primary', 'hex-primary', '--primary', true);
   setupColorControl('color-sidebar', 'hex-sidebar', '--bg-sidebar');
   setupColorControl('color-sidebar-active', 'hex-sidebar-active', '--bg-sidebar-active');
+  setupColorControl('color-text', 'hex-text', '--text-main');
+
+  // Init Radius
+  const radiusSelect = document.getElementById('select-radius');
+  if (radiusSelect) {
+    const savedRadius = localStorage.getItem('theme_--radius-form');
+    if (savedRadius) {
+      radiusSelect.value = savedRadius;
+      document.documentElement.style.setProperty('--radius-form', savedRadius);
+    }
+    radiusSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      document.documentElement.style.setProperty('--radius-form', val);
+      localStorage.setItem('theme_--radius-form', val);
+    });
+  }
+
+  // Init Dark Mode
+  const btnLight = document.getElementById('btn-theme-light');
+  const btnDark = document.getElementById('btn-theme-dark');
+  
+  if (btnLight && btnDark) {
+    const savedMode = localStorage.getItem('theme_mode') || 'light';
+    if (savedMode === 'dark') {
+      document.body.classList.add('dark-mode');
+      btnDark.className = 'btn-jurnal-primary';
+      btnLight.className = 'btn-jurnal-outline';
+    }
+
+    btnLight.addEventListener('click', () => {
+      document.body.classList.remove('dark-mode');
+      btnLight.className = 'btn-jurnal-primary';
+      btnDark.className = 'btn-jurnal-outline';
+      localStorage.setItem('theme_mode', 'light');
+    });
+
+    btnDark.addEventListener('click', () => {
+      document.body.classList.add('dark-mode');
+      btnDark.className = 'btn-jurnal-primary';
+      btnLight.className = 'btn-jurnal-outline';
+      localStorage.setItem('theme_mode', 'dark');
+    });
+  }
 
   // Reset to default
-  resetBtn.addEventListener('click', () => {
-    Object.keys(defaults).forEach(key => {
-      localStorage.removeItem('theme_' + key);
-      document.documentElement.style.removeProperty(key);
+  const resetBtn = document.getElementById('btn-reset-theme');
+  if(resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      Object.keys(defaults).forEach(key => {
+        localStorage.removeItem('theme_' + key);
+        document.documentElement.style.removeProperty(key);
+      });
+      document.documentElement.style.removeProperty('--primary-light');
+      document.documentElement.style.removeProperty('--primary-glow');
+      
+      localStorage.removeItem('theme_mode');
+      document.body.classList.remove('dark-mode');
+      if (btnLight && btnDark) {
+         btnLight.className = 'btn-jurnal-primary';
+         btnDark.className = 'btn-jurnal-outline';
+      }
+
+      window.location.reload();
     });
-    document.documentElement.style.removeProperty('--primary-light');
-    document.documentElement.style.removeProperty('--primary-glow');
-    
-    // Reset inputs visually
-    document.getElementById('color-primary').value = defaults['--primary'];
-    document.getElementById('hex-primary').textContent = defaults['--primary'];
-    
-    document.getElementById('color-sidebar').value = defaults['--bg-sidebar'];
-    document.getElementById('hex-sidebar').textContent = defaults['--bg-sidebar'];
-    
-    document.getElementById('color-sidebar-active').value = defaults['--bg-sidebar-active'];
-    document.getElementById('hex-sidebar-active').textContent = defaults['--bg-sidebar-active'];
-  });
+  }
 })();
