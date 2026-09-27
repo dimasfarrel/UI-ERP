@@ -2386,3 +2386,92 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
+// =========================================================================
+// THEME CONFIGURATOR LOGIC
+// =========================================================================
+(function initThemeConfigurator() {
+  const toggleBtn = document.getElementById('btn-theme-toggle');
+  const panel = document.getElementById('theme-panel');
+  const closeBtn = document.getElementById('btn-close-theme');
+  const resetBtn = document.getElementById('btn-reset-theme');
+  
+  if (!toggleBtn || !panel) return;
+
+  // Toggle Panel
+  toggleBtn.addEventListener('click', () => panel.classList.toggle('open'));
+  closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+
+  // Default values
+  const defaults = {
+    '--primary': '#2563EB',
+    '--bg-sidebar': '#1B2B4B',
+    '--bg-sidebar-active': '#243655'
+  };
+
+  // Convert hex to rgba for hover/glow effects
+  function hexToRgba(hex, alpha) {
+    let r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  // Handle color change
+  function setupColorControl(inputId, hexId, cssVarName, isPrimary = false) {
+    const input = document.getElementById(inputId);
+    const hexLabel = document.getElementById(hexId);
+    if (!input || !hexLabel) return;
+
+    // Load saved value
+    const saved = localStorage.getItem('theme_' + cssVarName);
+    if (saved) {
+      input.value = saved;
+      hexLabel.textContent = saved;
+      document.documentElement.style.setProperty(cssVarName, saved);
+      
+      if (isPrimary) {
+        document.documentElement.style.setProperty('--primary-light', hexToRgba(saved, 0.08));
+        document.documentElement.style.setProperty('--primary-glow', hexToRgba(saved, 0.35));
+      }
+    }
+
+    // On change
+    input.addEventListener('input', (e) => {
+      const val = e.target.value;
+      hexLabel.textContent = val;
+      document.documentElement.style.setProperty(cssVarName, val);
+      localStorage.setItem('theme_' + cssVarName, val);
+
+      if (isPrimary) {
+        document.documentElement.style.setProperty('--primary-light', hexToRgba(val, 0.08));
+        document.documentElement.style.setProperty('--primary-glow', hexToRgba(val, 0.35));
+      }
+    });
+  }
+
+  setupColorControl('color-primary', 'hex-primary', '--primary', true);
+  setupColorControl('color-sidebar', 'hex-sidebar', '--bg-sidebar');
+  setupColorControl('color-sidebar-active', 'hex-sidebar-active', '--bg-sidebar-active');
+
+  // Reset to default
+  resetBtn.addEventListener('click', () => {
+    Object.keys(defaults).forEach(key => {
+      localStorage.removeItem('theme_' + key);
+      document.documentElement.style.removeProperty(key);
+    });
+    document.documentElement.style.removeProperty('--primary-light');
+    document.documentElement.style.removeProperty('--primary-glow');
+    
+    // Reset inputs visually
+    document.getElementById('color-primary').value = defaults['--primary'];
+    document.getElementById('hex-primary').textContent = defaults['--primary'];
+    
+    document.getElementById('color-sidebar').value = defaults['--bg-sidebar'];
+    document.getElementById('hex-sidebar').textContent = defaults['--bg-sidebar'];
+    
+    document.getElementById('color-sidebar-active').value = defaults['--bg-sidebar-active'];
+    document.getElementById('hex-sidebar-active').textContent = defaults['--bg-sidebar-active'];
+  });
+})();
