@@ -2686,7 +2686,8 @@ document.addEventListener('DOMContentLoaded', () => {
     '--bg-sidebar': '#1B2B4B',
     '--bg-sidebar-active': '#243655',
     '--text-main': '#0F172A',
-    '--radius-form': '8px'
+    '--radius-form': '8px',
+    '--bg-form-header': '#FFFFFF'
   };
 
   // Convert hex to rgba for hover/glow effects
@@ -2732,6 +2733,26 @@ document.addEventListener('DOMContentLoaded', () => {
   setupColorControl('color-sidebar', 'hex-sidebar', '--bg-sidebar');
   setupColorControl('color-sidebar-active', 'hex-sidebar-active', '--bg-sidebar-active');
   setupColorControl('color-text', 'hex-text', '--text-main');
+
+  // Init Form Header Background
+  const inputFormHeader = document.getElementById('color-form-header');
+  if (inputFormHeader) {
+    const saved = localStorage.getItem('theme_--bg-form-header');
+    if (saved) {
+      inputFormHeader.value = saved;
+      document.documentElement.style.setProperty('--bg-form-header', saved);
+    }
+    inputFormHeader.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (val) {
+        document.documentElement.style.setProperty('--bg-form-header', val);
+        localStorage.setItem('theme_--bg-form-header', val);
+      } else {
+        document.documentElement.style.removeProperty('--bg-form-header');
+        localStorage.removeItem('theme_--bg-form-header');
+      }
+    });
+  }
 
   // Init Radius
   const radiusSelect = document.getElementById('select-radius');

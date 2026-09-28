@@ -2776,7 +2776,7 @@ body {
 
 /* Light & Clean Header Banner */
 .form-page-header {
-  background: #FFFFFF;
+  background: var(--bg-form-header, #FFFFFF);
   border-radius: calc(var(--radius-form) * 1.5);
   padding: 1.25rem 1.5rem 1rem;
   margin-bottom: 1.25rem;
