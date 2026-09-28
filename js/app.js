@@ -1133,9 +1133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Wire "Buat penjualan baru" to openFormPenjualan
-  document.querySelectorAll('#btn-open-penjualan-overlay').forEach(btn => {
-    btn.addEventListener('click', () => openFormPenjualan());
-  });
+  // (Handled generically by data-open-form delegator)
 
   // Old overlay listener removed — now handled by openFormPenjualan via data-open-form
   if (btnClosePenjualanOverlay) {
