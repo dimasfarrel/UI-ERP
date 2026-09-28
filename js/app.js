@@ -2392,10 +2392,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openFormPenjualan(editInv = null) {
     const instanceId = 'sales_new_' + TabManager.counter++;
-    const template = document.getElementById('template-module-form-penjualan').innerHTML;
+    const template = document.getElementById('template-module-form-penjualan');
+    const tempDiv = document.createElement('div');
+    tempDiv.appendChild(template.content.cloneNode(true));
+    let newHtml = tempDiv.innerHTML;
     
     // Replace IDs
-    let newHtml = template.replace(/id="fps-/g, 'id="fps-' + instanceId + '-');
+    newHtml = newHtml.replace(/id="fps-/g, 'id="fps-' + instanceId + '-');
     newHtml = newHtml.replace(/for="fps-/g, 'for="fps-' + instanceId + '-');
     newHtml = newHtml.replace(/id="form-penjualan-page"/g, 'id="form-penjualan-page-' + instanceId + '"');
     
