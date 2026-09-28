@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // "Buat pembelian baru" opens full page form
-  document.querySelectorAll('#btn-buat-pembelian-baru, [data-open-form="pembelian"]').forEach(btn => {
+  document.querySelectorAll('#btn-buat-pembelian-baru').forEach(btn => {
     btn.addEventListener('click', () => openFormPembelian());
   });
 
@@ -1133,7 +1133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Wire "Buat penjualan baru" to openFormPenjualan
-  document.querySelectorAll('#btn-open-penjualan-overlay, [data-open-form="penjualan"]').forEach(btn => {
+  document.querySelectorAll('#btn-open-penjualan-overlay').forEach(btn => {
     btn.addEventListener('click', () => openFormPenjualan());
   });
 
@@ -2476,33 +2476,154 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function openFormPembelian(editInv = null) {
-    const formModule = document.getElementById('module-form-pembelian');
-    if (formModule) {
-      formModule.querySelectorAll('.form-tab-panel').forEach(p => p.style.display = 'none');
-      formModule.querySelectorAll('.form-tab-btn').forEach(b => b.classList.remove('active'));
-      const utama = document.getElementById('fpp-utama');
-      const firstBtn = formModule.querySelector('.form-tab-btn');
-      if (utama) utama.style.display = 'block';
-      if (firstBtn) firstBtn.classList.add('active');
-    }
-    if (editInv) {
-      document.getElementById('fpp-page-title').textContent = `Edit PO ${editInv.id}`;
-    } else {
-      document.getElementById('fpp-page-title').textContent = 'Buat Purchase Order Baru';
-      const tbody = document.getElementById('fpp-items-tbody');
-      if (tbody && tbody.children.length === 0) {
-        addFppRow('Bahan Baku Aluminium A1', 'Grade industri 6061', 50, 'Kg', 85000, 0, 11);
-      }
-    }
-    calculateFppTotals();
-    initAllF3Fields(formModule);
-    ['fpp-lain-disc-group','fpp-lain-ppn','fpp-lain-disc-persen'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.removeEventListener('input', calculateFppTotals); el.removeEventListener('change', calculateFppTotals); el.addEventListener('input', calculateFppTotals); el.addEventListener('change', calculateFppTotals); }
+  
+  // MULTI TAB VERSION FOR PEMBELIAN
+  function addFppRowInstance(instanceId, product = '', desc = '', qty = 1, unit = 'Kg', price = 0, disc = 0, tax = 11) {
+    const pfx = (id) => document.getElementById('fpp-' + instanceId + '-' + id);
+    const tbody = pfx('items-tbody');
+    if (!tbody) return;
+    
+    const taxOptions = `
+      <option value="11" ${tax === 11 ? 'selected' : ''}>11%</option>
+      <option value="0" ${tax === 0 ? 'selected' : ''}>0%</option>
+    `;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..."></td>
+      <td><input type="text" class="table-input-cell overlay-item-desc" value="${desc}" placeholder="Deskripsi..."></td>
+      <td><input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" style="text-align:center;"></td>
+      <td><select class="table-input-cell overlay-item-unit"><option>Pcs</option><option>Kg</option><option>Unit</option></select></td>
+      <td><input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0"></td>
+      <td><input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0"></td>
+      <td><select class="table-input-cell overlay-item-tax" style="width:70px;">${taxOptions}</select></td>
+      <td><input type="text" class="table-input-cell overlay-item-total" value="Rp 0" readonly style="background:#F8FAFC;font-weight:600;"></td>
+      <td><button type="button" class="btn-remove-overlay-row" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:1rem;">×</button></td>
+    `;
+    
+    row.querySelectorAll('.overlay-item-qty,.overlay-item-price,.overlay-item-disc,.overlay-item-tax').forEach(el => {
+      el.addEventListener('input', () => calculateFppTotalsInstance(instanceId));
+      el.addEventListener('change', () => calculateFppTotalsInstance(instanceId));
     });
-    switchModule('form-pembelian');
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => { row.remove(); calculateFppTotalsInstance(instanceId); });
+    tbody.appendChild(row);
+    calculateFppTotalsInstance(instanceId);
   }
+
+  function calculateFppTotalsInstance(instanceId) {
+    const pfx = (id) => document.getElementById('fpp-' + instanceId + '-' + id);
+    const tbody = pfx('items-tbody');
+    if (!tbody) return;
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+      const base = Math.max(0, (qty * price) - discount);
+      const rowTax = base * (taxRate / 100);
+      subtotal += base;
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(base + rowTax);
+    });
+    const includePPN = pfx('lain-ppn')?.checked !== false;
+    const discPersen = pfx('lain-disc-persen')?.checked || false;
+    const discGroup = parseFloat(pfx('lain-disc-group')?.value) || 0;
+    const tax = includePPN ? subtotal * 0.11 : 0;
+    const discAmount = discGroup > 0 ? (discPersen ? subtotal * discGroup / 100 : discGroup) : 0;
+    const grandTotal = Math.max(0, subtotal + tax - discAmount);
+    
+    if (pfx('calc-subtotal')) pfx('calc-subtotal').textContent = formatRupiah(subtotal);
+    if (pfx('calc-tax')) pfx('calc-tax').textContent = includePPN ? formatRupiah(tax) : 'Tidak dikenakan';
+    if (pfx('calc-grandtotal')) pfx('calc-grandtotal').textContent = formatRupiah(grandTotal);
+    if (pfx('discgroup-row')) pfx('discgroup-row').style.display = discAmount > 0 ? 'flex' : 'none';
+    if (pfx('calc-discgroup')) pfx('calc-discgroup').textContent = `- ${formatRupiah(discAmount)}${discPersen ? ` (${discGroup}%)` : ''}`;
+  }
+
+  function openFormPembelian(editInv = null) {
+    const instanceId = 'purchasing_new_' + TabManager.counter++;
+    const template = document.getElementById('template-module-form-pembelian');
+    const tempDiv = document.createElement('div');
+    tempDiv.appendChild(template.content.cloneNode(true));
+    let newHtml = tempDiv.innerHTML;
+    
+    // Replace IDs
+    newHtml = newHtml.replace(/id="fpp-/g, 'id="fpp-' + instanceId + '-');
+    newHtml = newHtml.replace(/for="fpp-/g, 'for="fpp-' + instanceId + '-');
+    newHtml = newHtml.replace(/id="form-pembelian-page"/g, 'id="form-pembelian-page-' + instanceId + '"');
+    
+    const container = document.createElement('div');
+    container.className = 'module-section';
+    container.id = 'module-' + instanceId;
+    container.style.display = 'none';
+    container.innerHTML = newHtml;
+    
+    document.getElementById('dashboard-content-body').appendChild(container);
+    
+    const pfx = (id) => document.getElementById('fpp-' + instanceId + '-' + id);
+    
+    // Setup
+    pfx('page-title').textContent = editInv ? `Edit PO ${editInv.id}` : 'Buat Purchase Order Baru';
+    if (editInv) {
+      pfx('invoice-no').value = editInv.id;
+      if (editInv.date) pfx('date').value = editInv.date;
+      container.dataset.editId = editInv.id;
+    } else {
+      addFppRowInstance(instanceId, 'Bahan Baku Aluminium A1', 'Grade industri 6061', 50, 'Kg', 85000, 0, 11);
+    }
+    
+    // Binds
+    ['lain-disc-group','lain-ppn','lain-disc-persen'].forEach(id => {
+      pfx(id)?.addEventListener('input', () => calculateFppTotalsInstance(instanceId));
+      pfx(id)?.addEventListener('change', () => calculateFppTotalsInstance(instanceId));
+    });
+    
+    // Add row button
+    const btnAdd = container.querySelector('.btn-add-line-dashed');
+    if (btnAdd) btnAdd.addEventListener('click', () => addFppRowInstance(instanceId));
+    
+    // Submit
+    const formEl = document.getElementById('form-pembelian-page-' + instanceId);
+    if (formEl) {
+      formEl.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const invNo = pfx('invoice-no')?.value || ('PO-2026-00' + (state.purchasingInvoices.length + 1));
+        const supplier = pfx('supplier')?.value || 'Supplier';
+        const date = pfx('date')?.value || new Date().toISOString().split('T')[0];
+        const warehouse = pfx('warehouse')?.value || '';
+        const grandTotalText = pfx('calc-grandtotal')?.textContent || 'Rp 0';
+        
+        const editId = container.dataset.editId;
+        if (editId) {
+          const idx = state.purchasingInvoices.findIndex(i => i.id === editId);
+          if (idx !== -1) {
+            state.purchasingInvoices[idx] = { ...state.purchasingInvoices[idx], supplier, date, warehouse: warehouse.split(' (')[0] || warehouse, amount: grandTotalText };
+            showToast(`PO ${editId} berhasil diperbarui!`, 'success');
+          }
+        } else {
+          state.purchasingInvoices.unshift({
+            id: invNo, date, supplier,
+            warehouse: warehouse.split(' (')[0] || warehouse,
+            amount: grandTotalText, status: 'Menunggu Persetujuan', badgeClass: 'badge-secondary'
+          });
+          showToast(`PO ${invNo} berhasil diterbitkan!`, 'success');
+        }
+        renderPurchasingTable();
+        TabManager.closeTab(instanceId);
+      });
+    }
+    
+    // Back button
+    container.querySelectorAll('.btn-form-back').forEach(btn => {
+      btn.addEventListener('click', () => {
+        TabManager.closeTab(instanceId);
+      });
+    });
+
+    // Add to TabManager
+    TabManager.addTab(instanceId, editInv ? 'Edit: ' + editInv.id : 'PO Baru', true);
+    switchModule(instanceId);
+  }
+
 
   // Add row buttons
   // Event delegation for all [data-open-form] links
