@@ -53,6 +53,62 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Mock Business Entities
+  
+  // =========================================================================
+  // TAB MANAGER
+  // =========================================================================
+  const TabManager = {
+    counter: 1,
+    tabs: [
+      { id: 'overview', name: 'Dashboard' },
+      { id: 'sales', name: 'Penjualan' },
+      { id: 'purchasing', name: 'Pembelian' }
+    ],
+    renderTabs: function() {
+      const bar = document.getElementById('main-tab-bar');
+      if (!bar) return;
+      bar.innerHTML = this.tabs.map(tab => {
+        const isActive = (state.activeModule === tab.id) ? 'active' : '';
+        const closeBtn = tab.isClosable ? `<button class="tab-close" data-close-tab="${tab.id}">×</button>` : '';
+        return `
+          <div class="main-tab ${isActive}" data-tab-id="${tab.id}">
+            <span>${tab.name}</span>
+            ${closeBtn}
+          </div>
+        `;
+      }).join('');
+      
+      bar.querySelectorAll('.main-tab').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (e.target.closest('.tab-close')) return;
+          switchModule(el.dataset.tabId);
+        });
+      });
+      
+      bar.querySelectorAll('.tab-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          TabManager.closeTab(btn.dataset.closeTab);
+        });
+      });
+    },
+    addTab: function(id, name, isClosable = true) {
+      this.tabs.push({ id, name, isClosable });
+      this.renderTabs();
+    },
+    closeTab: function(id) {
+      this.tabs = this.tabs.filter(t => t.id !== id);
+      const moduleEl = document.getElementById('module-' + id);
+      if (moduleEl) moduleEl.remove();
+      
+      if (state.activeModule === id) {
+        switchModule('sales'); // default back to sales
+      } else {
+        this.renderTabs();
+      }
+    }
+  };
+
   const businessEntities = [
     {
       id: 'biz-1',
@@ -210,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Switch Active ERP Module (Overview, Sales, Purchasing, Inventory, etc.)
   function switchModule(moduleName) {
     state.activeModule = moduleName;
+    if (typeof TabManager !== 'undefined') TabManager.renderTabs();
 
     // Module aliases: map logical names to actual element IDs
     const moduleIdMap = {
@@ -2264,47 +2321,157 @@ document.addEventListener('DOMContentLoaded', () => {
   // -------------------------------------------------------------------------
   // Open Form Penjualan (full page)
   // -------------------------------------------------------------------------
+  
+  // MULTI TAB VERSION
+  function getIds(instanceId, prefix='fps-') {
+    return function(id) {
+      return document.getElementById(prefix + instanceId + '-' + id);
+    }
+  }
+
+  function addFpsRowInstance(instanceId, product = '', desc = '', qty = 1, unit = 'Pcs', price = 0, disc = 0, tax = 11) {
+    const pfx = (id) => document.getElementById('fps-' + instanceId + '-' + id);
+    const tbody = pfx('items-tbody');
+    if (!tbody) return;
+    
+    const taxOptions = `
+      <option value="11" ${tax === 11 ? 'selected' : ''}>11%</option>
+      <option value="0" ${tax === 0 ? 'selected' : ''}>0%</option>
+    `;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><input type="text" class="table-input-cell overlay-item-name" value="${product}" placeholder="Nama Produk..."></td>
+      <td><input type="text" class="table-input-cell overlay-item-desc" value="${desc}" placeholder="Deskripsi..."></td>
+      <td><input type="number" class="table-input-cell overlay-item-qty" value="${qty}" min="1" style="text-align:center;"></td>
+      <td><select class="table-input-cell overlay-item-unit"><option>Pcs</option><option>Unit</option></select></td>
+      <td><input type="number" class="table-input-cell overlay-item-price" value="${price}" min="0"></td>
+      <td><input type="number" class="table-input-cell overlay-item-disc" value="${disc}" min="0"></td>
+      <td><select class="table-input-cell overlay-item-tax" style="width:70px;">${taxOptions}</select></td>
+      <td><input type="text" class="table-input-cell overlay-item-total" value="Rp 0" readonly style="background:#F8FAFC;font-weight:600;"></td>
+      <td><button type="button" class="btn-remove-overlay-row" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:1rem;">×</button></td>
+    `;
+    
+    row.querySelectorAll('.overlay-item-qty,.overlay-item-price,.overlay-item-disc,.overlay-item-tax').forEach(el => {
+      el.addEventListener('input', () => calculateFpsTotalsInstance(instanceId));
+      el.addEventListener('change', () => calculateFpsTotalsInstance(instanceId));
+    });
+    row.querySelector('.btn-remove-overlay-row').addEventListener('click', () => { row.remove(); calculateFpsTotalsInstance(instanceId); });
+    tbody.appendChild(row);
+    calculateFpsTotalsInstance(instanceId);
+  }
+
+  function calculateFpsTotalsInstance(instanceId) {
+    const pfx = (id) => document.getElementById('fps-' + instanceId + '-' + id);
+    const tbody = pfx('items-tbody');
+    if (!tbody) return;
+    let subtotal = 0;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.overlay-item-qty')?.value) || 0;
+      const price = parseFloat(row.querySelector('.overlay-item-price')?.value) || 0;
+      const discount = parseFloat(row.querySelector('.overlay-item-disc')?.value) || 0;
+      const taxRate = parseFloat(row.querySelector('.overlay-item-tax')?.value) || 0;
+      const base = Math.max(0, (qty * price) - discount);
+      const rowTax = base * (taxRate / 100);
+      subtotal += base;
+      const totalField = row.querySelector('.overlay-item-total');
+      if (totalField) totalField.value = formatRupiah(base + rowTax);
+    });
+    const includePPN = pfx('lain-ppn')?.checked !== false;
+    const discPersen = pfx('lain-disc-persen')?.checked || false;
+    const discGroup = parseFloat(pfx('lain-disc-group')?.value) || 0;
+    const tax = includePPN ? subtotal * 0.11 : 0;
+    const discAmount = discGroup > 0 ? (discPersen ? subtotal * discGroup / 100 : discGroup) : 0;
+    const grandTotal = Math.max(0, subtotal + tax - discAmount);
+    
+    if (pfx('calc-subtotal')) pfx('calc-subtotal').textContent = formatRupiah(subtotal);
+    if (pfx('calc-tax')) pfx('calc-tax').textContent = includePPN ? formatRupiah(tax) : 'Tidak dikenakan';
+    if (pfx('calc-grandtotal')) pfx('calc-grandtotal').textContent = formatRupiah(grandTotal);
+    if (pfx('discgroup-row')) pfx('discgroup-row').style.display = discAmount > 0 ? 'flex' : 'none';
+    if (pfx('calc-discgroup')) pfx('calc-discgroup').textContent = `- ${formatRupiah(discAmount)}${discPersen ? ` (${discGroup}%)` : ''}`;
+  }
+
   function openFormPenjualan(editInv = null) {
-    // Reset tabs to UTAMA
-    const formModule = document.getElementById('module-form-penjualan');
-    if (formModule) {
-      formModule.querySelectorAll('.form-tab-panel').forEach(p => p.style.display = 'none');
-      formModule.querySelectorAll('.form-tab-btn').forEach(b => b.classList.remove('active'));
-      const utama = document.getElementById('fps-utama');
-      const firstBtn = formModule.querySelector('.form-tab-btn');
-      if (utama) utama.style.display = 'block';
-      if (firstBtn) firstBtn.classList.add('active');
-    }
-
-    // Pre-fill if editing
+    const instanceId = 'sales_new_' + TabManager.counter++;
+    const template = document.getElementById('template-module-form-penjualan').innerHTML;
+    
+    // Replace IDs
+    let newHtml = template.replace(/id="fps-/g, 'id="fps-' + instanceId + '-');
+    newHtml = newHtml.replace(/for="fps-/g, 'for="fps-' + instanceId + '-');
+    newHtml = newHtml.replace(/id="form-penjualan-page"/g, 'id="form-penjualan-page-' + instanceId + '"');
+    
+    const container = document.createElement('div');
+    container.className = 'module-section';
+    container.id = 'module-' + instanceId;
+    container.style.display = 'none';
+    container.innerHTML = newHtml;
+    
+    document.getElementById('dashboard-content-body').appendChild(container);
+    
+    const pfx = (id) => document.getElementById('fps-' + instanceId + '-' + id);
+    
+    // Setup
+    pfx('page-title').textContent = editInv ? `Edit Faktur ${editInv.id}` : 'Buat Faktur Penjualan Baru';
     if (editInv) {
-      document.getElementById('fps-page-title').textContent = `Edit Faktur ${editInv.id}`;
-      const invNoEl = document.getElementById('fps-invoice-no');
-      if (invNoEl) invNoEl.value = editInv.id;
-      if (editInv.date) { const dateEl = document.getElementById('fps-date'); if (dateEl) dateEl.value = editInv.date; }
-      formModule.dataset.editId = editInv.id;
+      pfx('invoice-no').value = editInv.id;
+      if (editInv.date) pfx('date').value = editInv.date;
+      container.dataset.editId = editInv.id;
     } else {
-      document.getElementById('fps-page-title').textContent = 'Buat Faktur Penjualan Baru';
-      if (formModule) delete formModule.dataset.editId;
-      // Init with sample rows if empty
-      const tbody = document.getElementById('fps-items-tbody');
-      if (tbody && tbody.children.length === 0) {
-        addFpsRow('Komponen Mesin MX-4', 'Modul perakitan hidrolik', 10, 'Pcs', 2500000, 0, 11);
-        addFpsRow('Inverter Listrik Industri 5KW', 'Inverter 3-phase', 2, 'Unit', 4100000, 0, 11);
-      }
+      addFpsRowInstance(instanceId, 'Komponen Mesin MX-4', 'Modul perakitan hidrolik', 10, 'Pcs', 2500000, 0, 11);
     }
-
-    calculateFpsTotals();
-    initAllF3Fields(formModule);
-
-    // Bind disc group real-time for fps
-    ['fps-lain-disc-group','fps-lain-ppn','fps-lain-disc-persen'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.removeEventListener('input', calculateFpsTotals); el.removeEventListener('change', calculateFpsTotals); el.addEventListener('input', calculateFpsTotals); el.addEventListener('change', calculateFpsTotals); }
+    
+    // Binds
+    ['lain-disc-group','lain-ppn','lain-disc-persen'].forEach(id => {
+      pfx(id)?.addEventListener('input', () => calculateFpsTotalsInstance(instanceId));
+      pfx(id)?.addEventListener('change', () => calculateFpsTotalsInstance(instanceId));
+    });
+    
+    // Add row button
+    const btnAdd = container.querySelector('.btn-add-line-dashed');
+    if (btnAdd) btnAdd.addEventListener('click', () => addFpsRowInstance(instanceId));
+    
+    // Submit
+    const formEl = document.getElementById('form-penjualan-page-' + instanceId);
+    if (formEl) {
+      formEl.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const invNo = pfx('invoice-no')?.value || ('INV-2026-00' + (state.salesInvoices.length + 1));
+        const customer = pfx('customer')?.value || 'Pelanggan';
+        const date = pfx('date')?.value || new Date().toISOString().split('T')[0];
+        const warehouse = pfx('warehouse')?.value || '';
+        const grandTotalText = pfx('calc-grandtotal')?.textContent || 'Rp 0';
+        
+        const editId = container.dataset.editId;
+        if (editId) {
+          const idx = state.salesInvoices.findIndex(i => i.id === editId);
+          if (idx !== -1) {
+            state.salesInvoices[idx] = { ...state.salesInvoices[idx], customer, date, warehouse: warehouse.split(' (')[0] || warehouse, amount: grandTotalText };
+            showToast(`Faktur ${editId} berhasil diperbarui!`, 'success');
+          }
+        } else {
+          state.salesInvoices.unshift({
+            id: invNo, date, customer,
+            warehouse: warehouse.split(' (')[0] || warehouse,
+            amount: grandTotalText, status: 'Belum Bayar', badgeClass: 'badge-warning'
+          });
+          showToast(`Faktur ${invNo} berhasil diterbitkan!`, 'success');
+        }
+        renderSalesTable();
+        TabManager.closeTab(instanceId);
+      });
+    }
+    
+    // Back button
+    container.querySelectorAll('.btn-form-back').forEach(btn => {
+      btn.addEventListener('click', () => {
+        TabManager.closeTab(instanceId);
+      });
     });
 
-    switchModule('form-penjualan');
+    // Add to TabManager
+    TabManager.addTab(instanceId, editInv ? 'Edit: ' + editInv.id : 'Faktur Baru', true);
+    switchModule(instanceId);
   }
+
 
   function openFormPembelian(editInv = null) {
     const formModule = document.getElementById('module-form-pembelian');

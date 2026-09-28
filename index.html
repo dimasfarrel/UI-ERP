@@ -367,8 +367,15 @@
           </div>
         </header>
 
+        <!-- MULTI-TAB BAR -->
+        <div class="main-tab-bar-wrapper">
+          <div id="main-tab-bar" class="main-tab-bar">
+             <!-- Tabs injected by JS -->
+          </div>
+        </div>
+
         <!-- Body Dashboard -->
-        <div class="dashboard-content-body">
+        <div class="dashboard-content-body" id="dashboard-content-body">
 
           <!-- =================================================================
                MODULE 1: OVERVIEW DASHBOARD
@@ -1310,7 +1317,8 @@
 
 
 
-<div id="module-form-penjualan" class="module-section" style="display:none;">
+<template id="template-module-form-penjualan">
+<div class="module-section" style="display:block;">
 
   <!-- Page Header -->
   <div class="form-page-header">
@@ -1651,6 +1659,7 @@
     </div>
   </form>
 </div>
+</template>
 
 
 <!-- ================================================================
